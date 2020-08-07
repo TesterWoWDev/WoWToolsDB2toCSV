@@ -197,7 +197,12 @@ public class Runner {
             br.readLine();//skip header
             while ((line = br.readLine()) != null) {
                 String[] split = line.split(delimiter);
-                itemSQL.write("UPDATE `item_template` SET `name` = '" + split[1].replace("'", "''") + "' WHERE `entry` = " + split[2] + ";\n");
+                if(split.length == 17)
+                    itemSQL.write("UPDATE `item_template` SET `name` = '" + split[1].replace("'", "''") + "' WHERE `entry` = " + split[2] + ";\n");
+                if(split.length == 18)
+                    itemSQL.write("UPDATE `item_template` SET `name` = '" + split[1].replace("'", "''") + delimiter + split[2].replace("'", "''") + "' WHERE `entry` = " + split[3] + ";\n");
+                if(split.length == 19)
+                    itemSQL.write("UPDATE `item_template` SET `name` = '" + split[1].replace("'", "''") + delimiter + split[2].replace("'", "''") + delimiter + split[3].replace("'", "''") + "' WHERE `entry` = " + split[4] + ";\n");
             }
         }
         itemSQL.close();
