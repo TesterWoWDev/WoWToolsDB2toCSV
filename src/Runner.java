@@ -221,12 +221,12 @@ public class Runner {
 
     public static HashMap<String, String> setupFDIDMap(String filename) throws IOException
     {
-        String delimiter = ";";
+        String delim = ";";
         HashMap<String, String> hm = new HashMap<>();
         BufferedReader br = new BufferedReader(new FileReader(filename));
         String line;
         while ( (line = br.readLine()) != null ) {
-            String[] values = line.split(delimiter);
+            String[] values = line.split(delim);
             hm.put(values[0],values[1]);
         }
         br.close();
@@ -384,10 +384,10 @@ public class Runner {
     }
 
     public static void setVarsItem(String[] curr) {
-        String delimiter = "/";
+        String delim = "/";
         String data = fileIDs.get(textureFDID.get(curr[1]));
         if(data != null){
-            data = data.split(delimiter)[data.split(delimiter).length -1];
+            data = data.split(delim)[data.split(delim).length -1];
             data = data.substring(0,data.length() -4);
             switch (curr[0]) {
                 case "0":
