@@ -9,6 +9,7 @@ public class Runner {
     public static HashMap<String, String> fileIDs;
     public static HashMap<String, String> modelFDID;
     public static HashMap<String, String> textureFDID;
+    public static String delimiter = ",";
 //creature extra display
     public static String head = "0";
     public static String shoulder = "0";
@@ -57,7 +58,7 @@ public class Runner {
             String line;
             br.readLine();//skip header
             while ((line = br.readLine()) != null) {
-                String[] displayRow = line.split(",");
+                String[] displayRow = line.split(delimiter);
                 String text1 = fileIDs.get(displayRow[24]);
                 String text2 = fileIDs.get(displayRow[25]);
                 String text3 = fileIDs.get(displayRow[26]);
@@ -77,14 +78,14 @@ public class Runner {
                     text3 = "\"" + text3.substring(0, text3.length() - 4) + "\"";
                 }
                 if (modelData.get(displayRow[1]) != null) {
-                    String[] modelRow = (modelData.get(displayRow[1])).split(",");
+                    String[] modelRow = (modelData.get(displayRow[1])).split(delimiter);
                     String modelLine = fileIDs.get(modelRow[8]);
                     if (!displayRow[7].equals("0")) {
                         if (displayExtra.get(displayRow[7]) != null && displayExtraItems.get(displayRow[7]) != null) {
                             String displayExtraLine = displayExtra.get(displayRow[7]);
-                            String[] extraSplit = displayExtraLine.split(",");
+                            String[] extraSplit = displayExtraLine.split(delimiter);
                             String displayExtraItemsLine = displayExtraItems.get(displayRow[7]);
-                            String[] itemSplit = displayExtraItemsLine.split(",");
+                            String[] itemSplit = displayExtraItemsLine.split(delimiter);
                             for (String s : itemSplit) {
                                 String[] currItem = s.split("\\.");
                                 setVarsCreature(currItem);
@@ -92,7 +93,7 @@ public class Runner {
                             String a = fileIDs.get(extraSplit[10]);
                             if (a != null) {
                                 String texture = a.split("/")[a.split("/").length - 1];
-                                displayExtraMap.put(extraSplit[0],extraSplit[0] + "," + extraSplit[1] + "," + extraSplit[2] + "," + extraSplit[4] + "," + extraSplit[5] + "," + extraSplit[6] + "," + extraSplit[7] + "," + extraSplit[8] + "," + head + "," + shoulder + "," + chest + "," + belt + "," + legs + "," + boots + "," + rings + "," + gloves + "," + wrist + "," + cape + "," + "0" + "," + texture + ",\n");
+                                displayExtraMap.put(extraSplit[0],extraSplit[0] + delimiter + extraSplit[1] + delimiter + extraSplit[2] + delimiter + extraSplit[4] + delimiter + extraSplit[5] + delimiter + extraSplit[6] + delimiter + extraSplit[7] + delimiter + extraSplit[8] + delimiter + head + delimiter + shoulder + delimiter + chest + delimiter + belt + delimiter + legs + delimiter + boots + delimiter + rings + delimiter + gloves + delimiter + wrist + delimiter + cape + delimiter + "0" + delimiter + texture + ",\n");
                                 resetVarsCreature();
                             }
                         }
@@ -100,8 +101,8 @@ public class Runner {
                     if (modelLine != null) {
                         String path; //NOTE if there are dupes(write the model and displayextra to a linked list, then loop it at the end and write)
                         path = "\"" + modelLine.substring(0, modelLine.length() - 1) + "dx" + "\"";
-                        modelMap.put(modelRow[0],modelRow[0] + "," + modelRow[7] + "," + path + "," + "1" + "," + modelRow[19] + "," + modelRow[26] + "," + modelRow[10] + "," + "0x41900000" + "," + "0x41400000" + "," + "1" + "," + modelRow[15] + "," + "0" + "," + modelRow[17] + "," + "0" + "," + modelRow[20] + "," + modelRow[21] + "," + modelRow[30] + "," + modelRow[1] + "," + modelRow[2] + "," + modelRow[3] + "," + modelRow[4] + "," + modelRow[5] + "," + modelRow[6] + "," + "1" + "," + modelRow[22] + "," + modelRow[25] + "," + "0x0" + "," + "0" + ",\n");
-                        creatureDisplayWriter.write(displayRow[0] + "," + displayRow[1] + "," + displayRow[2] + "," + displayRow[7] + "," + displayRow[4] + "," + displayRow[5] + "," + text1 + "," + text2 + "," + text3 + "," + displayRow[10] + "," + displayRow[7] + "," + displayRow[9] + "," + displayRow[10] + "," + "0" + "," + "0x0" + "," + displayRow[13] + ",\n");
+                        modelMap.put(modelRow[0],modelRow[0] + delimiter + modelRow[7] + delimiter + path + delimiter + "1" + delimiter + modelRow[19] + delimiter + modelRow[26] + delimiter + modelRow[10] + delimiter + "0x41900000" + delimiter + "0x41400000" + delimiter + "1" + delimiter + modelRow[15] + delimiter + "0" + delimiter + modelRow[17] + delimiter + "0" + delimiter + modelRow[20] + delimiter + modelRow[21] + delimiter + modelRow[30] + delimiter + modelRow[1] + delimiter + modelRow[2] + delimiter + modelRow[3] + delimiter + modelRow[4] + delimiter + modelRow[5] + delimiter + modelRow[6] + delimiter + "1" + delimiter + modelRow[22] + delimiter + modelRow[25] + delimiter + "0x0" + delimiter + "0" + ",\n");
+                        creatureDisplayWriter.write(displayRow[0] + delimiter + displayRow[1] + delimiter + displayRow[2] + delimiter + displayRow[7] + delimiter + displayRow[4] + delimiter + displayRow[5] + delimiter + text1 + delimiter + text2 + delimiter + text3 + delimiter + displayRow[10] + delimiter + displayRow[7] + delimiter + displayRow[9] + delimiter + displayRow[10] + delimiter + "0" + delimiter + "0x0" + delimiter + displayRow[13] + ",\n");
 
                     }
                 }
@@ -131,7 +132,7 @@ public class Runner {
             String line;
             br.readLine();//skip header
             while ((line = br.readLine()) != null) {
-                String[] displayRow = line.split(",");
+                String[] displayRow = line.split(delimiter);
                 String Lmodel = fileIDs.get(modelFDID.get(displayRow[10]));
                 String Rmodel = fileIDs.get(modelFDID.get(displayRow[11]));
                 String Ltexture = fileIDs.get(textureFDID.get(displayRow[12]));
@@ -162,7 +163,7 @@ public class Runner {
                 }
                 if(itemDisplayInfoMaterials.get(displayRow[0]) != null) {
                     String displayInfoMats = itemDisplayInfoMaterials.get(displayRow[0]);
-                    String[] itemSplit = displayInfoMats.split(",");
+                    String[] itemSplit = displayInfoMats.split(delimiter);
                     for (String s : itemSplit) {
                         String[] currItem = s.split("\\.");
                         setVarsItem(currItem);
@@ -174,7 +175,7 @@ public class Runner {
                         icon = fileIDs.get(itemappearanceIcon.get(displayRow[0]));
                         icon = "\"" + icon.split("/")[icon.split("/").length -1].substring(0,icon.split("/")[icon.split("/").length -1].length() -4) + "\"";
                     }
-                itemDisplayInfoWriter.write(displayRow[0] + "," + Lmodel + "," + Rmodel + "," + Ltexture + "," + Rtexture + "," + icon + "," + "\"\"" + "," + displayRow[16] + "," + displayRow[17] + "," + displayRow[18] + "," + displayRow[9] + "," + displayRow[6] + "," + "0" + "," + displayRow[28] + "," + displayRow[29] + "," + upArm + "," + lowArm + "," + hands + "," + upTor + "," + lowTor + "," + upLeg + "," + lowLeg + "," + foot + "," + displayRow[1] + "," + displayRow[2] + ",\n");
+                itemDisplayInfoWriter.write(displayRow[0] + delimiter + Lmodel + delimiter + Rmodel + delimiter + Ltexture + delimiter + Rtexture + delimiter + icon + delimiter + "\"\"" + delimiter + displayRow[16] + delimiter + displayRow[17] + delimiter + displayRow[18] + delimiter + displayRow[9] + delimiter + displayRow[6] + delimiter + "0" + delimiter + displayRow[28] + delimiter + displayRow[29] + delimiter + upArm + delimiter + lowArm + delimiter + hands + delimiter + upTor + delimiter + lowTor + delimiter + upLeg + delimiter + lowLeg + delimiter + foot + delimiter + displayRow[1] + delimiter + displayRow[2] + ",\n");
                 resetVarsItem();
             }
         }
@@ -182,20 +183,20 @@ public class Runner {
             String line;
             br.readLine();//skip header
             while ((line = br.readLine()) != null) {
-                String[] displayRow = line.split(",");
+                String[] displayRow = line.split(delimiter);
                 String display = "0";
                 if(itemmodifiedappearance.get(displayRow[0]) != null)
                     if(itemappearance.get(itemmodifiedappearance.get(displayRow[0])) != null) {
-                        display = itemappearance.get(itemmodifiedappearance.get(displayRow[0])).split(",")[0];
+                        display = itemappearance.get(itemmodifiedappearance.get(displayRow[0])).split(delimiter)[0];
                     }
-                itemWriter.write(displayRow[0] + "," + displayRow[1] + "," + displayRow[2] + "," + displayRow[6] + "," + displayRow[3] + "," + display + "," + displayRow[4] + "," + displayRow[5] + ",\n");
+                itemWriter.write(displayRow[0] + delimiter + displayRow[1] + delimiter + displayRow[2] + delimiter + displayRow[6] + delimiter + displayRow[3] + delimiter + display + delimiter + displayRow[4] + delimiter + displayRow[5] + ",\n");
             }
         }
         try (BufferedReader br = new BufferedReader(new FileReader("item/itemsearchname.csv"))) {
             String line;
             br.readLine();//skip header
             while ((line = br.readLine()) != null) {
-                String[] split = line.split(",");
+                String[] split = line.split(delimiter);
                 itemSQL.write("UPDATE `item_template` SET `name` = '" + split[1].replace("'", "''") + "' WHERE `entry` = " + split[2] + ";\n");
             }
         }
@@ -206,7 +207,6 @@ public class Runner {
 
     public static HashMap<String, String> setupMap(String filename) throws IOException
     {
-        String delimiter = ",";
         HashMap<String, String> hm = new HashMap<>();
         BufferedReader br = new BufferedReader(new FileReader(filename));
         String line;
@@ -235,7 +235,6 @@ public class Runner {
 
     public static HashMap<String, String> setupItemModMap(String filename) throws IOException
     {
-        String delimiter = ",";
         HashMap<String, String> hm = new HashMap<>();
         BufferedReader br = new BufferedReader(new FileReader(filename));
         String line;
@@ -249,7 +248,6 @@ public class Runner {
 
     public static HashMap<String, String> setupItemAppMap(String filename) throws IOException
     {
-        String delimiter = ",";
         HashMap<String, String> hm = new HashMap<>();
         BufferedReader br = new BufferedReader(new FileReader(filename));
         String line;
@@ -263,7 +261,6 @@ public class Runner {
 
     public static HashMap<String, String> setupItemAppIconMap(String filename) throws IOException
     {
-        String delimiter = ",";
         HashMap<String, String> hm = new HashMap<>();
         BufferedReader br = new BufferedReader(new FileReader(filename));
         String line;
@@ -277,7 +274,6 @@ public class Runner {
 
     public static HashMap<String, String> setupDisplayExtraItemsMap(String filename) throws IOException
     {
-        String delimiter = ",";
         String splitter = ".";
         HashMap<String, String> hm = new HashMap<>();
         BufferedReader br = new BufferedReader(new FileReader(filename));
@@ -300,7 +296,6 @@ public class Runner {
 
     public static HashMap<String, String> setupModelMap(String filename) throws IOException
     {
-        String delimiter = ",";
         HashMap<String, String> hm = new HashMap<>();
         BufferedReader br = new BufferedReader(new FileReader(filename));
         String line;
@@ -314,7 +309,6 @@ public class Runner {
 
     public static HashMap<String, String> setupTextureMap(String filename) throws IOException
     {
-        String delimiter = ",";
         HashMap<String, String> hm = new HashMap<>();
         BufferedReader br = new BufferedReader(new FileReader(filename));
         String line;
