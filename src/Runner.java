@@ -108,10 +108,10 @@ public class Runner {
                 }
             }
         }
-        for (Map.Entry me : modelMap.entrySet()) {
+        for (@SuppressWarnings("rawtypes") Map.Entry me : modelMap.entrySet()) {
             creatureModelWriter.write(me.getValue().toString());
         }
-        for (Map.Entry me : displayExtraMap.entrySet()) {
+        for (@SuppressWarnings("rawtypes") Map.Entry me : displayExtraMap.entrySet()) {
             creatureDisplayExtraWriter.write(me.getValue().toString());
         }
         creatureDisplayWriter.close();
