@@ -33,7 +33,7 @@ public class Runner {
     public static void main(String[] args) throws IOException
     {
        startupTables();
-       //creatureDB2Convert();
+       creatureDB2Convert();
        itemDB2Convert();
     }
     public static void startupTables() throws IOException {
