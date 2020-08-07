@@ -9,7 +9,7 @@ public class Runner {
     public static HashMap<String, String> fileIDs;
     public static HashMap<String, String> modelFDID;
     public static HashMap<String, String> textureFDID;
-
+//creature extra display
     public static String head = "0";
     public static String shoulder = "0";
     public static String chest = "0";
@@ -20,7 +20,7 @@ public class Runner {
     public static String gloves = "0";
     public static String wrist = "0";
     public static String cape = "0";
-
+//item textures
     public static String upArm = "\"\"";
     public static String lowArm = "\"\"";
     public static String hands = "\"\"";
@@ -206,12 +206,13 @@ public class Runner {
 
     public static HashMap<String, String> setupMap(String filename) throws IOException
     {
+        String delimiter = ",";
         HashMap<String, String> hm = new HashMap<>();
         BufferedReader br = new BufferedReader(new FileReader(filename));
         String line;
         br.readLine();//skip header
         while ((line = br.readLine()) != null) {
-            String[] values = line.split(",");
+            String[] values = line.split(delimiter);
             hm.put(values[0], line);
         }
         br.close();
@@ -220,24 +221,26 @@ public class Runner {
 
     public static HashMap<String, String> setupFDIDMap(String filename) throws IOException
     {
-            HashMap<String, String> hm = new HashMap<>();
-            BufferedReader br = new BufferedReader(new FileReader(filename));
-            String line;
-            while ( (line = br.readLine()) != null ) {
-                String[] values = line.split(";");
-                hm.put(values[0],values[1]);
-            }
-            br.close();
-           return hm;
-    }
-
-    public static HashMap<String, String> setupItemModMap(String filename) throws IOException
-    {
+        String delimiter = ";";
         HashMap<String, String> hm = new HashMap<>();
         BufferedReader br = new BufferedReader(new FileReader(filename));
         String line;
         while ( (line = br.readLine()) != null ) {
-            String[] values = line.split(",");
+            String[] values = line.split(delimiter);
+            hm.put(values[0],values[1]);
+        }
+        br.close();
+        return hm;
+    }
+
+    public static HashMap<String, String> setupItemModMap(String filename) throws IOException
+    {
+        String delimiter = ",";
+        HashMap<String, String> hm = new HashMap<>();
+        BufferedReader br = new BufferedReader(new FileReader(filename));
+        String line;
+        while ( (line = br.readLine()) != null ) {
+            String[] values = line.split(delimiter);
             hm.put(values[1],values[3]);
         }
         br.close();
@@ -246,12 +249,13 @@ public class Runner {
 
     public static HashMap<String, String> setupItemAppMap(String filename) throws IOException
     {
+        String delimiter = ",";
         HashMap<String, String> hm = new HashMap<>();
         BufferedReader br = new BufferedReader(new FileReader(filename));
         String line;
         while ( (line = br.readLine()) != null ) {
-            String[] values = line.split(",");
-            hm.put(values[0],values[2] + "," + values[3]);
+            String[] values = line.split(delimiter);
+            hm.put(values[0],values[2] + delimiter + values[3]);
         }
         br.close();
         return hm;
@@ -259,11 +263,12 @@ public class Runner {
 
     public static HashMap<String, String> setupItemAppIconMap(String filename) throws IOException
     {
+        String delimiter = ",";
         HashMap<String, String> hm = new HashMap<>();
         BufferedReader br = new BufferedReader(new FileReader(filename));
         String line;
         while ( (line = br.readLine()) != null ) {
-            String[] values = line.split(",");
+            String[] values = line.split(delimiter);
             hm.put(values[2],values[3]);
         }
         br.close();
@@ -272,6 +277,8 @@ public class Runner {
 
     public static HashMap<String, String> setupDisplayExtraItemsMap(String filename) throws IOException
     {
+        String delimiter = ",";
+        String splitter = ".";
         HashMap<String, String> hm = new HashMap<>();
         BufferedReader br = new BufferedReader(new FileReader(filename));
         StringBuilder perline = new StringBuilder();
@@ -279,12 +286,12 @@ public class Runner {
         String line;
         br.readLine();//skip header
         while ( (line = br.readLine()) != null ) {
-            String[] values = line.split(",");
+            String[] values = line.split(delimiter);
             if (!last.equals(values[3]) && !last.equals("")){
                 hm.put(values[3], perline.toString());
                 perline = new StringBuilder();
             }
-            perline.append(values[1]).append(".").append(values[2]).append(",");
+            perline.append(values[1]).append(splitter).append(values[2]).append(delimiter);
             last = values[3];
         }
         br.close();
@@ -293,11 +300,12 @@ public class Runner {
 
     public static HashMap<String, String> setupModelMap(String filename) throws IOException
     {
+        String delimiter = ",";
         HashMap<String, String> hm = new HashMap<>();
         BufferedReader br = new BufferedReader(new FileReader(filename));
         String line;
         while ( (line = br.readLine()) != null ) {
-            String[] values = line.split(",");
+            String[] values = line.split(delimiter);
             hm.put(values[3],values[0]);
         }
         br.close();
@@ -306,11 +314,12 @@ public class Runner {
 
     public static HashMap<String, String> setupTextureMap(String filename) throws IOException
     {
+        String delimiter = ",";
         HashMap<String, String> hm = new HashMap<>();
         BufferedReader br = new BufferedReader(new FileReader(filename));
         String line;
         while ( (line = br.readLine()) != null ) {
-            String[] values = line.split(",");
+            String[] values = line.split(delimiter);
             hm.put(values[2],values[0]);
         }
         br.close();
@@ -381,9 +390,10 @@ public class Runner {
     }
 
     public static void setVarsItem(String[] curr) {
+        String delimiter = "/";
         String data = fileIDs.get(textureFDID.get(curr[1]));
         if(data != null){
-            data = data.split("/")[data.split("/").length -1];
+            data = data.split(delimiter)[data.split(delimiter).length -1];
             data = data.substring(0,data.length() -4);
             switch (curr[0]) {
                 case "0":
