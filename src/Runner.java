@@ -58,7 +58,6 @@ public class Runner {
             br.readLine();//skip header
             while ((line = br.readLine()) != null) {
                 String[] displayRow = line.split(",");
-                System.out.println("CreatureID: " + displayRow[0]);
                 String text1 = fileIDs.get(displayRow[24]);
                 String text2 = fileIDs.get(displayRow[25]);
                 String text3 = fileIDs.get(displayRow[26]);
@@ -184,7 +183,6 @@ public class Runner {
             br.readLine();//skip header
             while ((line = br.readLine()) != null) {
                 String[] displayRow = line.split(",");
-                System.out.println("ItemID: "+displayRow[0]);
                 String display = "0";
                 if(itemmodifiedappearance.get(displayRow[0]) != null)
                     if(itemappearance.get(itemmodifiedappearance.get(displayRow[0])) != null) {
