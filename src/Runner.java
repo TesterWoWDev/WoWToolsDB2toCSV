@@ -1,7 +1,6 @@
 import java.io.*;
 import java.net.URL;
 import java.nio.channels.Channels;
-import java.nio.channels.FileChannel;
 import java.nio.channels.ReadableByteChannel;
 import java.util.HashMap;
 import java.util.Map;
@@ -69,13 +68,21 @@ public class Runner {
     public static void setupFolders(){
         System.out.println("Setting up folders...");
         File file = new File("./item");
-        file.mkdir();
+        boolean make = file.mkdir();
+        if(!make)
+            System.out.println("Error setting up Item folder");
         file = new File("./creature");
-        file.mkdir();
+        make = file.mkdir();
+        if(!make)
+            System.out.println("Error setting up Creature folder");
         file = new File("./listfile");
-        file.mkdir();
+        make = file.mkdir();
+        if(!make)
+            System.out.println("Error setting up Listfile folder");
         file = new File("./export");
-        file.mkdir();
+        make = file.mkdir();
+        if(!make)
+            System.out.println("Error setting up Export folder");
     }
 
     public static void downloadFiles() throws IOException {
