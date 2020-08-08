@@ -403,9 +403,6 @@ public class Runner {
         if(data != null){
             data = data.split(delim)[data.split(delim).length -1];
             data = data.substring(0,data.length() - 9);
-            if(data.endsWith("_"))
-                data = data.substring(0,data.length() -1);
-
             switch (curr[0]) {
                 case "0":
                     upArm = data;
