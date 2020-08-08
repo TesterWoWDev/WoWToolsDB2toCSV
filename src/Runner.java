@@ -29,7 +29,7 @@ public class Runner {
     public static String upLeg = "\"\"";
     public static String lowLeg = "\"\"";
     public static String foot = "\"\"";
-
+//shit to do
     public static String buildNumber = "9.0.1.35482";
     public static String[] tables = new String[12];
 
@@ -496,7 +496,7 @@ public class Runner {
         String data = fileIDs.get(textureFDID.get(curr[1]));
         if(data != null){
             data = data.split(delim)[data.split(delim).length -1];
-            data = data.substring(0,data.length() - 9);
+            data = data.substring(0,data.length() - 6);
             switch (curr[0]) {
                 case "0":
                     upArm = data;
