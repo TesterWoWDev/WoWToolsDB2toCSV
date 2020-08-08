@@ -391,10 +391,11 @@ import java.util.*;
         br.readLine();//skip header
         while ( (line = br.readLine()) != null ) {
             String[] values = line.split(delimiter);
-            if (!last.equals(values[3]) && !last.equals("")){
-                hm.put(values[3], perline.toString());
+            if (!last.equals(values[3])){
+                hm.put(last, perline.toString());
                 perline = new StringBuilder();
             }
+
             perline.append(values[1]).append(splitter).append(values[2]).append(delimiter);
             last = values[3];
         }
@@ -444,38 +445,39 @@ import java.util.*;
 
     private static void setVarsCreature(String[] curr)
     {
-        switch (curr[1])
-        {
-            case "1":
-                head = curr[0];
-                break;
-            case "3":
-                shoulder = curr[0];
-                break;
-            case "5":
-                chest = curr[0];
-                break;
-            case "6":
-                belt = curr[0];
-                break;
-            case "7":
-                legs = curr[0];
-                break;
-            case "8":
-                boots = curr[0];
-                break;
-            case "9":
-                wrist = curr[0];
-                break;
-            case "10":
-                gloves = curr[0];
-                break;
-            case "11":
-                rings = curr[0];
-                break;
-            case "15":
-                cape = curr[0];
-                break;
+        if(curr.length == 2) {
+            switch (curr[1]) {
+                case "1":
+                    head = curr[0];
+                    break;
+                case "3":
+                    shoulder = curr[0];
+                    break;
+                case "5":
+                    chest = curr[0];
+                    break;
+                case "6":
+                    belt = curr[0];
+                    break;
+                case "7":
+                    legs = curr[0];
+                    break;
+                case "8":
+                    boots = curr[0];
+                    break;
+                case "9":
+                    wrist = curr[0];
+                    break;
+                case "10":
+                    gloves = curr[0];
+                    break;
+                case "11":
+                    rings = curr[0];
+                    break;
+                case "15":
+                    cape = curr[0];
+                    break;
+            }
         }
     }
 
@@ -492,36 +494,38 @@ import java.util.*;
     }
 
     private static void setVarsItem(String[] curr) {
-        String delim = "/";
-        String data = fileIDs.get(textureFDID.get(curr[1]));
-        if(data != null){
-            data = data.split(delim)[data.split(delim).length -1];
-            data = data.substring(0,data.length() - 6);
-            switch (curr[0]) {
-                case "0":
-                    upArm = data;
-                    break;
-                case "1":
-                    lowArm = data;
-                    break;
-                case "2":
-                    hands = data;
-                    break;
-                case "3":
-                    upTor = data;
-                    break;
-                case "4":
-                    lowTor = data;
-                    break;
-                case "5":
-                    upLeg = data;
-                    break;
-                case "6":
-                    lowLeg = data;
-                    break;
-                case "7":
-                    foot = data;
-                    break;
+        if(curr.length == 2) {
+            String delim = "/";
+            String data = fileIDs.get(textureFDID.get(curr[1]));
+            if (data != null) {
+                data = data.split(delim)[data.split(delim).length - 1];
+                data = data.substring(0, data.length() - 6);
+                switch (curr[0]) {
+                    case "0":
+                        upArm = data;
+                        break;
+                    case "1":
+                        lowArm = data;
+                        break;
+                    case "2":
+                        hands = data;
+                        break;
+                    case "3":
+                        upTor = data;
+                        break;
+                    case "4":
+                        lowTor = data;
+                        break;
+                    case "5":
+                        upLeg = data;
+                        break;
+                    case "6":
+                        lowLeg = data;
+                        break;
+                    case "7":
+                        foot = data;
+                        break;
+                }
             }
         }
     }
