@@ -5,6 +5,7 @@ import java.nio.channels.FileChannel;
 import java.nio.channels.ReadableByteChannel;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
 
 public class Runner {
     public static HashMap<String, String> fileIDs;
@@ -37,9 +38,16 @@ public class Runner {
 
     public static void main(String[] args) throws IOException
     {
+        Scanner keyboard = new Scanner(System.in);
        fillTable();
        setupFolders();
-       downloadFiles();
+       System.out.println("Would you like to redownload the CSVs? True or False");
+       boolean download = keyboard.nextBoolean();
+       if(download) {
+           System.out.println("What is the current build? Default is: "+buildNumber);
+           buildNumber = keyboard.nextLine();
+           downloadFiles();
+       }
        startupTables();
        //creatureDB2Convert();
        //itemDB2Convert();
