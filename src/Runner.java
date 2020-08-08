@@ -284,9 +284,6 @@ import java.util.*;
                     icon = fileIDs.get(itemIcon.get(itemappearanceReversed.get(itemmodifiedappearanceReversed.get(displayRow[0]))));
                     if(icon != null)
                     icon = "\"" + icon.split("/")[icon.split("/").length - 1].substring(0, icon.split("/")[icon.split("/").length - 1].length() - 4) + "\"";
-                    System.out.println(icon);
-
-
                 }
                 itemDisplayInfoWriter.write(displayRow[0] + delimiter + Lmodel + delimiter + Rmodel + delimiter + Ltexture + delimiter + Rtexture + delimiter + icon + delimiter + "\"\"" + delimiter + displayRow[16] + delimiter + displayRow[17] + delimiter + displayRow[18] + delimiter + displayRow[9] + delimiter + displayRow[6] + delimiter + "0" + delimiter + displayRow[28] + delimiter + displayRow[29] + delimiter + upArm + delimiter + lowArm + delimiter + hands + delimiter + upTor + delimiter + lowTor + delimiter + upLeg + delimiter + lowLeg + delimiter + foot + delimiter + displayRow[1] + delimiter + displayRow[2] + ",\n");
                 resetVarsItem();
