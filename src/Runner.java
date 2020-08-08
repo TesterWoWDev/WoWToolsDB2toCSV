@@ -55,15 +55,12 @@ public class Runner {
     }
     public static void sortInfoMatRes() throws IOException {
         BufferedReader reader = new BufferedReader(new FileReader("item/itemdisplayinfomaterialres.csv"));
-        Map<String, List<String>> map = new TreeMap<String, List<String>>();
-        String line = reader.readLine();//read header
+        Map<String, List<String>> map = new TreeMap<>();
+        String line;
+        reader.readLine();//skip header
         while ((line = reader.readLine()) != null) {
             String key = getField(line);
-            List<String> l = map.get(key);
-            if (l == null) {
-                l = new LinkedList<String>();
-                map.put(key, l);
-            }
+            List<String> l = map.computeIfAbsent(key, k -> new LinkedList<>());
             l.add(line);
         }
         reader.close();
