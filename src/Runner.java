@@ -141,15 +141,23 @@ public class Runner {
                     Lmodel = "\"\"";
                 }else{
                     Lmodel = Lmodel.split("/")[Lmodel.split("/").length -1];
-                    Lmodel = Lmodel.substring(0,Lmodel.length() -1) + "dx";
-                    Lmodel = "\"" + Lmodel.replaceAll("rshoulder", "lshoulder")+ "\"";
+                    Lmodel = Lmodel.substring(0,Lmodel.length() -3);
+                    if(Lmodel.startsWith("helm_"))
+                        Lmodel = Lmodel.substring(0,Lmodel.length() -4);
+                    if(Lmodel.endsWith("_"))
+                        Lmodel = Lmodel.substring(0,Lmodel.length() - 1);
+                    Lmodel = "\"" + Lmodel.replaceAll("rshoulder", "lshoulder")+ ".mdx\"";
 
                 }if(Rmodel == null){
                     Rmodel = "\"\"";
                 }else{
                     Rmodel = Rmodel.split("/")[Rmodel.split("/").length -1];
-                    Rmodel = Rmodel.substring(0,Rmodel.length() -1) + "dx";
-                    Rmodel = "\"" + Rmodel.replaceAll("lshoulder", "rshoulder")+ "\"";
+                    Rmodel = Rmodel.substring(0,Rmodel.length() -3);
+                    if(Rmodel.startsWith("helm_"))
+                        Rmodel = Rmodel.substring(0,Rmodel.length() -4);
+                    if(Rmodel.endsWith("_"))
+                        Rmodel = Rmodel.substring(0,Rmodel.length() - 1);
+                    Rmodel = "\"" + Rmodel.replaceAll("lshoulder", "rshoulder")+ ".mdx\"";
                 }if(Ltexture == null){
                     Ltexture = "\"\"";
                 }else{
@@ -393,7 +401,8 @@ public class Runner {
         String data = fileIDs.get(textureFDID.get(curr[1]));
         if(data != null){
             data = data.split(delim)[data.split(delim).length -1];
-            data = data.substring(0,data.length() -4);
+            data = data.substring(0,data.length() -6);
+
             switch (curr[0]) {
                 case "0":
                     upArm = data;
