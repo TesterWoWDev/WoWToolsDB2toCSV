@@ -2,9 +2,7 @@ import java.io.*;
 import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 public class Runner {
     public static HashMap<String, String> fileIDs;
@@ -37,7 +35,8 @@ public class Runner {
 
     public static void main(String[] args) throws IOException
     {
-        Scanner keyboard = new Scanner(System.in);
+       Scanner keyboard = new Scanner(System.in);
+
        fillTable();
        setupFolders();
        System.out.println("Would you like to download the CSVs? True or False(Recommended first use)");
@@ -48,11 +47,40 @@ public class Runner {
            buildNumber = keyboard.nextLine();
            buildNumber = keyboard.nextLine();
            downloadFiles();
+           sortInfoMatRes();
        }
        startupTables();
        creatureDB2Convert();
        itemDB2Convert();
     }
+    public static void sortInfoMatRes() throws IOException {
+        BufferedReader reader = new BufferedReader(new FileReader("item/itemdisplayinfomaterialres.csv"));
+        Map<String, List<String>> map = new TreeMap<String, List<String>>();
+        String line = reader.readLine();//read header
+        while ((line = reader.readLine()) != null) {
+            String key = getField(line);
+            List<String> l = map.get(key);
+            if (l == null) {
+                l = new LinkedList<String>();
+                map.put(key, l);
+            }
+            l.add(line);
+        }
+        reader.close();
+        FileWriter writer = new FileWriter("item/itemdisplayinfomaterialresSorted.csv");
+        for (List<String> list : map.values()) {
+            for (String val : list) {
+                writer.write(val);
+                writer.write("\n");
+            }
+        }
+        writer.close();
+    }
+
+    private static String getField(String line) {
+        return line.split(",")[3];// extract value you want to sort on
+    }
+
     public static void fillTable(){
         tables[0] = "item/item";
         tables[1] = "item/itemappearance";
@@ -67,6 +95,7 @@ public class Runner {
         tables[10] = "listfile/modelfiledata";
         tables[11] = "listfile/texturefiledata";
     }
+
     public static void setupFolders(){
         System.out.println("Setting up folders...");
         File file = new File("./item");
@@ -102,12 +131,14 @@ public class Runner {
         FileOutputStream fileOutputStream = new FileOutputStream("./listfile/listfile.csv");
         fileOutputStream.getChannel().transferFrom(readableByteChannel, 0, Long.MAX_VALUE);
     }
+
     public static void startupTables() throws IOException {
         System.out.println("Starting Tables...");
         fileIDs = setupFDIDMap("listfile/listfile.csv");
         modelFDID = setupModelMap("listfile/modelfiledata.csv");
         textureFDID = setupTextureMap("listfile/texturefiledata.csv");
     }
+
     public static void creatureDB2Convert() throws IOException
     {
         System.out.println("Starting Creatures...");
@@ -186,7 +217,7 @@ public class Runner {
 
     public static void itemDB2Convert() throws IOException {
         System.out.println("Starting Items...");
-        HashMap<String, String> itemDisplayInfoMaterials = setupDisplayExtraItemsMap("item/itemdisplayinfomaterialres.csv");
+        HashMap<String, String> itemDisplayInfoMaterials = setupDisplayExtraItemsMap("item/itemdisplayinfomaterialresSorted.csv");
         HashMap<String, String> itemmodifiedappearance = setupItemModMap("item/itemmodifiedappearance.csv");
         HashMap<String, String> itemappearance = setupItemAppMap("item/itemappearance.csv");
         HashMap<String, String> itemappearanceIcon = setupItemAppIconMap("item/itemappearance.csv");
@@ -194,9 +225,9 @@ public class Runner {
         FileWriter itemWriter = new FileWriter("export/ItemNew.csv");
         FileWriter itemSQL = new FileWriter("export/itemSQL.sql");
         try (BufferedReader br = new BufferedReader(new FileReader("item/itemdisplayinfo.csv"))) {
-            String line;
-            br.readLine();//skip header
-            while ((line = br.readLine()) != null) {
+                String line;
+                br.readLine();//skip header
+                while ((line = br.readLine()) != null) {
                 String[] displayRow = line.split(delimiter);
                 String Lmodel = fileIDs.get(modelFDID.get(displayRow[10]));
                 String Rmodel = fileIDs.get(modelFDID.get(displayRow[11]));
