@@ -194,10 +194,11 @@ public class Runner {
             while ((line = br.readLine()) != null) {
                 String[] displayRow = line.split(delimiter);
                 String display = "0";
-                if(itemmodifiedappearance.get(displayRow[0]) != null)
-                    if(itemappearance.get(itemmodifiedappearance.get(displayRow[0])) != null) {
+                if(itemmodifiedappearance.get(displayRow[0]) != null) {
+                    if (itemappearance.get(itemmodifiedappearance.get(displayRow[0])) != null) {
                         display = itemappearance.get(itemmodifiedappearance.get(displayRow[0])).split(delimiter)[0];
                     }
+                }
                 itemWriter.write(displayRow[0] + delimiter + displayRow[1] + delimiter + displayRow[2] + delimiter + displayRow[6] + delimiter + displayRow[3] + delimiter + display + delimiter + displayRow[4] + delimiter + displayRow[5] + ",\n");
             }
         }
