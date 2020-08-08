@@ -4,34 +4,34 @@ import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.util.*;
 
-public class Runner {
-    public static HashMap<String, String> fileIDs;
-    public static HashMap<String, String> modelFDID;
-    public static HashMap<String, String> textureFDID;
-    public static String delimiter = ",";
+    public class Runner {
+    private static HashMap<String, String> fileIDs;
+    private static HashMap<String, String> modelFDID;
+    private static HashMap<String, String> textureFDID;
+    private static final String delimiter = ",";
 //creature extra display
-    public static String head = "0";
-    public static String shoulder = "0";
-    public static String chest = "0";
-    public static String belt = "0";
-    public static String legs = "0";
-    public static String boots = "0";
-    public static String rings = "0";
-    public static String gloves = "0";
-    public static String wrist = "0";
-    public static String cape = "0";
+    private static String head = "0";
+    private static String shoulder = "0";
+    private static String chest = "0";
+    private static String belt = "0";
+    private static String legs = "0";
+    private static String boots = "0";
+    private static String rings = "0";
+    private static String gloves = "0";
+    private static String wrist = "0";
+    private static String cape = "0";
 //item textures
-    public static String upArm = "\"\"";
-    public static String lowArm = "\"\"";
-    public static String hands = "\"\"";
-    public static String upTor = "\"\"";
-    public static String lowTor = "\"\"";
-    public static String upLeg = "\"\"";
-    public static String lowLeg = "\"\"";
-    public static String foot = "\"\"";
+    private static String upArm = "\"\"";
+    private static String lowArm = "\"\"";
+    private static String hands = "\"\"";
+    private static String upTor = "\"\"";
+    private static String lowTor = "\"\"";
+    private static String upLeg = "\"\"";
+    private static String lowLeg = "\"\"";
+    private static String foot = "\"\"";
 //shit to do
-    public static String buildNumber = "9.0.1.35482";
-    public static String[] tables = new String[12];
+    private static String buildNumber = "9.0.1.35482";
+    private static final String[] tables = new String[12];
 
     public static void main(String[] args) throws IOException
     {
@@ -53,7 +53,7 @@ public class Runner {
        creatureDB2Convert();
        itemDB2Convert();
     }
-    public static void sortInfoMatRes() throws IOException {
+    private static void sortInfoMatRes() throws IOException {
         BufferedReader reader = new BufferedReader(new FileReader("item/itemdisplayinfomaterialres.csv"));
         Map<String, List<String>> map = new TreeMap<>();
         String line;
@@ -78,7 +78,7 @@ public class Runner {
         return line.split(",")[3];// extract value you want to sort on
     }
 
-    public static void fillTable(){
+    private static void fillTable(){
         tables[0] = "item/item";
         tables[1] = "item/itemappearance";
         tables[2] = "item/itemdisplayinfo";
@@ -93,7 +93,7 @@ public class Runner {
         tables[11] = "listfile/texturefiledata";
     }
 
-    public static void setupFolders(){
+    private static void setupFolders(){
         System.out.println("Setting up folders...");
         File file = new File("./item");
         boolean make = file.mkdir();
@@ -113,7 +113,7 @@ public class Runner {
             System.out.println("Error creating Export folder(possibly already exists)");
     }
 
-    public static void downloadFiles() throws IOException {
+    private static void downloadFiles() throws IOException {
         System.out.println("Starting downloads...");
         for (String table : tables) {
             System.out.println("Currently downloading... " + table.split("/")[1]);
@@ -129,14 +129,14 @@ public class Runner {
         fileOutputStream.getChannel().transferFrom(readableByteChannel, 0, Long.MAX_VALUE);
     }
 
-    public static void startupTables() throws IOException {
+    private static void startupTables() throws IOException {
         System.out.println("Starting Tables...");
-        fileIDs = setupFDIDMap("listfile/listfile.csv");
-        modelFDID = setupModelMap("listfile/modelfiledata.csv");
-        textureFDID = setupTextureMap("listfile/texturefiledata.csv");
+        fileIDs = setupFDIDMap();
+        modelFDID = setupModelMap();
+        textureFDID = setupTextureMap();
     }
 
-    public static void creatureDB2Convert() throws IOException
+    private static void creatureDB2Convert() throws IOException
     {
         System.out.println("Starting Creatures...");
         FileWriter creatureModelWriter = new FileWriter("export/CreatureModelInfoNew.csv");
@@ -212,12 +212,12 @@ public class Runner {
         creatureDisplayExtraWriter.close();
     }
 
-    public static void itemDB2Convert() throws IOException {
+    private static void itemDB2Convert() throws IOException {
         System.out.println("Starting Items...");
         HashMap<String, String> itemDisplayInfoMaterials = setupDisplayExtraItemsMap("item/itemdisplayinfomaterialresSorted.csv");
-        HashMap<String, String> itemmodifiedappearance = setupItemModMap("item/itemmodifiedappearance.csv");
-        HashMap<String, String> itemappearance = setupItemAppMap("item/itemappearance.csv");
-        HashMap<String, String> itemappearanceIcon = setupItemAppIconMap("item/itemappearance.csv");
+        HashMap<String, String> itemmodifiedappearance = setupItemModMap();
+        HashMap<String, String> itemappearance = setupItemAppMap();
+        HashMap<String, String> itemappearanceIcon = setupItemAppIconMap();
         FileWriter itemDisplayInfoWriter = new FileWriter("export/ItemDisplayInfoNew.csv");
         FileWriter itemWriter = new FileWriter("export/ItemNew.csv");
         FileWriter itemSQL = new FileWriter("export/itemSQL.sql");
@@ -313,7 +313,7 @@ public class Runner {
         itemWriter.close();
     }
 
-    public static HashMap<String, String> setupMap(String filename) throws IOException
+    private static HashMap<String, String> setupMap(String filename) throws IOException
     {
         HashMap<String, String> hm = new HashMap<>();
         BufferedReader br = new BufferedReader(new FileReader(filename));
@@ -327,11 +327,11 @@ public class Runner {
         return hm;
     }
 
-    public static HashMap<String, String> setupFDIDMap(String filename) throws IOException
+    private static HashMap<String, String> setupFDIDMap() throws IOException
     {
         String delim = ";";
         HashMap<String, String> hm = new HashMap<>();
-        BufferedReader br = new BufferedReader(new FileReader(filename));
+        BufferedReader br = new BufferedReader(new FileReader("listfile/listfile.csv"));
         String line;
         while ( (line = br.readLine()) != null ) {
             String[] values = line.split(delim);
@@ -341,10 +341,10 @@ public class Runner {
         return hm;
     }
 
-    public static HashMap<String, String> setupItemModMap(String filename) throws IOException
+    private static HashMap<String, String> setupItemModMap() throws IOException
     {
         HashMap<String, String> hm = new HashMap<>();
-        BufferedReader br = new BufferedReader(new FileReader(filename));
+        BufferedReader br = new BufferedReader(new FileReader("item/itemmodifiedappearance.csv"));
         String line;
         while ( (line = br.readLine()) != null ) {
             String[] values = line.split(delimiter);
@@ -354,10 +354,10 @@ public class Runner {
         return hm;
     }
 
-    public static HashMap<String, String> setupItemAppMap(String filename) throws IOException
+    private static HashMap<String, String> setupItemAppMap() throws IOException
     {
         HashMap<String, String> hm = new HashMap<>();
-        BufferedReader br = new BufferedReader(new FileReader(filename));
+        BufferedReader br = new BufferedReader(new FileReader("item/itemappearance.csv"));
         String line;
         while ( (line = br.readLine()) != null ) {
             String[] values = line.split(delimiter);
@@ -367,10 +367,10 @@ public class Runner {
         return hm;
     }
 
-    public static HashMap<String, String> setupItemAppIconMap(String filename) throws IOException
+    private static HashMap<String, String> setupItemAppIconMap() throws IOException
     {
         HashMap<String, String> hm = new HashMap<>();
-        BufferedReader br = new BufferedReader(new FileReader(filename));
+        BufferedReader br = new BufferedReader(new FileReader("item/itemappearance.csv"));
         String line;
         while ( (line = br.readLine()) != null ) {
             String[] values = line.split(delimiter);
@@ -380,7 +380,7 @@ public class Runner {
         return hm;
     }
 
-    public static HashMap<String, String> setupDisplayExtraItemsMap(String filename) throws IOException
+    private static HashMap<String, String> setupDisplayExtraItemsMap(String filename) throws IOException
     {
         String splitter = ".";
         HashMap<String, String> hm = new HashMap<>();
@@ -402,10 +402,10 @@ public class Runner {
         return hm;
     }
 
-    public static HashMap<String, String> setupModelMap(String filename) throws IOException
+    private static HashMap<String, String> setupModelMap() throws IOException
     {
         HashMap<String, String> hm = new HashMap<>();
-        BufferedReader br = new BufferedReader(new FileReader(filename));
+        BufferedReader br = new BufferedReader(new FileReader("listfile/modelfiledata.csv"));
         String line;
         while ( (line = br.readLine()) != null ) {
             String[] values = line.split(delimiter);
@@ -415,10 +415,10 @@ public class Runner {
         return hm;
     }
 
-    public static HashMap<String, String> setupTextureMap(String filename) throws IOException
+    private static HashMap<String, String> setupTextureMap() throws IOException
     {
         HashMap<String, String> hm = new HashMap<>();
-        BufferedReader br = new BufferedReader(new FileReader(filename));
+        BufferedReader br = new BufferedReader(new FileReader("listfile/texturefiledata.csv"));
         String line;
         while ( (line = br.readLine()) != null ) {
             String[] values = line.split(delimiter);
@@ -428,7 +428,7 @@ public class Runner {
         return hm;
     }
 
-    public static void resetVarsCreature()
+    private static void resetVarsCreature()
     {
         head = "0";
         shoulder = "0";
@@ -442,7 +442,7 @@ public class Runner {
         cape = "0";
     }
 
-    public static void setVarsCreature(String[] curr)
+    private static void setVarsCreature(String[] curr)
     {
         switch (curr[1])
         {
@@ -479,7 +479,7 @@ public class Runner {
         }
     }
 
-    public static void resetVarsItem()
+    private static void resetVarsItem()
     {
         upArm = "\"\"";
         lowArm = "\"\"";
@@ -491,7 +491,7 @@ public class Runner {
         foot = "\"\"";
     }
 
-    public static void setVarsItem(String[] curr) {
+    private static void setVarsItem(String[] curr) {
         String delim = "/";
         String data = fileIDs.get(textureFDID.get(curr[1]));
         if(data != null){
