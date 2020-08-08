@@ -40,17 +40,18 @@ public class Runner {
         Scanner keyboard = new Scanner(System.in);
        fillTable();
        setupFolders();
-       System.out.println("Would you like to redownload the CSVs? True or False");
+       System.out.println("Would you like to download the CSVs? True or False(Recommended first use)");
        boolean download = keyboard.nextBoolean();
        if(download) {
+           setupFolders();
            System.out.println("What is the current build? (Get this from WoW.Tools) Default is: "+buildNumber);
            buildNumber = keyboard.nextLine();
            buildNumber = keyboard.nextLine();
            downloadFiles();
        }
        startupTables();
-       //creatureDB2Convert();
-       //itemDB2Convert();
+       creatureDB2Convert();
+       itemDB2Convert();
     }
     public static void fillTable(){
         tables[0] = "item/item";
