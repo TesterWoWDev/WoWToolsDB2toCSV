@@ -43,7 +43,8 @@ public class Runner {
        System.out.println("Would you like to redownload the CSVs? True or False");
        boolean download = keyboard.nextBoolean();
        if(download) {
-           System.out.println("What is the current build? Default is: "+buildNumber);
+           System.out.println("What is the current build? (Get this from WoW.Tools) Default is: "+buildNumber);
+           buildNumber = keyboard.nextLine();
            buildNumber = keyboard.nextLine();
            downloadFiles();
        }
@@ -70,23 +71,23 @@ public class Runner {
         File file = new File("./item");
         boolean make = file.mkdir();
         if(!make)
-            System.out.println("Error setting up Item folder");
+            System.out.println("Error creating Item folder(possibly already exists)");
         file = new File("./creature");
         make = file.mkdir();
         if(!make)
-            System.out.println("Error setting up Creature folder");
+            System.out.println("Error creating Creature folder(possibly already exists)");
         file = new File("./listfile");
         make = file.mkdir();
         if(!make)
-            System.out.println("Error setting up Listfile folder");
+            System.out.println("Error creating Listfile folder(possibly already exists)");
         file = new File("./export");
         make = file.mkdir();
         if(!make)
-            System.out.println("Error setting up Export folder");
+            System.out.println("Error creating Export folder(possibly already exists)");
     }
 
     public static void downloadFiles() throws IOException {
-        System.out.println("Starting downloads");
+        System.out.println("Starting downloads...");
         for (String table : tables) {
             System.out.println("Currently downloading... " + table.split("/")[1]);
             InputStream in = new URL("https://wow.tools/dbc/api/export/?name=" + table.split("/")[1] + "&build=" + buildNumber).openStream();
