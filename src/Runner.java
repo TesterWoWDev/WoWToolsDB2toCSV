@@ -1,7 +1,8 @@
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
+import java.net.URL;
+import java.nio.channels.Channels;
+import java.nio.channels.FileChannel;
+import java.nio.channels.ReadableByteChannel;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,11 +32,58 @@ public class Runner {
     public static String lowLeg = "\"\"";
     public static String foot = "\"\"";
 
+    public static String buildNumber = "9.0.1.35482";
+    public static String[] tables = new String[12];
+
     public static void main(String[] args) throws IOException
     {
+       fillTable();
+       setupFolders();
+       downloadFiles();
        startupTables();
-       creatureDB2Convert();
-       itemDB2Convert();
+       //creatureDB2Convert();
+       //itemDB2Convert();
+    }
+    public static void fillTable(){
+        tables[0] = "item/item";
+        tables[1] = "item/itemappearance";
+        tables[2] = "item/itemdisplayinfo";
+        tables[3] = "item/itemdisplayinfomaterialres";
+        tables[4] = "item/itemmodifiedappearance";
+        tables[5] = "item/itemsearchname";
+        tables[6] = "creature/creaturedisplayinfo";
+        tables[7] = "creature/creaturedisplayinfoextra";
+        tables[8] = "creature/creaturemodeldata";
+        tables[9] = "creature/npcmodelitemslotdisplayinfo";
+        tables[10] = "listfile/modelfiledata";
+        tables[11] = "listfile/texturefiledata";
+    }
+    public static void setupFolders(){
+        System.out.println("Setting up folders...");
+        File file = new File("./item");
+        file.mkdir();
+        file = new File("./creature");
+        file.mkdir();
+        file = new File("./listfile");
+        file.mkdir();
+        file = new File("./export");
+        file.mkdir();
+    }
+
+    public static void downloadFiles() throws IOException {
+        System.out.println("Starting downloads");
+        for (String table : tables) {
+            System.out.println("Currently downloading... " + table.split("/")[1]);
+            InputStream in = new URL("https://wow.tools/dbc/api/export/?name=" + table.split("/")[1] + "&build=" + buildNumber).openStream();
+            ReadableByteChannel readableByteChannel = Channels.newChannel(in);
+            FileOutputStream fileOutputStream = new FileOutputStream("./" + table + ".csv");
+            fileOutputStream.getChannel().transferFrom(readableByteChannel, 0, Long.MAX_VALUE);
+        }
+        System.out.println("Currently downloading... listfile");
+        InputStream in = new URL("https://wow.tools/casc/listfile/download/csv/unverified").openStream();
+        ReadableByteChannel readableByteChannel = Channels.newChannel(in);
+        FileOutputStream fileOutputStream = new FileOutputStream("./listfile/listfile.csv");
+        fileOutputStream.getChannel().transferFrom(readableByteChannel, 0, Long.MAX_VALUE);
     }
     public static void startupTables() throws IOException {
         System.out.println("Starting Tables...");
