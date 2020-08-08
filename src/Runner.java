@@ -157,6 +157,7 @@ public class Runner {
                         Rmodel = Rmodel.substring(0,Rmodel.length() -4);
                     if(Rmodel.endsWith("_"))
                         Rmodel = Rmodel.substring(0,Rmodel.length() - 1);
+
                     Rmodel = "\"" + Rmodel.replaceAll("lshoulder", "rshoulder")+ ".mdx\"";
                 }if(Ltexture == null){
                     Ltexture = "\"\"";
@@ -401,7 +402,9 @@ public class Runner {
         String data = fileIDs.get(textureFDID.get(curr[1]));
         if(data != null){
             data = data.split(delim)[data.split(delim).length -1];
-            data = data.substring(0,data.length() -6);
+            data = data.substring(0,data.length() - 9);
+            if(data.endsWith("_"))
+                data = data.substring(0,data.length() -1);
 
             switch (curr[0]) {
                 case "0":
