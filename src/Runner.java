@@ -630,5 +630,4 @@ public class Runner {
     private static String substringFour(String str) {
         return str.substring(0, str.length() - 4);
     }
-
 }
