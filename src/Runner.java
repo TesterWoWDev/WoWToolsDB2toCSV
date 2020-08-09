@@ -40,22 +40,25 @@ import java.util.*;
 
     public static void main(String[] args) throws IOException
     {
-       Scanner keyboard = new Scanner(System.in);
        fillTable();
        setupFolders();
-       System.out.println("Would you like to download the CSVs? True or False(Recommended first use)");
-       boolean download = keyboard.nextBoolean();
-       if(download) {
-           setupFolders();
-           System.out.println("What is the current build? (Get this from WoW.Tools) Default is: "+buildNumber);
-           buildNumber = keyboard.nextLine();//for the skip line(scanner sux)
-           buildNumber = keyboard.nextLine();
-           downloadFiles();
-           sortInfoMatRes();
-       }
+       startupText();
        startupTables();
        creatureDB2Convert();
        itemDB2Convert();
+    }
+    private static void startupText() throws IOException {
+        Scanner keyboard = new Scanner(System.in);
+        System.out.println("Would you like to download the CSVs? True or False(Recommended first use)");
+        boolean download = keyboard.nextBoolean();
+        if(download) {
+            setupFolders();
+            System.out.println("What is the current build? (Get this from WoW.Tools) Default is: "+buildNumber);
+            buildNumber = keyboard.nextLine();//for the skip line(scanner sux)
+            buildNumber = keyboard.nextLine();
+            downloadFiles();
+            sortInfoMatRes();
+        }
     }
     //sorts itemdisplayinfomaterialres to put all displayIDs in groups for parsing later
     private static void sortInfoMatRes() throws IOException {
@@ -225,12 +228,12 @@ import java.util.*;
     private static void itemDB2Convert() throws IOException {
         System.out.println("Starting Items...");
         HashMap<String, String> itemDisplayInfoMaterials = setupDisplayExtraItemsMap(tables[3] + "Sorted" + csvEndSuffix);
-        HashMap<String, String> itemmodifiedappearance = setupItemModMap();
-        HashMap<String, String> itemappearance = setupItemAppMap();
-        HashMap<String, String> itemmodifiedappearanceReversed = setupItemModReversedMap();
-        HashMap<String, String> itemappearanceReversed = setupItemAppReversedMap();
+        HashMap<String, String> itemModifiedAppearance = setupItemModMap();
+        HashMap<String, String> itemAppearance = setupItemAppMap();
+        HashMap<String, String> itemModifiedAppearanceReversed = setupItemModReversedMap();
+        HashMap<String, String> itemAppearanceReversed = setupItemAppReversedMap();
         HashMap<String, String> itemIcon = setupItemMap();
-        HashMap<String, String> itemappearanceIcon = setupItemAppIconMap();
+        HashMap<String, String> itemAppearanceIcon = setupItemAppIconMap();
         FileWriter itemDisplayInfoWriter = new FileWriter("export/ItemDisplayInfoNew.csv");
         FileWriter itemWriter = new FileWriter("export/ItemNew.csv");
         FileWriter itemSQL = new FileWriter("export/itemSQL.sql");
@@ -285,13 +288,13 @@ import java.util.*;
                     }
                 }
                 String icon = "\"\"";
-                if(itemappearanceIcon.get(displayRow[0]) != null) {
-                    if (fileIDs.get(itemappearanceIcon.get(displayRow[0])) != null) {
-                        icon = fileIDs.get(itemappearanceIcon.get(displayRow[0]));
+                if(itemAppearanceIcon.get(displayRow[0]) != null) {
+                    if (fileIDs.get(itemAppearanceIcon.get(displayRow[0])) != null) {
+                        icon = fileIDs.get(itemAppearanceIcon.get(displayRow[0]));
                         icon = "\"" + icon.split("/")[icon.split("/").length - 1].substring(0, icon.split("/")[icon.split("/").length - 1].length() - 4) + "\"";
                     }
-                }else if(itemappearanceReversed.get(itemmodifiedappearanceReversed.get(displayRow[0])) != null){
-                    icon = fileIDs.get(itemIcon.get(itemappearanceReversed.get(itemmodifiedappearanceReversed.get(displayRow[0]))));
+                }else if(itemAppearanceReversed.get(itemModifiedAppearanceReversed.get(displayRow[0])) != null){
+                    icon = fileIDs.get(itemIcon.get(itemAppearanceReversed.get(itemModifiedAppearanceReversed.get(displayRow[0]))));
                     if(icon != null)
                     icon = "\"" + icon.split("/")[icon.split("/").length - 1].substring(0, icon.split("/")[icon.split("/").length - 1].length() - 4) + "\"";
                 }
@@ -305,9 +308,9 @@ import java.util.*;
             while ((line = br.readLine()) != null) {
                 String[] displayRow = line.split(delimiter);
                 String display = "0";
-                if(itemmodifiedappearance.get(displayRow[0]) != null) {
-                    if (itemappearance.get(itemmodifiedappearance.get(displayRow[0])) != null) {
-                        display = itemappearance.get(itemmodifiedappearance.get(displayRow[0])).split(delimiter)[0];
+                if(itemModifiedAppearance.get(displayRow[0]) != null) {
+                    if (itemAppearance.get(itemModifiedAppearance.get(displayRow[0])) != null) {
+                        display = itemAppearance.get(itemModifiedAppearance.get(displayRow[0])).split(delimiter)[0];
                     }
                 }
                 itemWriter.write(displayRow[0] + delimiter + displayRow[1] + delimiter + displayRow[2] + delimiter + displayRow[6] + delimiter + displayRow[3] + delimiter + display + delimiter + displayRow[4] + delimiter + displayRow[5] + ",\n");
