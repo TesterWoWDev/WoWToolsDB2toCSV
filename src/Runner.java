@@ -41,7 +41,6 @@ public class Runner {
     public static void main(String[] args) throws IOException
     {
        fillTable();
-       setupFolders();
        startupText();
        startupTables();
        creatureDB2Convert();
@@ -53,7 +52,7 @@ public class Runner {
         boolean download = keyboard.nextBoolean();
         if(download) {
             setupFolders();
-            System.out.println("What is the current build? (Get this from WoW.Tools) Default is: "+buildNumber);
+            System.out.println("What is the current build? (Get this from WoW.Tools) Default is: "+buildNumber + " No promises on builds past this.");
             buildNumber = keyboard.nextLine();//for the skip line(scanner sux)
             buildNumber = keyboard.nextLine();
             downloadFiles();
@@ -62,6 +61,7 @@ public class Runner {
     }
     //sorts itemdisplayinfomaterialres to put all displayIDs in groups for parsing later(cause blizzard cant keep their shit together)
     private static void sortInfoMatRes() throws IOException {
+        System.out.println("Sorting itemdisplayinfomaterialres...");
         BufferedReader reader = new BufferedReader(new FileReader(tables[3] + csvEndSuffix));
         Map<String, List<String>> map = new TreeMap<>();
         String line;
@@ -89,6 +89,7 @@ public class Runner {
 
     //table and path downloads for files
     private static void fillTable(){
+        System.out.println("Filling table...");
         tables[0] = "item/item";
         tables[1] = "item/itemappearance";
         tables[2] = "item/itemdisplayinfo";
