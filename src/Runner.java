@@ -173,19 +173,19 @@ public class Runner {
                     text1 = "\"\"";
                 } else if (!text1.equals("\"\"")) {//remove .blp extension
                     text1 = returnLast(text1);
-                    text1 = surroundQuotes(text1.substring(0, text1.length() - 4));
+                    text1 = surroundQuotes(blpExtensionRemover(text1));
                 }
                 if (text2 == null) {
                     text2 = "\"\"";
                 } else if (!text2.equals("\"\"")) {
                     text2 = returnLast(text2);
-                    text2 = surroundQuotes(text2.substring(0, text2.length() - 4));
+                    text2 = surroundQuotes(blpExtensionRemover(text2));
                 }
                 if (text3 == null) {
                     text3 = "\"\"";
                 } else if (!text3.equals("\"\"")) {
                     text3 = returnLast(text3);
-                    text3 = surroundQuotes(text3.substring(0, text3.length() - 4));
+                    text3 = surroundQuotes(blpExtensionRemover(text3));
                 }
                 if (modelData.get(displayRow[1]) != null) {
                     String[] modelRow = (modelData.get(displayRow[1])).split(delimiter);
@@ -228,7 +228,12 @@ public class Runner {
         creatureModelWriter.close();
         creatureDisplayExtraWriter.close();
     }
-//helper functions
+
+    private static String blpExtensionRemover(String str) {
+        return str.substring(0, str.length() - 4);
+    }
+
+    //helper functions
     //surrounds string with quotes for printout
     private static String surroundQuotes(String s) {
         return "\"" + s + "\"";
@@ -266,7 +271,7 @@ public class Runner {
                     Lmodel = returnLast(Lmodel);
                     Lmodel = Lmodel.substring(0,Lmodel.length() -3);
                     if(Lmodel.startsWith("helm_"))
-                        Lmodel = Lmodel.substring(0,Lmodel.length() -4);
+                        Lmodel = blpExtensionRemover(Lmodel);
                     if(Lmodel.endsWith("_"))
                         Lmodel = Lmodel.substring(0,Lmodel.length() - 1);
                     Lmodel = surroundQuotes(Lmodel.replaceAll("rshoulder", "lshoulder")+ ".mdx");
@@ -277,7 +282,7 @@ public class Runner {
                     Rmodel = returnLast(Rmodel);
                     Rmodel = Rmodel.substring(0,Rmodel.length() -3);
                     if(Rmodel.startsWith("helm_"))
-                        Rmodel = Rmodel.substring(0,Rmodel.length() -4);
+                        Rmodel = blpExtensionRemover(Rmodel);
                     if(Rmodel.endsWith("_"))
                         Rmodel = Rmodel.substring(0,Rmodel.length() - 1);
 
@@ -286,12 +291,12 @@ public class Runner {
                     Ltexture = "\"\"";
                 }else{
                     Ltexture = returnLast(Ltexture);
-                    Ltexture = surroundQuotes(Ltexture.substring(0,Ltexture.length() -4));
+                    Ltexture = surroundQuotes(blpExtensionRemover(Ltexture));
                 }if(Rtexture == null){
                     Rtexture = "\"\"";
                 }else{
                     Rtexture = returnLast(Rtexture);
-                    Rtexture = surroundQuotes(Rtexture.substring(0,Rtexture.length() -4));
+                    Rtexture = surroundQuotes(blpExtensionRemover(Rtexture));
                 }
                 if(itemDisplayInfoMaterials.get(displayRow[0]) != null) {
                     String displayInfoMats = itemDisplayInfoMaterials.get(displayRow[0]);
