@@ -82,7 +82,7 @@ public class Runner {
         writer.close();
     }
 
-    // extract value you want to sort on(for sorting itemdisplayinfomaterialres)
+    // extract value you want to sort on(for sorting itemdisplayinfomaterialres)Used in sortInfoMatRes()
     private static String getField(String line) {
         return line.split(",")[3];
     }
@@ -173,19 +173,19 @@ public class Runner {
                     text1 = "\"\"";
                 } else if (!text1.equals("\"\"")) {//remove .blp extension
                     text1 = returnLast(text1);
-                    text1 = surroundQuotes(blpExtensionRemover(text1));
+                    text1 = surroundQuotes(substringFour(text1));
                 }
                 if (text2 == null) {
                     text2 = "\"\"";
                 } else if (!text2.equals("\"\"")) {
                     text2 = returnLast(text2);
-                    text2 = surroundQuotes(blpExtensionRemover(text2));
+                    text2 = surroundQuotes(substringFour(text2));
                 }
                 if (text3 == null) {
                     text3 = "\"\"";
                 } else if (!text3.equals("\"\"")) {
                     text3 = returnLast(text3);
-                    text3 = surroundQuotes(blpExtensionRemover(text3));
+                    text3 = surroundQuotes(substringFour(text3));
                 }
                 if (modelData.get(displayRow[1]) != null) {
                     String[] modelRow = (modelData.get(displayRow[1])).split(delimiter);
@@ -229,20 +229,6 @@ public class Runner {
         creatureDisplayExtraWriter.close();
     }
 
-    private static String blpExtensionRemover(String str) {
-        return str.substring(0, str.length() - 4);
-    }
-
-    //helper functions
-    //surrounds string with quotes for printout
-    private static String surroundQuotes(String s) {
-        return "\"" + s + "\"";
-    }
-    //returns last value after a split on /
-    private static String returnLast(String str) {
-        return str.split("/")[str.split("/").length -1];
-    }
-
     //all item csv creation
     private static void itemDB2Convert() throws IOException {
         System.out.println("Starting Items...");
@@ -270,38 +256,38 @@ public class Runner {
                 }else{
                     Lmodel = returnLast(Lmodel);
                     if(Lmodel.endsWith("_r.m2"))
-                        Lmodel = blpExtensionRemover(Lmodel) + "l.m2";
+                        Lmodel = substringFour(Lmodel) + "l.m2";
                     Lmodel = Lmodel.substring(0,Lmodel.length() -3);
                     if(Lmodel.startsWith("helm_"))
-                        Lmodel = blpExtensionRemover(Lmodel);
+                        Lmodel = substringFour(Lmodel);
                     if(Lmodel.endsWith("_"))
                         Lmodel = Lmodel.substring(0,Lmodel.length() - 1);
-                    Lmodel = surroundQuotes(Lmodel.replaceAll("rshoulder", "lshoulder")+ ".mdx");
+                    Lmodel = appendMDX(surroundQuotes(Lmodel.replaceAll("rshoulder", "lshoulder")));
 
                 }if(Rmodel == null){
                     Rmodel = "\"\"";
                 }else{
                     Rmodel = returnLast(Rmodel);
                         if(Rmodel.endsWith("_l.m2"))
-                            Rmodel = blpExtensionRemover(Rmodel) + "r.m2";
+                            Rmodel = substringFour(Rmodel) + "r.m2";
                     Rmodel = Rmodel.substring(0,Rmodel.length() -3);
                     if(Rmodel.startsWith("helm_"))
-                        Rmodel = blpExtensionRemover(Rmodel);
+                        Rmodel = substringFour(Rmodel);
                     if(Rmodel.endsWith("_"))
                         Rmodel = Rmodel.substring(0,Rmodel.length() - 1);
 
 
-                    Rmodel = surroundQuotes(Rmodel.replaceAll("lshoulder", "rshoulder")+ ".mdx");
+                    Rmodel = appendMDX(surroundQuotes(Rmodel.replaceAll("lshoulder", "rshoulder")));
                 }if(Ltexture == null){
                     Ltexture = "\"\"";
                 }else{
                     Ltexture = returnLast(Ltexture);
-                    Ltexture = surroundQuotes(blpExtensionRemover(Ltexture));
+                    Ltexture = surroundQuotes(substringFour(Ltexture));
                 }if(Rtexture == null){
                     Rtexture = "\"\"";
                 }else{
                     Rtexture = returnLast(Rtexture);
-                    Rtexture = surroundQuotes(blpExtensionRemover(Rtexture));
+                    Rtexture = surroundQuotes(substringFour(Rtexture));
                 }
                 if(itemDisplayInfoMaterials.get(displayRow[0]) != null) {
                     String displayInfoMats = itemDisplayInfoMaterials.get(displayRow[0]);
@@ -357,8 +343,6 @@ public class Runner {
         itemDisplayInfoWriter.close();
         itemWriter.close();
     }
-
-
 
     //general map, used in multiple places
     private static HashMap<String, String> setupMap(String filename) throws IOException
@@ -631,4 +615,20 @@ public class Runner {
             }
         }
     }
+    //helper functions
+    //surrounds string with quotes for printout
+    private static String surroundQuotes(String s) {
+        return "\"" + s + "\"";
+    }
+    //returns last value after a split on /
+    private static String returnLast(String str) {
+        return str.split("/")[str.split("/").length -1];
+    }
+    private static String appendMDX(String str) {
+        return str + ".mdx";
+    }
+    private static String substringFour(String str) {
+        return str.substring(0, str.length() - 4);
+    }
+
 }
