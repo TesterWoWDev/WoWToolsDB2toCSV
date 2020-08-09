@@ -5,11 +5,10 @@ import java.nio.channels.ReadableByteChannel;
 import java.util.*;
 
     public class Runner {
+//FileID maps
     private static HashMap<String, String> fileIDs;
     private static HashMap<String, String> modelFDID;
     private static HashMap<String, String> textureFDID;
-    private static final String delimiter = ",";
-    public static final String csvEndSuffix = ".csv";
 //creature extra display
     private static String head = "0";
     private static String shoulder = "0";
@@ -35,11 +34,13 @@ import java.util.*;
     private static String buildNumber = "9.0.1.35482";
     //filled in fillTable
     private static final String[] tables = new String[12];
+    //shit
+    private static final String delimiter = ",";
+    public static final String csvEndSuffix = ".csv";
 
     public static void main(String[] args) throws IOException
     {
        Scanner keyboard = new Scanner(System.in);
-
        fillTable();
        setupFolders();
        System.out.println("Would you like to download the CSVs? True or False(Recommended first use)");
@@ -47,7 +48,7 @@ import java.util.*;
        if(download) {
            setupFolders();
            System.out.println("What is the current build? (Get this from WoW.Tools) Default is: "+buildNumber);
-           buildNumber = keyboard.nextLine();
+           buildNumber = keyboard.nextLine();//for the skip line(scanner sux)
            buildNumber = keyboard.nextLine();
            downloadFiles();
            sortInfoMatRes();
