@@ -172,19 +172,19 @@ public class Runner {
                 if (text1 == null) {
                     text1 = "\"\"";
                 } else if (!text1.equals("\"\"")) {//remove .blp extension
-                    text1 = text1.split("/")[text1.split("/").length - 1];
+                    text1 = returnLast(text1);
                     text1 = surroundQuotes(text1.substring(0, text1.length() - 4));
                 }
                 if (text2 == null) {
                     text2 = "\"\"";
                 } else if (!text2.equals("\"\"")) {
-                    text2 = text2.split("/")[text2.split("/").length - 1];
+                    text2 = returnLast(text2);
                     text2 = surroundQuotes(text2.substring(0, text2.length() - 4));
                 }
                 if (text3 == null) {
                     text3 = "\"\"";
                 } else if (!text3.equals("\"\"")) {
-                    text3 = text3.split("/")[text3.split("/").length - 1];
+                    text3 = returnLast(text3);
                     text3 = surroundQuotes(text3.substring(0, text3.length() - 4));
                 }
                 if (modelData.get(displayRow[1]) != null) {
@@ -202,7 +202,7 @@ public class Runner {
                             }
                             String a = fileIDs.get(textureFDID.get(extraSplit[10]));
                             if (a != null) {
-                                String texture = surroundQuotes(a.split("/")[a.split("/").length - 1]);
+                                String texture = surroundQuotes(returnLast(a));
                                 displayExtraMap.put(extraSplit[0],extraSplit[0] + delimiter + extraSplit[1] + delimiter + extraSplit[2] + delimiter + extraSplit[4] + delimiter + extraSplit[5] + delimiter + extraSplit[6] + delimiter + extraSplit[7] + delimiter + extraSplit[8] + delimiter + head + delimiter + shoulder + delimiter + shirt + delimiter + chest + delimiter + belt + delimiter + legs + delimiter + boots + delimiter + wrist + delimiter + gloves + delimiter + tabard + delimiter + cape + delimiter + "0" + delimiter + texture + ",\n");
                                 resetVarsCreature();
                             }
@@ -228,9 +228,14 @@ public class Runner {
         creatureModelWriter.close();
         creatureDisplayExtraWriter.close();
     }
-
+//helper functions
+    //surrounds string with quotes for printout
     private static String surroundQuotes(String s) {
         return "\"" + s + "\"";
+    }
+    //returns last value after a split on /
+    private static String returnLast(String str) {
+        return str.split("/")[str.split("/").length -1];
     }
 
     //all item csv creation
@@ -258,7 +263,7 @@ public class Runner {
                 if(Lmodel == null){
                     Lmodel = "\"\"";
                 }else{
-                    Lmodel = Lmodel.split("/")[Lmodel.split("/").length -1];
+                    Lmodel = returnLast(Lmodel);
                     Lmodel = Lmodel.substring(0,Lmodel.length() -3);
                     if(Lmodel.startsWith("helm_"))
                         Lmodel = Lmodel.substring(0,Lmodel.length() -4);
@@ -269,7 +274,7 @@ public class Runner {
                 }if(Rmodel == null){
                     Rmodel = "\"\"";
                 }else{
-                    Rmodel = Rmodel.split("/")[Rmodel.split("/").length -1];
+                    Rmodel = returnLast(Rmodel);
                     Rmodel = Rmodel.substring(0,Rmodel.length() -3);
                     if(Rmodel.startsWith("helm_"))
                         Rmodel = Rmodel.substring(0,Rmodel.length() -4);
@@ -280,12 +285,12 @@ public class Runner {
                 }if(Ltexture == null){
                     Ltexture = "\"\"";
                 }else{
-                    Ltexture = Ltexture.split("/")[Ltexture.split("/").length -1];
+                    Ltexture = returnLast(Ltexture);
                     Ltexture = surroundQuotes(Ltexture.substring(0,Ltexture.length() -4));
                 }if(Rtexture == null){
                     Rtexture = "\"\"";
                 }else{
-                    Rtexture = Rtexture.split("/")[Rtexture.split("/").length -1];
+                    Rtexture = returnLast(Rtexture);
                     Rtexture = surroundQuotes(Rtexture.substring(0,Rtexture.length() -4));
                 }
                 if(itemDisplayInfoMaterials.get(displayRow[0]) != null) {
@@ -300,12 +305,12 @@ public class Runner {
                 if(itemAppearanceIcon.get(displayRow[0]) != null) {
                     if (fileIDs.get(itemAppearanceIcon.get(displayRow[0])) != null) {
                         icon = fileIDs.get(itemAppearanceIcon.get(displayRow[0]));
-                        icon = surroundQuotes(icon.split("/")[icon.split("/").length - 1].substring(0, icon.split("/")[icon.split("/").length - 1].length() - 4));
+                        icon = surroundQuotes(returnLast(icon).substring(0, returnLast(icon).length() - 4));
                     }
                 }else if(itemAppearanceReversed.get(itemModifiedAppearanceReversed.get(displayRow[0])) != null){
                     icon = fileIDs.get(itemIcon.get(itemAppearanceReversed.get(itemModifiedAppearanceReversed.get(displayRow[0]))));
                     if(icon != null)
-                    icon = surroundQuotes(icon.split("/")[icon.split("/").length - 1].substring(0, icon.split("/")[icon.split("/").length - 1].length() - 4));
+                    icon = surroundQuotes(returnLast(icon).substring(0, returnLast(icon).length() - 4));
                 }
                 itemDisplayInfoWriter.write(displayRow[0] + delimiter + Lmodel + delimiter + Rmodel + delimiter + Ltexture + delimiter + Rtexture + delimiter + icon + delimiter + "\"\"" + delimiter + displayRow[16] + delimiter + displayRow[17] + delimiter + displayRow[18] + delimiter + displayRow[9] + delimiter + displayRow[6] + delimiter + "0" + delimiter + displayRow[28] + delimiter + displayRow[29] + delimiter + upArm + delimiter + lowArm + delimiter + hands + delimiter + upTor + delimiter + lowTor + delimiter + upLeg + delimiter + lowLeg + delimiter + foot + delimiter + displayRow[1] + delimiter + displayRow[2] + ",\n");
                 resetVarsItem();
@@ -342,6 +347,8 @@ public class Runner {
         itemDisplayInfoWriter.close();
         itemWriter.close();
     }
+
+
 
     //general map, used in multiple places
     private static HashMap<String, String> setupMap(String filename) throws IOException
@@ -581,10 +588,9 @@ public class Runner {
     //set ItemDisplayInfo variables
     private static void setVarsItem(String[] curr) {
         if(curr.length == 2) {
-            String delim = "/";
             String data = fileIDs.get(textureFDID.get(curr[1]));
             if (data != null) {
-                data = data.split(delim)[data.split(delim).length - 1];
+                data = returnLast(data);
                 data = data.substring(0, data.length() - 6);
                 switch (curr[0]) {
                     case "0":
