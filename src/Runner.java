@@ -9,6 +9,7 @@ import java.util.*;
     private static HashMap<String, String> modelFDID;
     private static HashMap<String, String> textureFDID;
     private static final String delimiter = ",";
+    public static final String csvEndSuffix = ".csv";
 //creature extra display
     private static String head = "0";
     private static String shoulder = "0";
@@ -16,10 +17,11 @@ import java.util.*;
     private static String belt = "0";
     private static String legs = "0";
     private static String boots = "0";
-    private static String rings = "0";
     private static String gloves = "0";
     private static String wrist = "0";
     private static String cape = "0";
+    private static String shirt = "0";
+    private static String tabard = "0";
 //item textures
     private static String upArm = "\"\"";
     private static String lowArm = "\"\"";
@@ -29,8 +31,9 @@ import java.util.*;
     private static String upLeg = "\"\"";
     private static String lowLeg = "\"\"";
     private static String foot = "\"\"";
-//shit to do
+    //updated in main method
     private static String buildNumber = "9.0.1.35482";
+    //filled in fillTable
     private static final String[] tables = new String[12];
 
     public static void main(String[] args) throws IOException
@@ -53,8 +56,9 @@ import java.util.*;
        creatureDB2Convert();
        itemDB2Convert();
     }
+    //sorts itemdisplayinfomaterialres to put all displayIDs in groups for parsing later
     private static void sortInfoMatRes() throws IOException {
-        BufferedReader reader = new BufferedReader(new FileReader("item/itemdisplayinfomaterialres.csv"));
+        BufferedReader reader = new BufferedReader(new FileReader(tables[3] + csvEndSuffix));
         Map<String, List<String>> map = new TreeMap<>();
         String line;
         reader.readLine();//skip header
@@ -64,7 +68,7 @@ import java.util.*;
             l.add(line);
         }
         reader.close();
-        FileWriter writer = new FileWriter("item/itemdisplayinfomaterialresSorted.csv");
+        FileWriter writer = new FileWriter(tables[3] + "Sorted" + csvEndSuffix);
         for (List<String> list : map.values()) {
             for (String val : list) {
                 writer.write(val);
@@ -74,10 +78,12 @@ import java.util.*;
         writer.close();
     }
 
+    // extract value you want to sort on(for sorting itemdisplayinfomaterialres)
     private static String getField(String line) {
-        return line.split(",")[3];// extract value you want to sort on
+        return line.split(",")[3];
     }
 
+    //table and path downloads for files
     private static void fillTable(){
         tables[0] = "item/item";
         tables[1] = "item/itemappearance";
@@ -142,12 +148,12 @@ import java.util.*;
         FileWriter creatureModelWriter = new FileWriter("export/CreatureModelInfoNew.csv");
         FileWriter creatureDisplayWriter = new FileWriter("export/CreatureDisplayInfoNew.csv");
         FileWriter creatureDisplayExtraWriter = new FileWriter("export/CreatureDisplayExtraNew.csv");
-        HashMap<String, String> modelData = setupMap("creature/creaturemodeldata.csv");
-        HashMap<String, String> displayExtra = setupMap("creature/creaturedisplayinfoextra.csv");
-        HashMap<String, String> displayExtraItems = setupDisplayExtraItemsMap("creature/npcmodelitemslotdisplayinfo.csv");
+        HashMap<String, String> modelData = setupMap(tables[8] + csvEndSuffix);
+        HashMap<String, String> displayExtra = setupMap(tables[7] + csvEndSuffix);
+        HashMap<String, String> displayExtraItems = setupDisplayExtraItemsMap(tables[9] + csvEndSuffix);
         HashMap<String, String> modelMap = new HashMap<>();
         HashMap<String, String> displayExtraMap = new HashMap<>();
-        try (BufferedReader br = new BufferedReader(new FileReader("creature/creaturedisplayinfo.csv"))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(tables[6] + csvEndSuffix))) {
             String line;
             br.readLine();//skip header
             while ((line = br.readLine()) != null) {
@@ -189,13 +195,13 @@ import java.util.*;
                             String a = fileIDs.get(textureFDID.get(extraSplit[10]));
                             if (a != null) {
                                 String texture = "\"" + a.split("/")[a.split("/").length - 1] + "\"";
-                                displayExtraMap.put(extraSplit[0],extraSplit[0] + delimiter + extraSplit[1] + delimiter + extraSplit[2] + delimiter + extraSplit[4] + delimiter + extraSplit[5] + delimiter + extraSplit[6] + delimiter + extraSplit[7] + delimiter + extraSplit[8] + delimiter + head + delimiter + shoulder + delimiter + chest + delimiter + belt + delimiter + legs + delimiter + boots + delimiter + rings + delimiter + gloves + delimiter + wrist + delimiter + cape + delimiter + "0" + delimiter + texture + ",\n");
+                                displayExtraMap.put(extraSplit[0],extraSplit[0] + delimiter + extraSplit[1] + delimiter + extraSplit[2] + delimiter + extraSplit[4] + delimiter + extraSplit[5] + delimiter + extraSplit[6] + delimiter + extraSplit[7] + delimiter + extraSplit[8] + delimiter + head + delimiter + shoulder + delimiter + shirt + delimiter + chest + delimiter + belt + delimiter + legs + delimiter + boots + delimiter + wrist + delimiter + gloves + delimiter + tabard + delimiter + cape + delimiter + "0" + delimiter + texture + ",\n");
                                 resetVarsCreature();
                             }
                         }
                     }
                     if (modelLine != null) {
-                        String path; //NOTE if there are dupes(write the model and displayextra to a linked list, then loop it at the end and write)
+                        String path;
                         path = "\"" + modelLine.substring(0, modelLine.length() - 1) + "dx" + "\"";
                         modelMap.put(modelRow[0],modelRow[0] + delimiter + modelRow[7] + delimiter + path + delimiter + "1" + delimiter + modelRow[19] + delimiter + modelRow[26] + delimiter + modelRow[10] + delimiter + "0x41900000" + delimiter + "0x41400000" + delimiter + "1" + delimiter + modelRow[15] + delimiter + "0" + delimiter + modelRow[17] + delimiter + "0" + delimiter + modelRow[20] + delimiter + modelRow[21] + delimiter + modelRow[30] + delimiter + modelRow[1] + delimiter + modelRow[2] + delimiter + modelRow[3] + delimiter + modelRow[4] + delimiter + modelRow[5] + delimiter + modelRow[6] + delimiter + "1" + delimiter + modelRow[22] + delimiter + modelRow[25] + delimiter + "0x0" + delimiter + "0" + ",\n");
                         creatureDisplayWriter.write(displayRow[0] + delimiter + displayRow[1] + delimiter + displayRow[2] + delimiter + displayRow[7] + delimiter + displayRow[4] + delimiter + displayRow[5] + delimiter + text1 + delimiter + text2 + delimiter + text3 + delimiter + displayRow[10] + delimiter + displayRow[7] + delimiter + displayRow[9] + delimiter + displayRow[10] + delimiter + "0" + delimiter + "0x0" + delimiter + displayRow[13] + ",\n");
@@ -217,7 +223,7 @@ import java.util.*;
 
     private static void itemDB2Convert() throws IOException {
         System.out.println("Starting Items...");
-        HashMap<String, String> itemDisplayInfoMaterials = setupDisplayExtraItemsMap("item/itemdisplayinfomaterialresSorted.csv");
+        HashMap<String, String> itemDisplayInfoMaterials = setupDisplayExtraItemsMap(tables[3] + "Sorted" + csvEndSuffix);
         HashMap<String, String> itemmodifiedappearance = setupItemModMap();
         HashMap<String, String> itemappearance = setupItemAppMap();
         HashMap<String, String> itemmodifiedappearanceReversed = setupItemModReversedMap();
@@ -227,7 +233,7 @@ import java.util.*;
         FileWriter itemDisplayInfoWriter = new FileWriter("export/ItemDisplayInfoNew.csv");
         FileWriter itemWriter = new FileWriter("export/ItemNew.csv");
         FileWriter itemSQL = new FileWriter("export/itemSQL.sql");
-        try (BufferedReader br = new BufferedReader(new FileReader("item/itemdisplayinfo.csv"))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(tables[2] + csvEndSuffix))) {
                 String line;
                 br.readLine();//skip header
                 while ((line = br.readLine()) != null) {
@@ -292,7 +298,7 @@ import java.util.*;
                 resetVarsItem();
             }
         }
-        try (BufferedReader br = new BufferedReader(new FileReader("item/item.csv"))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(tables[0] + csvEndSuffix))) {
             String line;
             br.readLine();//skip header
             while ((line = br.readLine()) != null) {
@@ -306,7 +312,7 @@ import java.util.*;
                 itemWriter.write(displayRow[0] + delimiter + displayRow[1] + delimiter + displayRow[2] + delimiter + displayRow[6] + delimiter + displayRow[3] + delimiter + display + delimiter + displayRow[4] + delimiter + displayRow[5] + ",\n");
             }
         }
-        try (BufferedReader br = new BufferedReader(new FileReader("item/itemsearchname.csv"))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(tables[5] + csvEndSuffix))) {
             String line;
             br.readLine();//skip header
             while ((line = br.readLine()) != null) {
@@ -355,7 +361,7 @@ import java.util.*;
     private static HashMap<String, String> setupItemModMap() throws IOException
     {
         HashMap<String, String> hm = new HashMap<>();
-        BufferedReader br = new BufferedReader(new FileReader("item/itemmodifiedappearance.csv"));
+        BufferedReader br = new BufferedReader(new FileReader(tables[4] + csvEndSuffix));
         String line;
         while ( (line = br.readLine()) != null ) {
             String[] values = line.split(delimiter);
@@ -368,7 +374,7 @@ import java.util.*;
     private static HashMap<String, String> setupItemAppMap() throws IOException
     {
         HashMap<String, String> hm = new HashMap<>();
-        BufferedReader br = new BufferedReader(new FileReader("item/itemappearance.csv"));
+        BufferedReader br = new BufferedReader(new FileReader(tables[1] + csvEndSuffix));
         String line;
         while ( (line = br.readLine()) != null ) {
             String[] values = line.split(delimiter);
@@ -381,7 +387,7 @@ import java.util.*;
         private static HashMap<String, String> setupItemModReversedMap() throws IOException
         {
             HashMap<String, String> hm = new HashMap<>();
-            BufferedReader br = new BufferedReader(new FileReader("item/itemmodifiedappearance.csv"));
+            BufferedReader br = new BufferedReader(new FileReader(tables[4] + csvEndSuffix));
             String line;
             while ( (line = br.readLine()) != null ) {
                 String[] values = line.split(delimiter);
@@ -394,7 +400,7 @@ import java.util.*;
         private static HashMap<String, String> setupItemAppReversedMap() throws IOException
         {
             HashMap<String, String> hm = new HashMap<>();
-            BufferedReader br = new BufferedReader(new FileReader("item/itemappearance.csv"));
+            BufferedReader br = new BufferedReader(new FileReader(tables[1] + csvEndSuffix));
             String line;
             while ( (line = br.readLine()) != null ) {
                 String[] values = line.split(delimiter);
@@ -407,7 +413,7 @@ import java.util.*;
         private static HashMap<String, String> setupItemMap() throws IOException
         {
             HashMap<String, String> hm = new HashMap<>();
-            BufferedReader br = new BufferedReader(new FileReader("item/item.csv"));
+            BufferedReader br = new BufferedReader(new FileReader(tables[0] + csvEndSuffix));
             String line;
             while ( (line = br.readLine()) != null ) {
                 String[] values = line.split(delimiter);
@@ -420,7 +426,7 @@ import java.util.*;
     private static HashMap<String, String> setupItemAppIconMap() throws IOException
     {
         HashMap<String, String> hm = new HashMap<>();
-        BufferedReader br = new BufferedReader(new FileReader("item/itemappearance.csv"));
+        BufferedReader br = new BufferedReader(new FileReader(tables[1] + csvEndSuffix));
         String line;
         while ( (line = br.readLine()) != null ) {
             String[] values = line.split(delimiter);
@@ -456,7 +462,7 @@ import java.util.*;
     private static HashMap<String, String> setupModelMap() throws IOException
     {
         HashMap<String, String> hm = new HashMap<>();
-        BufferedReader br = new BufferedReader(new FileReader("listfile/modelfiledata.csv"));
+        BufferedReader br = new BufferedReader(new FileReader(tables[10] + csvEndSuffix));
         String line;
         while ( (line = br.readLine()) != null ) {
             String[] values = line.split(delimiter);
@@ -469,7 +475,7 @@ import java.util.*;
     private static HashMap<String, String> setupTextureMap() throws IOException
     {
         HashMap<String, String> hm = new HashMap<>();
-        BufferedReader br = new BufferedReader(new FileReader("listfile/texturefiledata.csv"));
+        BufferedReader br = new BufferedReader(new FileReader(tables[11] + csvEndSuffix));
         String line;
         while ( (line = br.readLine()) != null ) {
             String[] values = line.split(delimiter);
@@ -487,10 +493,11 @@ import java.util.*;
         belt = "0";
         legs = "0";
         boots = "0";
-        rings = "0";
         gloves = "0";
         wrist = "0";
         cape = "0";
+        shirt = "0";
+        tabard = "0";
     }
 
     private static void setVarsCreature(String[] curr)
@@ -502,6 +509,9 @@ import java.util.*;
                     break;
                 case "3":
                     shoulder = curr[0];
+                    break;
+                case "4":
+                    shirt = curr[0];
                     break;
                 case "5":
                     chest = curr[0];
@@ -521,11 +531,11 @@ import java.util.*;
                 case "10":
                     gloves = curr[0];
                     break;
-                case "11":
-                    rings = curr[0];
-                    break;
                 case "15":
                     cape = curr[0];
+                    break;
+                case "19":
+                    tabard = curr[0];
                     break;
             }
         }
