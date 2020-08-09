@@ -158,16 +158,19 @@ import java.util.*;
                 if (text1 == null) {
                     text1 = "\"\"";
                 } else if (!text1.equals("\"\"")) {//remove .blp extension
+                    text1 = text1.split("/")[text1.split("/").length - 1];
                     text1 = "\"" + text1.substring(0, text1.length() - 4) + "\"";
                 }
                 if (text2 == null) {
                     text2 = "\"\"";
                 } else if (!text2.equals("\"\"")) {
+                    text2 = text2.split("/")[text2.split("/").length - 1];
                     text2 = "\"" + text2.substring(0, text2.length() - 4) + "\"";
                 }
                 if (text3 == null) {
                     text3 = "\"\"";
                 } else if (!text3.equals("\"\"")) {
+                    text3 = text3.split("/")[text3.split("/").length - 1];
                     text3 = "\"" + text3.substring(0, text3.length() - 4) + "\"";
                 }
                 if (modelData.get(displayRow[1]) != null) {
@@ -183,9 +186,9 @@ import java.util.*;
                                 String[] currItem = s.split("\\.");
                                 setVarsCreature(currItem);
                             }
-                            String a = fileIDs.get(extraSplit[10]);
+                            String a = fileIDs.get(textureFDID.get(extraSplit[10]));
                             if (a != null) {
-                                String texture = a.split("/")[a.split("/").length - 1];
+                                String texture = "\"" + a.split("/")[a.split("/").length - 1] + "\"";
                                 displayExtraMap.put(extraSplit[0],extraSplit[0] + delimiter + extraSplit[1] + delimiter + extraSplit[2] + delimiter + extraSplit[4] + delimiter + extraSplit[5] + delimiter + extraSplit[6] + delimiter + extraSplit[7] + delimiter + extraSplit[8] + delimiter + head + delimiter + shoulder + delimiter + chest + delimiter + belt + delimiter + legs + delimiter + boots + delimiter + rings + delimiter + gloves + delimiter + wrist + delimiter + cape + delimiter + "0" + delimiter + texture + ",\n");
                                 resetVarsCreature();
                             }
