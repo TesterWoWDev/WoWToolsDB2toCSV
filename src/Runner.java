@@ -4,7 +4,7 @@ import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.util.*;
 
-    public class Runner {
+public class Runner {
 //FileID maps
     private static HashMap<String, String> fileIDs;
     private static HashMap<String, String> modelFDID;
@@ -36,7 +36,7 @@ import java.util.*;
     private static final String[] tables = new String[12];
     //shit
     private static final String delimiter = ",";
-    public static final String csvEndSuffix = ".csv";
+    private static final String csvEndSuffix = ".csv";
 
     public static void main(String[] args) throws IOException
     {
@@ -60,7 +60,7 @@ import java.util.*;
             sortInfoMatRes();
         }
     }
-    //sorts itemdisplayinfomaterialres to put all displayIDs in groups for parsing later
+    //sorts itemdisplayinfomaterialres to put all displayIDs in groups for parsing later(cause blizzard cant keep their shit together)
     private static void sortInfoMatRes() throws IOException {
         BufferedReader reader = new BufferedReader(new FileReader(tables[3] + csvEndSuffix));
         Map<String, List<String>> map = new TreeMap<>();
@@ -103,6 +103,7 @@ import java.util.*;
         tables[11] = "listfile/texturefiledata";
     }
 
+    //creates folders, will mostly error. peeps got folders, but for startup
     private static void setupFolders(){
         System.out.println("Setting up folders...");
         File file = new File("./item");
@@ -123,6 +124,7 @@ import java.util.*;
             System.out.println("Error creating Export folder(possibly already exists)");
     }
 
+    //get all those csv downloads
     private static void downloadFiles() throws IOException {
         System.out.println("Starting downloads...");
         for (String table : tables) {
@@ -139,6 +141,7 @@ import java.util.*;
         fileOutputStream.getChannel().transferFrom(readableByteChannel, 0, Long.MAX_VALUE);
     }
 
+    //fills tables for use later
     private static void startupTables() throws IOException {
         System.out.println("Starting Tables...");
         fileIDs = setupFDIDMap();
@@ -146,6 +149,7 @@ import java.util.*;
         textureFDID = setupTextureMap();
     }
 
+    //all creature csv creation
     private static void creatureDB2Convert() throws IOException
     {
         System.out.println("Starting Creatures...");
@@ -225,6 +229,7 @@ import java.util.*;
         creatureDisplayExtraWriter.close();
     }
 
+    //all item csv creation
     private static void itemDB2Convert() throws IOException {
         System.out.println("Starting Items...");
         HashMap<String, String> itemDisplayInfoMaterials = setupDisplayExtraItemsMap(tables[3] + "Sorted" + csvEndSuffix);
@@ -334,6 +339,7 @@ import java.util.*;
         itemWriter.close();
     }
 
+    //general map, used in multiple places
     private static HashMap<String, String> setupMap(String filename) throws IOException
     {
         HashMap<String, String> hm = new HashMap<>();
@@ -348,6 +354,7 @@ import java.util.*;
         return hm;
     }
 
+    //FDID map creation
     private static HashMap<String, String> setupFDIDMap() throws IOException
     {
         String delim = ";";
@@ -362,6 +369,7 @@ import java.util.*;
         return hm;
     }
 
+    //itemModifiedAppearance map creation
     private static HashMap<String, String> setupItemModMap() throws IOException
     {
         HashMap<String, String> hm = new HashMap<>();
@@ -375,6 +383,7 @@ import java.util.*;
         return hm;
     }
 
+    //itemAppearance map creation
     private static HashMap<String, String> setupItemAppMap() throws IOException
     {
         HashMap<String, String> hm = new HashMap<>();
@@ -388,45 +397,49 @@ import java.util.*;
         return hm;
     }
 
-        private static HashMap<String, String> setupItemModReversedMap() throws IOException
-        {
-            HashMap<String, String> hm = new HashMap<>();
-            BufferedReader br = new BufferedReader(new FileReader(tables[4] + csvEndSuffix));
-            String line;
-            while ( (line = br.readLine()) != null ) {
-                String[] values = line.split(delimiter);
-                hm.put(values[3],values[1]);
-            }
-            br.close();
-            return hm;
+    //setup itemmodifiedappearance map but reversed
+    private static HashMap<String, String> setupItemModReversedMap() throws IOException
+    {
+        HashMap<String, String> hm = new HashMap<>();
+        BufferedReader br = new BufferedReader(new FileReader(tables[4] + csvEndSuffix));
+        String line;
+        while ( (line = br.readLine()) != null ) {
+            String[] values = line.split(delimiter);
+            hm.put(values[3],values[1]);
         }
+        br.close();
+        return hm;
+    }
 
-        private static HashMap<String, String> setupItemAppReversedMap() throws IOException
-        {
-            HashMap<String, String> hm = new HashMap<>();
-            BufferedReader br = new BufferedReader(new FileReader(tables[1] + csvEndSuffix));
-            String line;
-            while ( (line = br.readLine()) != null ) {
-                String[] values = line.split(delimiter);
-                hm.put(values[2],values[0]);
-            }
-            br.close();
-            return hm;
+    //setup item appearance map but reversed
+    private static HashMap<String, String> setupItemAppReversedMap() throws IOException
+    {
+        HashMap<String, String> hm = new HashMap<>();
+        BufferedReader br = new BufferedReader(new FileReader(tables[1] + csvEndSuffix));
+        String line;
+        while ( (line = br.readLine()) != null ) {
+            String[] values = line.split(delimiter);
+            hm.put(values[2],values[0]);
         }
+        br.close();
+        return hm;
+    }
 
-        private static HashMap<String, String> setupItemMap() throws IOException
-        {
-            HashMap<String, String> hm = new HashMap<>();
-            BufferedReader br = new BufferedReader(new FileReader(tables[0] + csvEndSuffix));
-            String line;
-            while ( (line = br.readLine()) != null ) {
-                String[] values = line.split(delimiter);
-                hm.put(values[0],values[7]);
-            }
-            br.close();
-            return hm;
+    //setup item map
+    private static HashMap<String, String> setupItemMap() throws IOException
+    {
+        HashMap<String, String> hm = new HashMap<>();
+        BufferedReader br = new BufferedReader(new FileReader(tables[0] + csvEndSuffix));
+        String line;
+        while ( (line = br.readLine()) != null ) {
+            String[] values = line.split(delimiter);
+            hm.put(values[0],values[7]);
         }
+        br.close();
+        return hm;
+    }
 
+    //setup item appearance map for icons
     private static HashMap<String, String> setupItemAppIconMap() throws IOException
     {
         HashMap<String, String> hm = new HashMap<>();
@@ -440,6 +453,7 @@ import java.util.*;
         return hm;
     }
 
+    //setup itemdisplayinfoextra map for items (tables npcmodelitemslotdisplayinfo and itemdisplayinfomaterialres)
     private static HashMap<String, String> setupDisplayExtraItemsMap(String filename) throws IOException
     {
         String splitter = ".";
@@ -463,6 +477,7 @@ import java.util.*;
         return hm;
     }
 
+    //setup creaturemodelinfo map
     private static HashMap<String, String> setupModelMap() throws IOException
     {
         HashMap<String, String> hm = new HashMap<>();
@@ -476,6 +491,7 @@ import java.util.*;
         return hm;
     }
 
+    //setup textureID->FDID map
     private static HashMap<String, String> setupTextureMap() throws IOException
     {
         HashMap<String, String> hm = new HashMap<>();
@@ -489,6 +505,7 @@ import java.util.*;
         return hm;
     }
 
+    //reset CreatureDisplayInfoExtra variables
     private static void resetVarsCreature()
     {
         head = "0";
@@ -504,6 +521,7 @@ import java.util.*;
         tabard = "0";
     }
 
+        //set CreatureDisplayInfoExtra variables
     private static void setVarsCreature(String[] curr)
     {
         if(curr.length == 2) {
@@ -544,7 +562,7 @@ import java.util.*;
             }
         }
     }
-
+    //reset ItemDisplayInfo variables
     private static void resetVarsItem()
     {
         upArm = "\"\"";
@@ -556,7 +574,7 @@ import java.util.*;
         lowLeg = "\"\"";
         foot = "\"\"";
     }
-
+    //set ItemDisplayInfo variables
     private static void setVarsItem(String[] curr) {
         if(curr.length == 2) {
             String delim = "/";
