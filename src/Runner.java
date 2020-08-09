@@ -274,6 +274,8 @@ public class Runner {
                         Lmodel = blpExtensionRemover(Lmodel);
                     if(Lmodel.endsWith("_"))
                         Lmodel = Lmodel.substring(0,Lmodel.length() - 1);
+                    if(Lmodel.startsWith(shoulder) && Lmodel.endsWith("_l"))
+                        Lmodel = Lmodel.substring(0,Lmodel.length() -1) + "r";
                     Lmodel = surroundQuotes(Lmodel.replaceAll("rshoulder", "lshoulder")+ ".mdx");
 
                 }if(Rmodel == null){
@@ -285,8 +287,10 @@ public class Runner {
                         Rmodel = blpExtensionRemover(Rmodel);
                     if(Rmodel.endsWith("_"))
                         Rmodel = Rmodel.substring(0,Rmodel.length() - 1);
+                    if(Rmodel.startsWith(shoulder) && Rmodel.endsWith("_l"))
+                        Rmodel = Rmodel.substring(0,Rmodel.length() -1) + "r";
 
-                    Rmodel = "\"" + Rmodel.replaceAll("lshoulder", "rshoulder")+ ".mdx\"";
+                    Rmodel = surroundQuotes(Rmodel.replaceAll("lshoulder", "rshoulder")+ ".mdx");
                 }if(Ltexture == null){
                     Ltexture = "\"\"";
                 }else{
