@@ -269,26 +269,27 @@ public class Runner {
                     Lmodel = "\"\"";
                 }else{
                     Lmodel = returnLast(Lmodel);
+                    if(Lmodel.endsWith("_r.m2"))
+                        Lmodel = blpExtensionRemover(Lmodel) + "l.m2";
                     Lmodel = Lmodel.substring(0,Lmodel.length() -3);
                     if(Lmodel.startsWith("helm_"))
                         Lmodel = blpExtensionRemover(Lmodel);
                     if(Lmodel.endsWith("_"))
                         Lmodel = Lmodel.substring(0,Lmodel.length() - 1);
-                    if(Lmodel.startsWith(shoulder) && Lmodel.endsWith("_l"))
-                        Lmodel = Lmodel.substring(0,Lmodel.length() -1) + "r";
                     Lmodel = surroundQuotes(Lmodel.replaceAll("rshoulder", "lshoulder")+ ".mdx");
 
                 }if(Rmodel == null){
                     Rmodel = "\"\"";
                 }else{
                     Rmodel = returnLast(Rmodel);
+                        if(Rmodel.endsWith("_l.m2"))
+                            Rmodel = blpExtensionRemover(Rmodel) + "r.m2";
                     Rmodel = Rmodel.substring(0,Rmodel.length() -3);
                     if(Rmodel.startsWith("helm_"))
                         Rmodel = blpExtensionRemover(Rmodel);
                     if(Rmodel.endsWith("_"))
                         Rmodel = Rmodel.substring(0,Rmodel.length() - 1);
-                    if(Rmodel.startsWith(shoulder) && Rmodel.endsWith("_l"))
-                        Rmodel = Rmodel.substring(0,Rmodel.length() -1) + "r";
+
 
                     Rmodel = surroundQuotes(Rmodel.replaceAll("lshoulder", "rshoulder")+ ".mdx");
                 }if(Ltexture == null){
