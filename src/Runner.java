@@ -221,8 +221,8 @@ public class Runner {
                 }
             }
         }
-        modelMap = sortbykey(modelMap);
-        displayExtraMap = sortbykey(displayExtraMap);
+        modelMap = sortByKey(modelMap);
+        displayExtraMap = sortByKey(displayExtraMap);
         for (@SuppressWarnings("rawtypes") Map.Entry me : modelMap.entrySet()) {
             creatureModelWriter.write(me.getValue().toString());
         }
@@ -233,14 +233,7 @@ public class Runner {
         creatureModelWriter.close();
         creatureDisplayExtraWriter.close();
     }
-    public static HashMap<Integer, String> sortbykey(HashMap<Integer,String> map)
-    {
-        TreeMap<Integer, String> sortedTree = new TreeMap<>(map);
-        HashMap<Integer, String> sortedMap = new HashMap<>();
-        for (Map.Entry<Integer, String> entry : sortedTree.entrySet())
-            sortedMap.put(entry.getKey(),entry.getValue());
-        return sortedMap;
-    }
+
     //all item csv creation
     private static void itemDB2Convert() throws IOException {
         System.out.println("Starting Items...");
@@ -635,5 +628,13 @@ public class Runner {
     }
     private static String substringFour(String str) {
         return str.substring(0, str.length() - 4);
+    }
+    public static HashMap<Integer, String> sortByKey(HashMap<Integer,String> map)
+    {
+        TreeMap<Integer, String> sortedTree = new TreeMap<>(map);
+        HashMap<Integer, String> sortedMap = new HashMap<>();
+        for (Map.Entry<Integer, String> entry : sortedTree.entrySet())
+            sortedMap.put(entry.getKey(),entry.getValue());
+        return sortedMap;
     }
 }
