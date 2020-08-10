@@ -165,7 +165,7 @@ public class Runner {
         HashMap<String, String> displayExtra = setupMap(tables[7] + csvEndSuffix);
         HashMap<String, String> displayExtraItems = setupDisplayExtraItemsMap(tables[9] + csvEndSuffix);
         HashMap<Integer, String> modelMap = new HashMap<>();
-        HashMap<Long, String> displayExtraMap = new HashMap<>();
+        HashMap<Integer, String> displayExtraMap = new HashMap<>();
         try (BufferedReader br = new BufferedReader(new FileReader(tables[6] + csvEndSuffix))) {
             String line;
             br.readLine();//skip header
@@ -206,7 +206,7 @@ public class Runner {
                             if (a != null) {
                                 String texture = surroundQuotes(returnLast(a));
                                 System.out.println(Long.parseLong(extraSplit[0]));
-                                displayExtraMap.put(Long.parseLong(extraSplit[0]),extraSplit[0] + delimiter + extraSplit[1] + delimiter + extraSplit[2] + delimiter + extraSplit[4] + delimiter + extraSplit[5] + delimiter + extraSplit[6] + delimiter + extraSplit[7] + delimiter + extraSplit[8] + delimiter + head + delimiter + shoulder + delimiter + shirt + delimiter + chest + delimiter + belt + delimiter + legs + delimiter + boots + delimiter + wrist + delimiter + gloves + delimiter + tabard + delimiter + cape + delimiter + "0" + delimiter + texture + ",\n");
+                                displayExtraMap.put(Integer.parseInt(extraSplit[0]),extraSplit[0] + delimiter + extraSplit[1] + delimiter + extraSplit[2] + delimiter + extraSplit[4] + delimiter + extraSplit[5] + delimiter + extraSplit[6] + delimiter + extraSplit[7] + delimiter + extraSplit[8] + delimiter + head + delimiter + shoulder + delimiter + shirt + delimiter + chest + delimiter + belt + delimiter + legs + delimiter + boots + delimiter + wrist + delimiter + gloves + delimiter + tabard + delimiter + cape + delimiter + "0" + delimiter + texture + ",\n");
                                 resetVarsCreature();
                             }
                         }
@@ -221,7 +221,8 @@ public class Runner {
                 }
             }
         }
-        modelMap = sortByKeyInt(modelMap);
+        modelMap = sortHashMap(modelMap);
+        displayExtraMap = sortHashMap(displayExtraMap);
         for (@SuppressWarnings("rawtypes") Map.Entry me : modelMap.entrySet()) {
             creatureModelWriter.write(me.getValue().toString());
         }
@@ -628,12 +629,13 @@ public class Runner {
     private static String substringFour(String str) {
         return str.substring(0, str.length() - 4);
     }
-    public static HashMap<Integer, String> sortByKeyInt(HashMap<Integer,String> map)
-    {
-        TreeMap<Integer, String> sortedTree = new TreeMap<>(map);
-        HashMap<Integer, String> sortedMap = new HashMap<>();
-        for (Map.Entry<Integer, String> entry : sortedTree.entrySet())
-            sortedMap.put(entry.getKey(),entry.getValue());
+    public static LinkedHashMap<Integer, String> sortHashMap(HashMap<Integer,String> mapp){
+//LinkedHashMap preserve the ordering of elements in which they are inserted
+        LinkedHashMap<Integer, String> sortedMap = new LinkedHashMap<>();
+        ((Map<Integer, String>) mapp).entrySet()
+                .stream()
+                .sorted(Map.Entry.comparingByKey())
+                .forEachOrdered(x -> sortedMap.put(x.getKey(), x.getValue()));
         return sortedMap;
     }
 }
