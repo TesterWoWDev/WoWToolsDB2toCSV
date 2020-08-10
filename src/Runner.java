@@ -5,6 +5,16 @@ import java.nio.channels.ReadableByteChannel;
 import java.util.*;
 
 public class Runner {
+
+    //updated in main method
+    private static String buildNumber = "9.0.1.35482";
+    //filled in fillTable
+    private static final String[] tables = new String[12];
+    //shit
+    private static final String delimiter = ",";
+    private static final String csvEndSuffix = ".csv";
+    private static final String emptyQuotes = "\"\"";
+    
 //FileID maps
     private static HashMap<String, String> fileIDs;
     private static HashMap<String, String> modelFDID;
@@ -22,21 +32,15 @@ public class Runner {
     private static String shirt = "0";
     private static String tabard = "0";
 //item textures
-    private static String upArm = "\"\"";
-    private static String lowArm = "\"\"";
-    private static String hands = "\"\"";
-    private static String upTor = "\"\"";
-    private static String lowTor = "\"\"";
-    private static String upLeg = "\"\"";
-    private static String lowLeg = "\"\"";
-    private static String foot = "\"\"";
-    //updated in main method
-    private static String buildNumber = "9.0.1.35482";
-    //filled in fillTable
-    private static final String[] tables = new String[12];
-    //shit
-    private static final String delimiter = ",";
-    private static final String csvEndSuffix = ".csv";
+    private static String upArm = emptyQuotes;
+    private static String lowArm = emptyQuotes;
+    private static String hands = emptyQuotes;
+    private static String upTor = emptyQuotes;
+    private static String lowTor = emptyQuotes;
+    private static String upLeg = emptyQuotes;
+    private static String lowLeg = emptyQuotes;
+    private static String foot = emptyQuotes;
+
 
     public static void main(String[] args) throws IOException
     {
@@ -171,20 +175,20 @@ public class Runner {
                 String text2 = fileIDs.get(displayRow[25]);
                 String text3 = fileIDs.get(displayRow[26]);
                 if (text1 == null) {
-                    text1 = "\"\"";
-                } else if (!text1.equals("\"\"")) {//remove .blp extension
+                    text1 = emptyQuotes;
+                } else if (!text1.equals(emptyQuotes)) {//remove .blp extension
                     text1 = returnLast(text1);
                     text1 = surroundQuotes(substringFour(text1));
                 }
                 if (text2 == null) {
-                    text2 = "\"\"";
-                } else if (!text2.equals("\"\"")) {
+                    text2 = emptyQuotes;
+                } else if (!text2.equals(emptyQuotes)) {
                     text2 = returnLast(text2);
                     text2 = surroundQuotes(substringFour(text2));
                 }
                 if (text3 == null) {
-                    text3 = "\"\"";
-                } else if (!text3.equals("\"\"")) {
+                    text3 = emptyQuotes;
+                } else if (!text3.equals(emptyQuotes)) {
                     text3 = returnLast(text3);
                     text3 = surroundQuotes(substringFour(text3));
                 }
@@ -253,7 +257,7 @@ public class Runner {
                 String Ltexture = fileIDs.get(textureFDID.get(displayRow[12]));
                 String Rtexture = fileIDs.get(textureFDID.get(displayRow[13]));
                 if(Lmodel == null){
-                    Lmodel = "\"\"";
+                    Lmodel = emptyQuotes;
                 }else{
                     Lmodel = returnLast(Lmodel);
                     if(Lmodel.endsWith("_r.m2"))
@@ -263,10 +267,10 @@ public class Runner {
                         Lmodel = substringFour(Lmodel);
                     if(Lmodel.endsWith("_"))
                         Lmodel = Lmodel.substring(0,Lmodel.length() - 1);
-                    Lmodel = appendMDX(surroundQuotes(Lmodel.replaceAll("rshoulder", "lshoulder")));
+                    Lmodel = surroundQuotes(appendMDX(Lmodel.replaceAll("rshoulder", "lshoulder")));
 
                 }if(Rmodel == null){
-                    Rmodel = "\"\"";
+                    Rmodel = emptyQuotes;
                 }else{
                     Rmodel = returnLast(Rmodel);
                         if(Rmodel.endsWith("_l.m2"))
@@ -278,14 +282,14 @@ public class Runner {
                         Rmodel = Rmodel.substring(0,Rmodel.length() - 1);
 
 
-                    Rmodel = appendMDX(surroundQuotes(Rmodel.replaceAll("lshoulder", "rshoulder")));
+                    Rmodel = surroundQuotes(appendMDX(Rmodel.replaceAll("lshoulder", "rshoulder")));
                 }if(Ltexture == null){
-                    Ltexture = "\"\"";
+                    Ltexture = emptyQuotes;
                 }else{
                     Ltexture = returnLast(Ltexture);
                     Ltexture = surroundQuotes(substringFour(Ltexture));
                 }if(Rtexture == null){
-                    Rtexture = "\"\"";
+                    Rtexture = emptyQuotes;
                 }else{
                     Rtexture = returnLast(Rtexture);
                     Rtexture = surroundQuotes(substringFour(Rtexture));
@@ -298,7 +302,7 @@ public class Runner {
                         setVarsItem(currItem);
                     }
                 }
-                String icon = "\"\"";
+                String icon = emptyQuotes;
                 if(itemAppearanceIcon.get(displayRow[0]) != null) {
                     if (fileIDs.get(itemAppearanceIcon.get(displayRow[0])) != null) {
                         icon = fileIDs.get(itemAppearanceIcon.get(displayRow[0]));
@@ -309,7 +313,7 @@ public class Runner {
                     if(icon != null)
                     icon = surroundQuotes(returnLast(icon).substring(0, returnLast(icon).length() - 4));
                 }
-                itemDisplayInfoWriter.write(displayRow[0] + delimiter + Lmodel + delimiter + Rmodel + delimiter + Ltexture + delimiter + Rtexture + delimiter + icon + delimiter + "\"\"" + delimiter + displayRow[16] + delimiter + displayRow[17] + delimiter + displayRow[18] + delimiter + displayRow[9] + delimiter + displayRow[6] + delimiter + "0" + delimiter + displayRow[28] + delimiter + displayRow[29] + delimiter + upArm + delimiter + lowArm + delimiter + hands + delimiter + upTor + delimiter + lowTor + delimiter + upLeg + delimiter + lowLeg + delimiter + foot + delimiter + displayRow[1] + delimiter + displayRow[2] + ",\n");
+                itemDisplayInfoWriter.write(displayRow[0] + delimiter + Lmodel + delimiter + Rmodel + delimiter + Ltexture + delimiter + Rtexture + delimiter + icon + delimiter + emptyQuotes + delimiter + displayRow[16] + delimiter + displayRow[17] + delimiter + displayRow[18] + delimiter + displayRow[9] + delimiter + displayRow[6] + delimiter + "0" + delimiter + displayRow[28] + delimiter + displayRow[29] + delimiter + upArm + delimiter + lowArm + delimiter + hands + delimiter + upTor + delimiter + lowTor + delimiter + upLeg + delimiter + lowLeg + delimiter + foot + delimiter + displayRow[1] + delimiter + displayRow[2] + ",\n");
                 resetVarsItem();
             }
         }
@@ -571,14 +575,14 @@ public class Runner {
     //reset ItemDisplayInfo variables
     private static void resetVarsItem()
     {
-        upArm = "\"\"";
-        lowArm = "\"\"";
-        hands = "\"\"";
-        upTor = "\"\"";
-        lowTor = "\"\"";
-        upLeg = "\"\"";
-        lowLeg = "\"\"";
-        foot = "\"\"";
+        upArm = emptyQuotes;
+        lowArm = emptyQuotes;
+        hands = emptyQuotes;
+        upTor = emptyQuotes;
+        lowTor = emptyQuotes;
+        upLeg = emptyQuotes;
+        lowLeg = emptyQuotes;
+        foot = emptyQuotes;
     }
     //set ItemDisplayInfo variables
     private static void setVarsItem(String[] curr) {
