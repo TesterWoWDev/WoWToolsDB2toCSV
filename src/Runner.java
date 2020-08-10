@@ -56,7 +56,7 @@ public class Runner {
         boolean download = keyboard.nextBoolean();
         if(download) {
             setupFolders();
-            System.out.println("What is the current build? (Get this from WoW.Tools) Default is: "+buildNumber + " No promises on builds past this.");
+            System.out.println("What is the current build? (Get this from WoW.Tools) Default is: "+ buildNumber + " No promises on builds past this.");
             buildNumber = keyboard.nextLine();//for the skip line(scanner sux)
             buildNumber = keyboard.nextLine();
             downloadFiles();
@@ -629,10 +629,10 @@ public class Runner {
     private static String substringFour(String str) {
         return str.substring(0, str.length() - 4);
     }
-    public static LinkedHashMap<Integer, String> sortHashMap(HashMap<Integer,String> mapp){
+    public static LinkedHashMap<Integer, String> sortHashMap(HashMap<Integer,String> unsortedMap){
 //LinkedHashMap preserve the ordering of elements in which they are inserted
         LinkedHashMap<Integer, String> sortedMap = new LinkedHashMap<>();
-        ((Map<Integer, String>) mapp).entrySet()
+        ((Map<Integer, String>) unsortedMap).entrySet()
                 .stream()
                 .sorted(Map.Entry.comparingByKey())
                 .forEachOrdered(x -> sortedMap.put(x.getKey(), x.getValue()));
