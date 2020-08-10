@@ -1,3 +1,4 @@
+import javax.print.attribute.IntegerSyntax;
 import java.io.*;
 import java.net.URL;
 import java.nio.channels.Channels;
@@ -164,7 +165,7 @@ public class Runner {
         HashMap<String, String> modelData = setupMap(tables[8] + csvEndSuffix);
         HashMap<String, String> displayExtra = setupMap(tables[7] + csvEndSuffix);
         HashMap<String, String> displayExtraItems = setupDisplayExtraItemsMap(tables[9] + csvEndSuffix);
-        HashMap<String, String> modelMap = new HashMap<>();
+        HashMap<Integer, String> modelMap = new HashMap<>();
         HashMap<String, String> displayExtraMap = new HashMap<>();
         try (BufferedReader br = new BufferedReader(new FileReader(tables[6] + csvEndSuffix))) {
             String line;
@@ -213,13 +214,14 @@ public class Runner {
                     if (modelLine != null) {
                         String path;
                         path = surroundQuotes(modelLine.substring(0, modelLine.length() - 1) + "dx");
-                        modelMap.put(modelRow[0],modelRow[0] + delimiter + modelRow[7] + delimiter + path + delimiter + "1" + delimiter + modelRow[19] + delimiter + modelRow[26] + delimiter + modelRow[10] + delimiter + "0x41900000" + delimiter + "0x41400000" + delimiter + "1" + delimiter + "" + delimiter + "0" + delimiter + modelRow[17] + delimiter + "0" + delimiter + modelRow[20] + delimiter + modelRow[21] + delimiter + modelRow[30] + delimiter + modelRow[1] + delimiter + modelRow[2] + delimiter + modelRow[3] + delimiter + modelRow[4] + delimiter + modelRow[5] + delimiter + modelRow[6] + delimiter + "1" + delimiter + modelRow[22] + delimiter + modelRow[25] + delimiter + "0x0" + delimiter + "0" + delimiter + "\n");
+                        modelMap.put(Integer.parseInt(modelRow[0]),modelRow[0] + delimiter + modelRow[7] + delimiter + path + delimiter + "1" + delimiter + modelRow[19] + delimiter + modelRow[26] + delimiter + modelRow[10] + delimiter + "18.0" + delimiter + "12.0" + delimiter + "1.0" + delimiter + "" + delimiter + "0" + delimiter + modelRow[17] + delimiter + "0" + delimiter + modelRow[20] + delimiter + modelRow[21] + delimiter + modelRow[30] + delimiter + modelRow[1] + delimiter + modelRow[2] + delimiter + modelRow[3] + delimiter + modelRow[4] + delimiter + modelRow[5] + delimiter + modelRow[6] + delimiter + "1.0" + delimiter + modelRow[22] + delimiter + modelRow[25] + delimiter + "0.0" + delimiter + "0.0" + delimiter + "\n");
                         creatureDisplayWriter.write(displayRow[0] + delimiter + displayRow[1] + delimiter + displayRow[2] + delimiter + displayRow[7] + delimiter + displayRow[4] + delimiter + displayRow[5] + delimiter + text1 + delimiter + text2 + delimiter + text3 + delimiter + surroundQuotes(displayRow[10]) + delimiter + displayRow[7] + delimiter + displayRow[9] + delimiter + displayRow[10] + delimiter + "0" + delimiter + "0x0" + delimiter + displayRow[13] + ",\n");
 
                     }
                 }
             }
         }
+        modelMap = sortbykey(modelMap);
         for (@SuppressWarnings("rawtypes") Map.Entry me : modelMap.entrySet()) {
             creatureModelWriter.write(me.getValue().toString());
         }
@@ -230,7 +232,14 @@ public class Runner {
         creatureModelWriter.close();
         creatureDisplayExtraWriter.close();
     }
-
+    public static HashMap<Integer, String> sortbykey(HashMap<Integer,String> map)
+    {
+        TreeMap<Integer, String> sortedTree = new TreeMap<>(map);
+        HashMap<Integer, String> sortedMap = new HashMap<>();
+        for (Map.Entry<Integer, String> entry : sortedTree.entrySet())
+            sortedMap.put(entry.getKey(),entry.getValue());
+        return sortedMap;
+    }
     //all item csv creation
     private static void itemDB2Convert() throws IOException {
         System.out.println("Starting Items...");
