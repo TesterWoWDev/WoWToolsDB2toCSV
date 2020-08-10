@@ -1,4 +1,3 @@
-import javax.print.attribute.IntegerSyntax;
 import java.io.*;
 import java.net.URL;
 import java.nio.channels.Channels;
@@ -222,7 +221,6 @@ public class Runner {
             }
         }
         modelMap = sortByKey(modelMap);
-        displayExtraMap = sortByKey(displayExtraMap);
         for (@SuppressWarnings("rawtypes") Map.Entry me : modelMap.entrySet()) {
             creatureModelWriter.write(me.getValue().toString());
         }
