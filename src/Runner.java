@@ -265,31 +265,26 @@ public class Runner {
                     if(Lmodel.endsWith("_"))
                         Lmodel = Lmodel.substring(0,Lmodel.length() - 1);
                     Lmodel = surroundQuotes(appendMDX(Lmodel.replaceAll("rshoulder", "lshoulder")));
-
                 }if(Rmodel == null){
                     Rmodel = emptyQuotes;
                 }else{
                     Rmodel = returnLast(Rmodel);
-                        if(Rmodel.endsWith("_l.m2"))
-                            Rmodel = substringFour(Rmodel) + "r.m2";
+                    if(Rmodel.endsWith("_l.m2"))
+                        Rmodel = substringFour(Rmodel) + "r.m2";
                     Rmodel = Rmodel.substring(0,Rmodel.length() -3);
                     if(Rmodel.startsWith("helm_"))
                         Rmodel = substringFour(Rmodel);
                     if(Rmodel.endsWith("_"))
                         Rmodel = Rmodel.substring(0,Rmodel.length() - 1);
-
-
                     Rmodel = surroundQuotes(appendMDX(Rmodel.replaceAll("lshoulder", "rshoulder")));
                 }if(Ltexture == null){
                     Ltexture = emptyQuotes;
                 }else{
-                    Ltexture = returnLast(Ltexture);
-                    Ltexture = surroundQuotes(substringFour(Ltexture));
+                    Ltexture = surroundQuotes(substringFour(returnLast(Ltexture)));
                 }if(Rtexture == null){
                     Rtexture = emptyQuotes;
                 }else{
-                    Rtexture = returnLast(Rtexture);
-                    Rtexture = surroundQuotes(substringFour(Rtexture));
+                    Rtexture = surroundQuotes(substringFour(returnLast(Rtexture)));
                 }
                 if(itemDisplayInfoMaterials.get(displayRow[0]) != null) {
                     String displayInfoMats = itemDisplayInfoMaterials.get(displayRow[0]);
@@ -302,13 +297,12 @@ public class Runner {
                 String icon = emptyQuotes;
                 if(itemAppearanceIcon.get(displayRow[0]) != null) {
                     if (fileIDs.get(itemAppearanceIcon.get(displayRow[0])) != null) {
-                        icon = fileIDs.get(itemAppearanceIcon.get(displayRow[0]));
-                        icon = surroundQuotes(returnLast(icon).substring(0, returnLast(icon).length() - 4));
+                        icon = surroundQuotes(substringFour(returnLast((fileIDs.get(itemAppearanceIcon.get(displayRow[0]))))));
                     }
                 }else if(itemAppearanceReversed.get(itemModifiedAppearanceReversed.get(displayRow[0])) != null){
                     icon = fileIDs.get(itemIcon.get(itemAppearanceReversed.get(itemModifiedAppearanceReversed.get(displayRow[0]))));
                     if(icon != null)
-                    icon = surroundQuotes(returnLast(icon).substring(0, returnLast(icon).length() - 4));
+                    icon = surroundQuotes(substringFour(returnLast(icon)));
                 }
                 itemDisplayInfoWriter.write(displayRow[0] + delimiter + Lmodel + delimiter + Rmodel + delimiter + Ltexture + delimiter + Rtexture + delimiter + icon + delimiter + emptyQuotes + delimiter + displayRow[16] + delimiter + displayRow[17] + delimiter + displayRow[18] + delimiter + displayRow[9] + delimiter + displayRow[6] + delimiter + "0" + delimiter + displayRow[28] + delimiter + displayRow[29] + delimiter + upArm + delimiter + lowArm + delimiter + hands + delimiter + upTor + delimiter + lowTor + delimiter + upLeg + delimiter + lowLeg + delimiter + foot + delimiter + displayRow[1] + delimiter + displayRow[2] + ",\n");
                 resetVarsItem();
