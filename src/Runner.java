@@ -177,20 +177,17 @@ public class Runner {
                 if (text1 == null) {
                     text1 = emptyQuotes;
                 } else if (!text1.equals(emptyQuotes)) {//remove .blp extension
-                    text1 = returnLast(text1);
-                    text1 = surroundQuotes(substringFour(text1));
+                    text1 = surroundQuotes(substringFour(returnLast(text1)));
                 }
                 if (text2 == null) {
                     text2 = emptyQuotes;
                 } else if (!text2.equals(emptyQuotes)) {
-                    text2 = returnLast(text2);
-                    text2 = surroundQuotes(substringFour(text2));
+                    text2 = surroundQuotes(substringFour(returnLast(text2)));
                 }
                 if (text3 == null) {
                     text3 = emptyQuotes;
                 } else if (!text3.equals(emptyQuotes)) {
-                    text3 = returnLast(text3);
-                    text3 = surroundQuotes(substringFour(text3));
+                    text3 = surroundQuotes(substringFour(returnLast(text3)));
                 }
                 if (modelData.get(displayRow[1]) != null) {
                     String[] modelRow = (modelData.get(displayRow[1])).split(delimiter);
