@@ -158,7 +158,7 @@ public class Runner {
     private static void creatureDB2Convert() throws IOException
     {
         System.out.println("Starting Creatures...");
-        FileWriter creatureModelWriter = new FileWriter("export/CreatureModelInfoNew.csv");
+        FileWriter creatureModelWriter = new FileWriter("export/CreatureModelDataNew.csv");
         FileWriter creatureDisplayWriter = new FileWriter("export/CreatureDisplayInfoNew.csv");
         FileWriter creatureDisplayExtraWriter = new FileWriter("export/CreatureDisplayExtraNew.csv");
         HashMap<String, String> modelData = setupMap(tables[8] + csvEndSuffix);
