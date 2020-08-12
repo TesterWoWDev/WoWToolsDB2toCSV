@@ -20,17 +20,17 @@ public class Runner {
     private static HashMap<String, String> modelFDID;
     private static HashMap<String, String> textureFDID;
 //creature extra display
-    private static String head = "0";
-    private static String shoulder = "0";
-    private static String chest = "0";
-    private static String belt = "0";
-    private static String legs = "0";
-    private static String boots = "0";
-    private static String gloves = "0";
-    private static String wrist = "0";
-    private static String cape = "0";
-    private static String shirt = "0";
-    private static String tabard = "0";
+    private static String head = surroundQuotes("0");
+    private static String shoulder = surroundQuotes("0");
+    private static String chest = surroundQuotes("0");
+    private static String belt = surroundQuotes("0");
+    private static String legs = surroundQuotes("0");
+    private static String boots = surroundQuotes("0");
+    private static String gloves = surroundQuotes("0");
+    private static String wrist = surroundQuotes("0");
+    private static String cape = surroundQuotes("0");
+    private static String shirt = surroundQuotes("0");
+    private static String tabard = surroundQuotes("0");
 //item textures
     private static String upArm = emptyQuotes;
     private static String lowArm = emptyQuotes;
@@ -315,7 +315,10 @@ public class Runner {
                     if(icon != null)
                     icon = surroundQuotes(substringFour(returnLast(icon)));
                 }
-                itemDisplayInfoWriter.write(displayRow[0] + delimiter + Lmodel + delimiter + Rmodel + delimiter + Ltexture + delimiter + Rtexture + delimiter + icon + delimiter + emptyQuotes + delimiter + displayRow[16] + delimiter + displayRow[17] + delimiter + displayRow[18] + delimiter + displayRow[9] + delimiter + displayRow[6] + delimiter + "0" + delimiter + displayRow[28] + delimiter + displayRow[29] + delimiter + upArm + delimiter + lowArm + delimiter + hands + delimiter + upTor + delimiter + lowTor + delimiter + upLeg + delimiter + lowLeg + delimiter + foot + delimiter + displayRow[1] + delimiter + displayRow[2] + ",\n");
+                for (int i=0;i< displayRow.length;i++){
+                    displayRow[i] = surroundQuotes(displayRow[i]);
+                }
+                itemDisplayInfoWriter.write(displayRow[0] + delimiter + Lmodel + delimiter + Rmodel + delimiter + Ltexture + delimiter + Rtexture + delimiter + icon + delimiter + emptyQuotes + delimiter + displayRow[16] + delimiter + displayRow[17] + delimiter + displayRow[18] + delimiter + displayRow[9] + delimiter + displayRow[6] + delimiter + surroundQuotes("0") + delimiter + displayRow[28] + delimiter + displayRow[29] + delimiter + upArm + delimiter + lowArm + delimiter + hands + delimiter + upTor + delimiter + lowTor + delimiter + upLeg + delimiter + lowLeg + delimiter + foot + delimiter + displayRow[1] + delimiter + displayRow[2] + ",\n");
                 resetVarsItem();
             }
         }
@@ -330,7 +333,10 @@ public class Runner {
                         display = itemAppearance.get(itemModifiedAppearance.get(displayRow[0])).split(delimiter)[0];
                     }
                 }
-                itemWriter.write(displayRow[0] + delimiter + displayRow[1] + delimiter + displayRow[2] + delimiter + displayRow[6] + delimiter + displayRow[3] + delimiter + display + delimiter + displayRow[4] + delimiter + displayRow[5] + ",\n");
+                for (int i=0;i< displayRow.length;i++){
+                    displayRow[i] = surroundQuotes(displayRow[i]);
+                }
+                itemWriter.write(displayRow[0] + delimiter + displayRow[1] + delimiter + displayRow[2] + delimiter + displayRow[6] + delimiter + displayRow[3] + delimiter + surroundQuotes(display) + delimiter + displayRow[4] + delimiter + displayRow[5] + ",\n");
             }
         }
         try (BufferedReader br = new BufferedReader(new FileReader(tables[5] + csvEndSuffix))) {
@@ -520,17 +526,17 @@ public class Runner {
     //reset CreatureDisplayInfoExtra variables
     private static void resetVarsCreature()
     {
-        head = "0";
-        shoulder = "0";
-        chest = "0";
-        belt = "0";
-        legs = "0";
-        boots = "0";
-        gloves = "0";
-        wrist = "0";
-        cape = "0";
-        shirt = "0";
-        tabard = "0";
+        head = surroundQuotes("0");
+        shoulder = surroundQuotes("0");
+        chest = surroundQuotes("0");
+        belt = surroundQuotes("0");
+        legs = surroundQuotes("0");
+        boots = surroundQuotes("0");
+        gloves = surroundQuotes("0");
+        wrist = surroundQuotes("0");
+        cape = surroundQuotes("0");
+        shirt = surroundQuotes("0");
+        tabard = surroundQuotes("0");
     }
 
         //set CreatureDisplayInfoExtra variables
@@ -592,8 +598,7 @@ public class Runner {
         if(curr.length == 2) {
             String data = fileIDs.get(textureFDID.get(curr[1]));
             if (data != null) {
-                data = returnLast(data);
-                data = data.substring(0, data.length() - 6);
+                data = surroundQuotes(returnLast(data.substring(0, data.length() - 6)));
                 switch (curr[0]) {
                     case "0":
                         upArm = data;
