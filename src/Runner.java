@@ -205,10 +205,10 @@ public class Runner {
                             String a = fileIDs.get(textureFDID.get(extraSplit[10]));
                             if (a != null) {
                                 for (int i=1;i< extraSplit.length;i++){
-                                    extraSplit[i] = surroundQuotes(extraSplit[i]);
+                                    extraSplit[i] = surroundQuotes(extraSplit[i]).replace(".",",");
                                 }
                                 String texture = surroundQuotes(returnLast(a));
-                                displayExtraMap.put(Integer.parseInt(extraSplit[0]),surroundQuotes(extraSplit[0]) + delimiter + extraSplit[1] + delimiter + extraSplit[2] + delimiter + extraSplit[4] + delimiter + extraSplit[5] + delimiter + extraSplit[6] + delimiter + extraSplit[7] + delimiter + extraSplit[8] + delimiter + head + delimiter + shoulder + delimiter + shirt + delimiter + chest + delimiter + belt + delimiter + legs + delimiter + boots + delimiter + wrist + delimiter + gloves + delimiter + tabard + delimiter + cape + delimiter + surroundQuotes("0") + delimiter + texture + delimiter +"\n");
+                                displayExtraMap.put(Integer.parseInt(extraSplit[0]),surroundQuotes(extraSplit[0]) + delimiter + extraSplit[1] + delimiter + extraSplit[2] + delimiter + extraSplit[4] + delimiter + extraSplit[5] + delimiter + extraSplit[6] + delimiter + extraSplit[7] + delimiter + extraSplit[8] + delimiter + head + delimiter + shoulder + delimiter + shirt + delimiter + chest + delimiter + belt + delimiter + legs + delimiter + boots + delimiter + wrist + delimiter + gloves + delimiter + tabard + delimiter + cape + delimiter + surroundQuotes("0") + delimiter + texture +"\n");
                                 resetVarsCreature();
                             }
                         }
@@ -217,13 +217,13 @@ public class Runner {
                         String path;
                         path = surroundQuotes(modelLine.substring(0, modelLine.length() - 1) + "dx");
                         for (int i=1;i< modelRow.length;i++){
-                            modelRow[i] = surroundQuotes(modelRow[i]);
+                            modelRow[i] = surroundQuotes(modelRow[i]).replace(".",",");
                         }
                         for (int i=0;i< displayRow.length;i++){
-                            displayRow[i] = surroundQuotes(displayRow[i]);
+                            displayRow[i] = surroundQuotes(displayRow[i]).replace(".",",");
                         }
-                        modelMap.put(Integer.parseInt(modelRow[0]),surroundQuotes(modelRow[0]) + delimiter + modelRow[7] + delimiter + path + delimiter + surroundQuotes("1") + delimiter + modelRow[25] + delimiter + modelRow[9] + delimiter + modelRow[10] + delimiter + modelRow[11] + delimiter + modelRow[12] + delimiter + modelRow[13] + delimiter + surroundQuotes("") + delimiter + modelRow[14] + delimiter + modelRow[17] + delimiter + surroundQuotes("0") + delimiter + modelRow[20] + delimiter + modelRow[21] + delimiter + modelRow[30] + delimiter + modelRow[1] + delimiter + modelRow[2] + delimiter + modelRow[3] + delimiter + modelRow[4] + delimiter + modelRow[5] + delimiter + modelRow[6] + delimiter + surroundQuotes("1.0") + delimiter + modelRow[22] + delimiter + modelRow[25] + delimiter + surroundQuotes("0.0") + delimiter + surroundQuotes("0.0") + delimiter + "\n");
-                        creatureDisplayWriter.write(displayRow[0] + delimiter + displayRow[1] + delimiter + displayRow[2] + delimiter + displayRow[7] + delimiter + displayRow[4] + delimiter + displayRow[5] + delimiter + text1 + delimiter + text2 + delimiter + text3 + delimiter + surroundQuotes(displayRow[10]) + delimiter + displayRow[7] + delimiter + displayRow[9] + delimiter + displayRow[10] + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + displayRow[13] + delimiter + "\n");
+                        modelMap.put(Integer.parseInt(modelRow[0]),surroundQuotes(modelRow[0]) + delimiter + modelRow[7] + delimiter + path + delimiter + surroundQuotes("1") + delimiter + modelRow[25] + delimiter + modelRow[9] + delimiter + modelRow[10] + delimiter + modelRow[11] + delimiter + modelRow[12] + delimiter + modelRow[13] + delimiter + modelRow[14] + delimiter + surroundQuotes("0") + delimiter + modelRow[17] + delimiter + surroundQuotes("0") + delimiter + modelRow[20] + delimiter + modelRow[21] + delimiter + modelRow[30] + delimiter + modelRow[1] + delimiter + modelRow[2] + delimiter + modelRow[3] + delimiter + modelRow[4] + delimiter + modelRow[5] + delimiter + modelRow[6] + delimiter + surroundQuotes("1,0") + delimiter + modelRow[22] + delimiter + modelRow[25] + delimiter + surroundQuotes("0,0") + delimiter + surroundQuotes("0,0") + "\n");
+                        creatureDisplayWriter.write(displayRow[0] + delimiter + displayRow[1] + delimiter + displayRow[2] + delimiter + displayRow[7] + delimiter + displayRow[4] + delimiter + displayRow[5] + delimiter + text1 + delimiter + text2 + delimiter + text3 + delimiter + surroundQuotes(displayRow[10]) + delimiter + displayRow[7] + delimiter + displayRow[9] + delimiter + displayRow[10] + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + displayRow[13] + "\n");
 
                     }
                 }
@@ -316,9 +316,9 @@ public class Runner {
                     icon = surroundQuotes(substringFour(returnLast(icon)));
                 }
                 for (int i=0;i< displayRow.length;i++){
-                    displayRow[i] = surroundQuotes(displayRow[i]);
+                    displayRow[i] = surroundQuotes(displayRow[i]).replace(".",",");
                 }
-                itemDisplayInfoWriter.write(displayRow[0] + delimiter + Lmodel + delimiter + Rmodel + delimiter + Ltexture + delimiter + Rtexture + delimiter + icon + delimiter + emptyQuotes + delimiter + displayRow[16] + delimiter + displayRow[17] + delimiter + displayRow[18] + delimiter + displayRow[9] + delimiter + displayRow[6] + delimiter + surroundQuotes("0") + delimiter + displayRow[28] + delimiter + displayRow[29] + delimiter + upArm + delimiter + lowArm + delimiter + hands + delimiter + upTor + delimiter + lowTor + delimiter + upLeg + delimiter + lowLeg + delimiter + foot + delimiter + displayRow[1] + delimiter + displayRow[2] + ",\n");
+                itemDisplayInfoWriter.write(displayRow[0] + delimiter + Lmodel + delimiter + Rmodel + delimiter + Ltexture + delimiter + Rtexture + delimiter + icon + delimiter + emptyQuotes + delimiter + displayRow[16] + delimiter + displayRow[17] + delimiter + displayRow[18] + delimiter + displayRow[9] + delimiter + displayRow[6] + delimiter + surroundQuotes("0") + delimiter + displayRow[28] + delimiter + displayRow[29] + delimiter + upArm + delimiter + lowArm + delimiter + hands + delimiter + upTor + delimiter + lowTor + delimiter + upLeg + delimiter + lowLeg + delimiter + foot + delimiter + displayRow[1] + delimiter + displayRow[2] + "\n");
                 resetVarsItem();
             }
         }
@@ -334,9 +334,9 @@ public class Runner {
                     }
                 }
                 for (int i=0;i< displayRow.length;i++){
-                    displayRow[i] = surroundQuotes(displayRow[i]);
+                    displayRow[i] = surroundQuotes(displayRow[i]).replace(".",",");
                 }
-                itemWriter.write(displayRow[0] + delimiter + displayRow[1] + delimiter + displayRow[2] + delimiter + displayRow[6] + delimiter + displayRow[3] + delimiter + surroundQuotes(display) + delimiter + displayRow[4] + delimiter + displayRow[5] + ",\n");
+                itemWriter.write(displayRow[0] + delimiter + displayRow[1] + delimiter + displayRow[2] + delimiter + displayRow[6] + delimiter + displayRow[3] + delimiter + surroundQuotes(display) + delimiter + displayRow[4] + delimiter + displayRow[5] + "\n");
             }
         }
         try (BufferedReader br = new BufferedReader(new FileReader(tables[5] + csvEndSuffix))) {
