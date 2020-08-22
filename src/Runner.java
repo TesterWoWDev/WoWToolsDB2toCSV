@@ -41,7 +41,6 @@ public class Runner {
     private static String lowLeg = emptyQuotes;
     private static String foot = emptyQuotes;
 
-
     public static void main(String[] args) throws IOException
     {
        fillTable();
@@ -50,6 +49,7 @@ public class Runner {
        creatureDB2Convert();
        itemDB2Convert();
     }
+
     private static void startupText() throws IOException {
         Scanner keyboard = new Scanner(System.in);
         System.out.println("Would you like to download the CSVs? True or False(Recommended first use)");
@@ -93,7 +93,7 @@ public class Runner {
 
     //table and path downloads for files
     private static void fillTable(){
-        System.out.println("Filling table...");
+        System.out.println("Filling Table...");
         tables[0] = "item/item";
         tables[1] = "item/itemappearance";
         tables[2] = "item/itemdisplayinfo";
@@ -222,7 +222,7 @@ public class Runner {
                         for (int i=0;i< displayRow.length;i++){
                             displayRow[i] = surroundQuotes(displayRow[i]).replace(".",",");
                         }
-                        modelMap.put(Integer.parseInt(modelRow[0]),surroundQuotes(modelRow[0]) + delimiter + modelRow[7] + delimiter + path + delimiter + surroundQuotes("1") + delimiter + modelRow[25] + delimiter + modelRow[9] + delimiter + modelRow[10] + delimiter + modelRow[11] + delimiter + modelRow[12] + delimiter + modelRow[13] + delimiter + modelRow[14] + delimiter + surroundQuotes("0") + delimiter + modelRow[17] + delimiter + surroundQuotes("0") + delimiter + modelRow[20] + delimiter + modelRow[21] + delimiter + modelRow[30] + delimiter + modelRow[1] + delimiter + modelRow[2] + delimiter + modelRow[3] + delimiter + modelRow[4] + delimiter + modelRow[5] + delimiter + modelRow[6] + delimiter + surroundQuotes("1,0") + delimiter + modelRow[22] + delimiter + modelRow[25] + delimiter + surroundQuotes("0,0") + delimiter + surroundQuotes("0,0") + "\n");
+                        modelMap.put(Integer.parseInt(modelRow[0]),surroundQuotes(modelRow[0]) + delimiter + modelRow[7].replace("/","\\") + delimiter + path + delimiter + surroundQuotes("1") + delimiter + modelRow[25] + delimiter + modelRow[9] + delimiter + modelRow[10] + delimiter + modelRow[11] + delimiter + modelRow[12] + delimiter + modelRow[13] + delimiter + modelRow[14] + delimiter + surroundQuotes("0") + delimiter + modelRow[17] + delimiter + surroundQuotes("0") + delimiter + modelRow[20] + delimiter + modelRow[21] + delimiter + modelRow[30] + delimiter + modelRow[1] + delimiter + modelRow[2] + delimiter + modelRow[3] + delimiter + modelRow[4] + delimiter + modelRow[5] + delimiter + modelRow[6] + delimiter + surroundQuotes("1,0") + delimiter + modelRow[22] + delimiter + modelRow[25] + delimiter + surroundQuotes("0,0") + delimiter + surroundQuotes("0,0") + "\n");
                         creatureDisplayWriter.write(displayRow[0] + delimiter + displayRow[1] + delimiter + displayRow[2] + delimiter + displayRow[7] + delimiter + displayRow[4] + delimiter + displayRow[5] + delimiter + text1 + delimiter + text2 + delimiter + text3 + delimiter + surroundQuotes(displayRow[10]) + delimiter + displayRow[7] + delimiter + displayRow[9] + delimiter + displayRow[10] + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + displayRow[13] + "\n");
 
                     }
