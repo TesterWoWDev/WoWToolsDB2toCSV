@@ -9,7 +9,7 @@ public class Runner {
     //updated in main method
     private static String buildNumber = "9.0.1.35482";
     //filled in fillTable
-    private static final String[] tables = new String[12];
+    private static final String[] tables = new String[14];
     //shit
     private static final String delimiter = ",";
     private static final String csvEndSuffix = ".csv";
@@ -46,8 +46,9 @@ public class Runner {
        fillTable();
        startupText();
        startupTables();
-       creatureDB2Convert();
-       itemDB2Convert();
+       //creatureDB2Convert();
+       //itemDB2Convert();
+        GroundEffects();
     }
 
     private static void startupText() throws IOException {
@@ -106,6 +107,8 @@ public class Runner {
         tables[9] = "creature/npcmodelitemslotdisplayinfo";
         tables[10] = "listfile/modelfiledata";
         tables[11] = "listfile/texturefiledata";
+        tables[12] = "maps/groundeffectdoodad";
+        tables[13] = "maps/groundeffecttexture";
     }
 
     //creates folders, will mostly error. peeps got folders, but for startup
@@ -127,6 +130,10 @@ public class Runner {
         make = file.mkdir();
         if(!make)
             System.out.println("Error creating Export folder(possibly already exists)");
+        file = new File("./maps");
+        make = file.mkdir();
+        if(!make)
+            System.out.println("Error creating Maps folder(possibly already exists)");
     }
 
     //get all those csv downloads
@@ -357,6 +364,38 @@ public class Runner {
         itemWriter.close();
     }
 
+    private static void GroundEffects() throws IOException{
+        FileWriter groundEffectDoodad = new FileWriter("export/GroundEffectDoodad.csv");
+        FileWriter groundEffectTexture = new FileWriter("export/GroundEffectTexture.csv");
+        try (BufferedReader br = new BufferedReader(new FileReader(tables[12] + csvEndSuffix))) {
+            String line;
+            br.readLine();//skip header
+            while ((line = br.readLine()) != null) {
+                String[] split = line.split(delimiter);
+                int flag = Integer.parseInt(split[2]);
+                if (flag >1 && flag < 4){
+                    flag = 1;
+                }
+                String pathToModel = fileIDs.get(split[1]);
+                if(pathToModel != null) {
+                    pathToModel = pathToModel.split("/")[pathToModel.split("/").length - 1];
+                    pathToModel = pathToModel.substring(0,pathToModel.length()-2) + "mdl";
+                    groundEffectDoodad.write(surroundQuotes(split[0]) + delimiter + surroundQuotes(pathToModel) + delimiter +"\"" + flag + "\"\n");
+                }
+
+            }
+        }
+        try (BufferedReader br = new BufferedReader(new FileReader(tables[13] + csvEndSuffix))) {
+            String line;
+            br.readLine();//skip header
+            while ((line = br.readLine()) != null) {
+                String[] split = line.split(delimiter);
+                groundEffectTexture.write(split[0] + delimiter + split[3] + delimiter + split[4] + delimiter + split[5] + delimiter + split[6] + delimiter + split[7] + delimiter + split[8] + delimiter + split[9] + delimiter + split[10] + delimiter + split[1] + delimiter + split[2] + "\n");
+            }
+        }
+        groundEffectDoodad.close();
+        groundEffectTexture.close();
+    }
     //general map, used in multiple places
     private static HashMap<String, String> setupMap(String filename) throws IOException
     {
