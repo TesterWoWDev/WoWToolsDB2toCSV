@@ -46,9 +46,9 @@ public class Runner {
        fillTable();
        startupText();
        startupTables();
-       //creatureDB2Convert();
-       //itemDB2Convert();
         GroundEffects();
+        itemDB2Convert();
+       creatureDB2Convert();
     }
 
     private static void startupText() throws IOException {
@@ -376,11 +376,12 @@ public class Runner {
                 if (flag >1 && flag < 4){
                     flag = 1;
                 }
+                String flagString = String.valueOf(flag);
                 String pathToModel = fileIDs.get(split[1]);
                 if(pathToModel != null) {
                     pathToModel = pathToModel.split("/")[pathToModel.split("/").length - 1];
                     pathToModel = pathToModel.substring(0,pathToModel.length()-2) + "mdl";
-                    groundEffectDoodad.write(surroundQuotes(split[0]) + delimiter + surroundQuotes(pathToModel) + delimiter +"\"" + flag + "\"\n");
+                    groundEffectDoodad.write(surroundQuotes(split[0]) + delimiter + surroundQuotes(pathToModel) + delimiter + surroundQuotes(flagString) + "\n");
                 }
 
             }
