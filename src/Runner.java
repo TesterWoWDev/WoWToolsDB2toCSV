@@ -390,7 +390,7 @@ public class Runner {
             br.readLine();//skip header
             while ((line = br.readLine()) != null) {
                 String[] split = line.split(delimiter);
-                groundEffectTexture.write(split[0] + delimiter + split[3] + delimiter + split[4] + delimiter + split[5] + delimiter + split[6] + delimiter + split[7] + delimiter + split[8] + delimiter + split[9] + delimiter + split[10] + delimiter + split[1] + delimiter + split[2] + "\n");
+                groundEffectTexture.write(surroundQuotes(split[0]) + delimiter + surroundQuotes(split[3]) + delimiter + surroundQuotes(split[4]) + delimiter + surroundQuotes(split[5]) + delimiter + surroundQuotes(split[6]) + delimiter + surroundQuotes(split[7]) + delimiter + surroundQuotes(split[8]) + delimiter + surroundQuotes(split[9]) + delimiter + surroundQuotes(split[10]) + delimiter + surroundQuotes(split[1]) + delimiter + surroundQuotes(split[2]) + "\n");
             }
         }
         groundEffectDoodad.close();
