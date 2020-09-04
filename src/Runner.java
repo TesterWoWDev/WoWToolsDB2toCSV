@@ -364,6 +364,7 @@ public class Runner {
         itemWriter.close();
     }
 
+    //ground effect texture/doodads
     private static void GroundEffects() throws IOException{
         FileWriter groundEffectDoodad = new FileWriter("export/GroundEffectDoodad.csv");
         FileWriter groundEffectTexture = new FileWriter("export/GroundEffectTexture.csv");
@@ -379,11 +380,10 @@ public class Runner {
                 String flagString = String.valueOf(flag);
                 String pathToModel = fileIDs.get(split[1]);
                 if(pathToModel != null) {
-                    pathToModel = pathToModel.split("/")[pathToModel.split("/").length - 1];
+                    pathToModel = returnLast(pathToModel);
                     pathToModel = pathToModel.substring(0,pathToModel.length()-2) + "mdl";
                     groundEffectDoodad.write(surroundQuotes(split[0]) + delimiter + surroundQuotes(pathToModel) + delimiter + surroundQuotes(flagString) + "\n");
                 }
-
             }
         }
         try (BufferedReader br = new BufferedReader(new FileReader(tables[13] + csvEndSuffix))) {
