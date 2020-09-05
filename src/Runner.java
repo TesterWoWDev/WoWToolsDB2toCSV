@@ -439,6 +439,7 @@ public class Runner {
                             //sound[Integer.parseInt(soundsplit[1])] // this needs to be equal to a soundEntries ID(which needs to be written)
                         }
                 gameobjectDisplay.write(split[0] + delimiter + fileIDs.get(split[7]) + sound[0] + delimiter + sound[1] + delimiter + sound[2] + delimiter + sound[3] + delimiter + sound[4] + delimiter + sound[5] + delimiter + sound[6] + delimiter + sound[7] + delimiter + sound[8] + delimiter + sound[9] + delimiter + split[1] + delimiter + split[2] + delimiter + split[3] + delimiter + split[4] + delimiter + split[5] + delimiter + split[6] + delimiter + split[8] + "\n");
+                soundEntries.write("\n");
             }
         }
         soundEntries.close();
