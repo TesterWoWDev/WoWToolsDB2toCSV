@@ -144,6 +144,10 @@ public class Runner {
         make = file.mkdir();
         if(!make)
             System.out.println("Error creating Gobs folder(possibly already exists)");
+        file = new File("./sound");
+        make = file.mkdir();
+        if(!make)
+            System.out.println("Error creating Sound folder(possibly already exists)");
 
     }
 
@@ -377,6 +381,7 @@ public class Runner {
 
     //ground effect texture/doodads
     private static void GroundEffects() throws IOException{
+        System.out.println("Starting Ground Effects...");
         FileWriter groundEffectDoodad = new FileWriter("export/GroundEffectDoodad.csv");
         FileWriter groundEffectTexture = new FileWriter("export/GroundEffectTexture.csv");
         try (BufferedReader br = new BufferedReader(new FileReader(tables[12] + csvEndSuffix))) {
@@ -411,6 +416,7 @@ public class Runner {
 
     //start of game object
     private static void GameObject() throws IOException{
+        System.out.println("Starting Gameobjects...");
         FileWriter gameobjectDisplay = new FileWriter("export/GameObjectDisplayInfo.csv");
         FileWriter soundEntries = new FileWriter("export/SoundEntries.csv");
         HashMap<String, String> gameObjectIDToSoundKit = setupMultiMap(tables[15] + "Sorted" + csvEndSuffix);
@@ -424,16 +430,15 @@ public class Runner {
                 String[] sound = new String[10];
                 Arrays.fill(sound, "0");//auto set to 0 when not a sound
                 String a = gameObjectIDToSoundKit.get(split[0]);
-                if(a != null){
-                    for (int i=0;i<a.split("/").length;i++){
-                        String[] mm = a.split("/")[i].split(".");
-                        String soundkitLine = soundKit.get(mm[0]);
-                        String[] soundsplit = soundkitLine.split(delimiter);
-                        //soundKitEntry.get(soundsplit[0]) FileData ID for sound
-                        //sound[Integer.parseInt(soundsplit[1])] // this needs to be a soundEntries ID
-                    }
-                }
-                gameobjectDisplay.write(  split[0] + delimiter + fileIDs.get(split[7]) + sound[0] + delimiter +sound[1] + delimiter +sound[2] + delimiter +sound[3] + delimiter +sound[4] + delimiter +sound[5] + delimiter +sound[6] + delimiter +sound[7] + delimiter +sound[8] + delimiter +sound[9] + delimiter + split[1] + delimiter +  split[2] + delimiter + split[3] + delimiter + split[4] + delimiter + split[5] + delimiter + split[6] + delimiter + split[8] + "\n");
+                if (a != null)
+                    for (int i = 0; i < a.split(",").length; i++) {
+                        String[] mm = a.split(",")[i].split("\\.");
+                            String soundkitLine = soundKit.get(mm[0]);
+                            String[] soundsplit = soundkitLine.split(delimiter);
+                            //fileIDs.get(soundKitEntry.get(soundsplit[0]).split(delimiter)[2]) FileData ID for sound
+                            //sound[Integer.parseInt(soundsplit[1])] // this needs to be equal to a soundEntries ID(which needs to be written)
+                        }
+                gameobjectDisplay.write(split[0] + delimiter + fileIDs.get(split[7]) + sound[0] + delimiter + sound[1] + delimiter + sound[2] + delimiter + sound[3] + delimiter + sound[4] + delimiter + sound[5] + delimiter + sound[6] + delimiter + sound[7] + delimiter + sound[8] + delimiter + sound[9] + delimiter + split[1] + delimiter + split[2] + delimiter + split[3] + delimiter + split[4] + delimiter + split[5] + delimiter + split[6] + delimiter + split[8] + "\n");
             }
         }
         soundEntries.close();
