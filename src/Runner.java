@@ -9,7 +9,7 @@ public class Runner {
     //updated in main method
     private static String buildNumber = "9.0.1.35482";
     //filled in fillTable
-    private static final String[] tables = new String[14];
+    private static final String[] tables = new String[18];
     //shit
     private static final String delimiter = ",";
     private static final String csvEndSuffix = ".csv";
@@ -46,9 +46,11 @@ public class Runner {
        fillTable();
        startupText();
        startupTables();
-        GroundEffects();
-        itemDB2Convert();
-       creatureDB2Convert();
+       GroundEffects();
+       itemDB2Convert();
+       GameObject();
+       //creatureDB2Convert();//most likely to break on newer builds, so it runs last so the others can run and finish
+
     }
 
     private static void startupText() throws IOException {
@@ -61,13 +63,14 @@ public class Runner {
             buildNumber = keyboard.nextLine();//for the skip line(scanner sux)
             buildNumber = keyboard.nextLine();
             downloadFiles();
-            sortInfoMatRes();
+            sortTable(3);
+            sortTable(15);
         }
     }
     //sorts itemdisplayinfomaterialres to put all displayIDs in groups for parsing later(cause blizzard cant keep their shit together)
-    private static void sortInfoMatRes() throws IOException {
-        System.out.println("Sorting itemdisplayinfomaterialres...");
-        BufferedReader reader = new BufferedReader(new FileReader(tables[3] + csvEndSuffix));
+    private static void sortTable(int tableNum) throws IOException {
+        System.out.println("Sorting " + tables[tableNum]);
+        BufferedReader reader = new BufferedReader(new FileReader(tables[tableNum] + csvEndSuffix));
         Map<String, List<String>> map = new TreeMap<>();
         String line;
         reader.readLine();//skip header
@@ -77,7 +80,7 @@ public class Runner {
             l.add(line);
         }
         reader.close();
-        FileWriter writer = new FileWriter(tables[3] + "Sorted" + csvEndSuffix);
+        FileWriter writer = new FileWriter(tables[tableNum] + "Sorted" + csvEndSuffix);
         for (List<String> list : map.values()) {
             for (String val : list) {
                 writer.write(val);
@@ -86,7 +89,6 @@ public class Runner {
         }
         writer.close();
     }
-
     // extract value you want to sort on(for sorting itemdisplayinfomaterialres)Used in sortInfoMatRes()
     private static String getField(String line) {
         return line.split(delimiter)[3];
@@ -109,6 +111,10 @@ public class Runner {
         tables[11] = "listfile/texturefiledata";
         tables[12] = "maps/groundeffectdoodad";
         tables[13] = "maps/groundeffecttexture";
+        tables[14] = "gobs/gameobjectdisplayinfo";
+        tables[15] = "gobs/gameobjectdisplayinfoxsoundkit";
+        tables[16] = "sound/soundkit";
+        tables[17] = "sound/soundkitentry";
     }
 
     //creates folders, will mostly error. peeps got folders, but for startup
@@ -134,6 +140,11 @@ public class Runner {
         make = file.mkdir();
         if(!make)
             System.out.println("Error creating Maps folder(possibly already exists)");
+        file = new File("./gobs");
+        make = file.mkdir();
+        if(!make)
+            System.out.println("Error creating Gobs folder(possibly already exists)");
+
     }
 
     //get all those csv downloads
@@ -170,7 +181,7 @@ public class Runner {
         FileWriter creatureDisplayExtraWriter = new FileWriter("export/CreatureDisplayExtraNew.csv");
         HashMap<String, String> modelData = setupMap(tables[8] + csvEndSuffix);
         HashMap<String, String> displayExtra = setupMap(tables[7] + csvEndSuffix);
-        HashMap<String, String> displayExtraItems = setupDisplayExtraItemsMap(tables[9] + csvEndSuffix);
+        HashMap<String, String> displayExtraItems = setupMultiMap(tables[9] + csvEndSuffix);
         HashMap<Integer, String> modelMap = new HashMap<>();
         HashMap<Integer, String> displayExtraMap = new HashMap<>();
         try (BufferedReader br = new BufferedReader(new FileReader(tables[6] + csvEndSuffix))) {
@@ -252,7 +263,7 @@ public class Runner {
     //all item csv creation
     private static void itemDB2Convert() throws IOException {
         System.out.println("Starting Items...");
-        HashMap<String, String> itemDisplayInfoMaterials = setupDisplayExtraItemsMap(tables[3] + "Sorted" + csvEndSuffix);
+        HashMap<String, String> itemDisplayInfoMaterials = setupMultiMap(tables[3] + "Sorted" + csvEndSuffix);
         HashMap<String, String> itemModifiedAppearance = setupItemModMap();
         HashMap<String, String> itemAppearance = setupItemAppMap();
         HashMap<String, String> itemModifiedAppearanceReversed = setupItemModReversedMap();
@@ -397,6 +408,38 @@ public class Runner {
         groundEffectDoodad.close();
         groundEffectTexture.close();
     }
+
+    //start of game object
+    private static void GameObject() throws IOException{
+        FileWriter gameobjectDisplay = new FileWriter("export/GameObjectDisplayInfo.csv");
+        FileWriter soundEntries = new FileWriter("export/SoundEntries.csv");
+        HashMap<String, String> gameObjectIDToSoundKit = setupMultiMap(tables[15] + "Sorted" + csvEndSuffix);
+        HashMap<String, String> soundKit = setupMap(tables[16] + csvEndSuffix);
+        HashMap<String, String> soundKitEntry = setupSoundKitEntryMap();
+        try (BufferedReader br = new BufferedReader(new FileReader(tables[14] + csvEndSuffix))) {
+            String line;
+            br.readLine();//skip header
+            while ((line = br.readLine()) != null) {
+                String[] split = line.split(delimiter);
+                String[] sound = new String[10];
+                Arrays.fill(sound, "0");//auto set to 0 when not a sound
+                String a = gameObjectIDToSoundKit.get(split[0]);
+                if(a != null){
+                    for (int i=0;i<a.split("/").length;i++){
+                        String[] mm = a.split("/")[i].split(".");
+                        String soundkitLine = soundKit.get(mm[0]);
+                        String[] soundsplit = soundkitLine.split(delimiter);
+                        //soundKitEntry.get(soundsplit[0]) FileData ID for sound
+                        //sound[Integer.parseInt(soundsplit[1])] // this needs to be a soundEntries ID
+                    }
+                }
+                gameobjectDisplay.write(  split[0] + delimiter + fileIDs.get(split[7]) + sound[0] + delimiter +sound[1] + delimiter +sound[2] + delimiter +sound[3] + delimiter +sound[4] + delimiter +sound[5] + delimiter +sound[6] + delimiter +sound[7] + delimiter +sound[8] + delimiter +sound[9] + delimiter + split[1] + delimiter +  split[2] + delimiter + split[3] + delimiter + split[4] + delimiter + split[5] + delimiter + split[6] + delimiter + split[8] + "\n");
+            }
+        }
+        soundEntries.close();
+        gameobjectDisplay.close();
+    }
+
     //general map, used in multiple places
     private static HashMap<String, String> setupMap(String filename) throws IOException
     {
@@ -407,6 +450,21 @@ public class Runner {
         while ((line = br.readLine()) != null) {
             String[] values = line.split(delimiter);
             hm.put(values[0], line);
+        }
+        br.close();
+        return hm;
+    }
+
+    //general map, used in multiple places
+    private static HashMap<String, String> setupSoundKitEntryMap() throws IOException
+    {
+        HashMap<String, String> hm = new HashMap<>();
+        BufferedReader br = new BufferedReader(new FileReader(tables[17] + csvEndSuffix));
+        String line;
+        br.readLine();//skip header
+        while ((line = br.readLine()) != null) {
+            String[] values = line.split(delimiter);
+            hm.put(values[1], line);
         }
         br.close();
         return hm;
@@ -511,8 +569,8 @@ public class Runner {
         return hm;
     }
 
-    //setup itemdisplayinfoextra map for items (tables npcmodelitemslotdisplayinfo and itemdisplayinfomaterialres)
-    private static HashMap<String, String> setupDisplayExtraItemsMap(String filename) throws IOException
+    //setup tables npcmodelitemslotdisplayinfo and itemdisplayinfomaterialres and gameobjectdisplayinfoxsoundkit
+    private static HashMap<String, String> setupMultiMap(String filename) throws IOException
     {
         String splitter = ".";
         HashMap<String, String> hm = new HashMap<>();
