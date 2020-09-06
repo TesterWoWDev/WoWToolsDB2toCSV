@@ -46,8 +46,8 @@ public class Runner {
        fillTable();
        startupText();
        startupTables();
-       GroundEffects();
-       itemDB2Convert();
+       //GroundEffects();
+       //itemDB2Convert();
        GameObject();
        //creatureDB2Convert();//most likely to break on newer builds, so it runs last so the others can run and finish
 
@@ -422,6 +422,7 @@ public class Runner {
         HashMap<String, String> gameObjectIDToSoundKit = setupMultiMap(tables[15] + "Sorted" + csvEndSuffix);
         HashMap<String, String> soundKit = setupMap(tables[16] + csvEndSuffix);
         HashMap<String, String> soundKitEntry = setupSoundKitEntryMap();
+        HashMap<Integer, String> beenMade = new HashMap<>();
         try (BufferedReader br = new BufferedReader(new FileReader(tables[14] + csvEndSuffix))) {
             String line;
             br.readLine();//skip header
@@ -430,20 +431,29 @@ public class Runner {
                 String[] sound = new String[10];
                 Arrays.fill(sound, "0");//auto set to 0 when not a sound
                 String a = gameObjectIDToSoundKit.get(split[0]);
-                if (a != null)
+                if (a != null){
                     for (int i = 0; i < a.split(",").length; i++) {
                         String[] mm = a.split(",")[i].split("\\.");
-                            String soundkitLine = soundKit.get(mm[0]);
-                            String[] soundsplit = soundkitLine.split(delimiter);
-                            //fileIDs.get(soundKitEntry.get(soundsplit[0]).split(delimiter)[2]) FileData ID for sound
-                            //sound[Integer.parseInt(soundsplit[1])] // this needs to be equal to a soundEntries ID(which needs to be written)
+                        String soundkitLine = soundKit.get(mm[0]);
+                        String[] soundkitsplit = soundkitLine.split(delimiter);
+                        if(beenMade.get(Integer.parseInt(soundkitsplit[0])) == null){
+                            sound[Integer.parseInt(mm[1])] = soundkitsplit[0];
+                            String path = fileIDs.get(soundKitEntry.get(soundkitsplit[0]).split(delimiter)[2]);
+                            String filename = path.split("/")[path.split("/").length - 1];
+                            path = path.substring(0, path.length() - filename.length());
+                            beenMade.put(Integer.parseInt(soundkitsplit[0]),soundkitsplit[0] + delimiter + soundkitsplit[1] + delimiter + filename + delimiter + filename + delimiter + "" + delimiter + "" + delimiter + "" + delimiter + "" + delimiter + "" + delimiter + "" + delimiter + "" + delimiter + "" + delimiter + "" + delimiter + soundKitEntry.get(soundkitsplit[0]).split(delimiter)[3] + delimiter + 0 + delimiter + 0 + delimiter + 0 + delimiter + 0 + delimiter + 0 + delimiter + 0 + delimiter + 0 + delimiter + 0 + delimiter + 0 + delimiter + path + delimiter + soundkitsplit[2] + delimiter + soundkitsplit[3] + delimiter + soundkitsplit[4] + delimiter + soundkitsplit[5] + delimiter + "0" + "\n");
                         }
+                    }
+                }
                 gameobjectDisplay.write(split[0] + delimiter + fileIDs.get(split[7]) + sound[0] + delimiter + sound[1] + delimiter + sound[2] + delimiter + sound[3] + delimiter + sound[4] + delimiter + sound[5] + delimiter + sound[6] + delimiter + sound[7] + delimiter + sound[8] + delimiter + sound[9] + delimiter + split[1] + delimiter + split[2] + delimiter + split[3] + delimiter + split[4] + delimiter + split[5] + delimiter + split[6] + delimiter + split[8] + "\n");
-                soundEntries.write("\n");
             }
         }
+        TreeMap<Integer, String> sorted = new TreeMap<>(beenMade);
+        for (Map.Entry<Integer, String> entry : sorted.entrySet())
+            soundEntries.write(entry.getValue());
         soundEntries.close();
         gameobjectDisplay.close();
+
     }
 
     //general map, used in multiple places
