@@ -9,7 +9,7 @@ public class Runner {
     //updated in main method
     private static String buildNumber = "9.0.1.35482";
     //filled in fillTable
-    private static final String[] tables = new String[18];
+    private static final String[] tables = new String[19];
     //shit
     private static final String delimiter = ",";
     private static final String csvEndSuffix = ".csv";
@@ -115,6 +115,7 @@ public class Runner {
         tables[15] = "gobs/gameobjectdisplayinfoxsoundkit";
         tables[16] = "sound/soundkit";
         tables[17] = "sound/soundkitentry";
+        tables[18] = "sound/soundkitadvanced";
     }
 
     //creates folders, will mostly error. peeps got folders, but for startup
@@ -419,6 +420,7 @@ public class Runner {
         System.out.println("Starting Gameobjects...");
         FileWriter gameobjectDisplay = new FileWriter("export/GameObjectDisplayInfo.csv");
         FileWriter soundEntries = new FileWriter("export/SoundEntries.csv");
+        FileWriter soundEntriesAdvanced = new FileWriter("export/SoundEntriesAdvanced.csv");
         HashMap<String, String> gameObjectIDToSoundKit = setupMultiMap(tables[15] + "Sorted" + csvEndSuffix);
         HashMap<String, String> soundKit = setupMap(tables[16] + csvEndSuffix);
         HashMap<String, String> soundKitEntry = setupSoundKitEntryMap();
@@ -446,6 +448,14 @@ public class Runner {
                     }
                 }
                 gameobjectDisplay.write(split[0] + delimiter + fileIDs.get(split[7]) + sound[0] + delimiter + sound[1] + delimiter + sound[2] + delimiter + sound[3] + delimiter + sound[4] + delimiter + sound[5] + delimiter + sound[6] + delimiter + sound[7] + delimiter + sound[8] + delimiter + sound[9] + delimiter + split[1] + delimiter + split[2] + delimiter + split[3] + delimiter + split[4] + delimiter + split[5] + delimiter + split[6] + delimiter + split[8] + "\n");
+            }
+        }
+        try (BufferedReader br = new BufferedReader(new FileReader(tables[18] + csvEndSuffix))) {
+            String line;
+            br.readLine();//skip header
+            while ((line = br.readLine()) != null) {
+                String[] split = line.split(delimiter);
+                soundEntriesAdvanced.write(split[0] + delimiter + split[1] + delimiter + split[2] + delimiter + split[4] + delimiter + split[5] + delimiter + split[6] + delimiter + split[7] + delimiter + split[8] + delimiter + split[9] + delimiter + split[10] + delimiter + split[11] + delimiter + split[14] + delimiter + split[15] + delimiter + split[16] + delimiter + split[17] + delimiter + split[22] + delimiter + split[23] + delimiter + split[24] + delimiter + split[25] + delimiter + split[26] + delimiter + split[27] + delimiter + split[28] + delimiter + split[2] + delimiter + "" + "\n");
             }
         }
         TreeMap<Integer, String> sorted = new TreeMap<>(beenMade);
