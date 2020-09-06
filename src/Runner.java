@@ -46,10 +46,10 @@ public class Runner {
        fillTable();
        startupText();
        startupTables();
-       //GroundEffects();
-       //itemDB2Convert();
+       GroundEffects();
+       itemDB2Convert();
        GameObject();
-       //creatureDB2Convert();//most likely to break on newer builds, so it runs last so the others can run and finish
+       creatureDB2Convert();//most likely to break on newer builds, so it runs last so the others can run and finish
 
     }
 
@@ -463,6 +463,7 @@ public class Runner {
             soundEntries.write(entry.getValue());
         soundEntries.close();
         gameobjectDisplay.close();
+        soundEntriesAdvanced.close();
 
     }
 
