@@ -9,7 +9,7 @@ public class Runner {
     //updated in main method
     private static String buildNumber = "9.0.1.35482";
     //filled in fillTable
-    private static final String[] tables = new String[12];
+    private static final String[] tables = new String[19];
     //shit
     private static final String delimiter = ",";
     private static final String csvEndSuffix = ".csv";
@@ -46,8 +46,11 @@ public class Runner {
        fillTable();
        startupText();
        startupTables();
-       creatureDB2Convert();
+       GroundEffects();
        itemDB2Convert();
+       GameObject();
+       creatureDB2Convert();//most likely to break on newer builds, so it runs last so the others can run and finish
+
     }
 
     private static void startupText() throws IOException {
@@ -60,13 +63,14 @@ public class Runner {
             buildNumber = keyboard.nextLine();//for the skip line(scanner sux)
             buildNumber = keyboard.nextLine();
             downloadFiles();
-            sortInfoMatRes();
+            sortTable(3);
+            sortTable(15);
         }
     }
     //sorts itemdisplayinfomaterialres to put all displayIDs in groups for parsing later(cause blizzard cant keep their shit together)
-    private static void sortInfoMatRes() throws IOException {
-        System.out.println("Sorting itemdisplayinfomaterialres...");
-        BufferedReader reader = new BufferedReader(new FileReader(tables[3] + csvEndSuffix));
+    private static void sortTable(int tableNum) throws IOException {
+        System.out.println("Sorting " + tables[tableNum]);
+        BufferedReader reader = new BufferedReader(new FileReader(tables[tableNum] + csvEndSuffix));
         Map<String, List<String>> map = new TreeMap<>();
         String line;
         reader.readLine();//skip header
@@ -76,7 +80,7 @@ public class Runner {
             l.add(line);
         }
         reader.close();
-        FileWriter writer = new FileWriter(tables[3] + "Sorted" + csvEndSuffix);
+        FileWriter writer = new FileWriter(tables[tableNum] + "Sorted" + csvEndSuffix);
         for (List<String> list : map.values()) {
             for (String val : list) {
                 writer.write(val);
@@ -85,10 +89,9 @@ public class Runner {
         }
         writer.close();
     }
-
     // extract value you want to sort on(for sorting itemdisplayinfomaterialres)Used in sortInfoMatRes()
     private static String getField(String line) {
-        return line.split(",")[3];
+        return line.split(delimiter)[3];
     }
 
     //table and path downloads for files
@@ -106,6 +109,13 @@ public class Runner {
         tables[9] = "creature/npcmodelitemslotdisplayinfo";
         tables[10] = "listfile/modelfiledata";
         tables[11] = "listfile/texturefiledata";
+        tables[12] = "maps/groundeffectdoodad";
+        tables[13] = "maps/groundeffecttexture";
+        tables[14] = "gobs/gameobjectdisplayinfo";
+        tables[15] = "gobs/gameobjectdisplayinfoxsoundkit";
+        tables[16] = "sound/soundkit";
+        tables[17] = "sound/soundkitentry";
+        tables[18] = "sound/soundkitadvanced";
     }
 
     //creates folders, will mostly error. peeps got folders, but for startup
@@ -127,6 +137,19 @@ public class Runner {
         make = file.mkdir();
         if(!make)
             System.out.println("Error creating Export folder(possibly already exists)");
+        file = new File("./maps");
+        make = file.mkdir();
+        if(!make)
+            System.out.println("Error creating Maps folder(possibly already exists)");
+        file = new File("./gobs");
+        make = file.mkdir();
+        if(!make)
+            System.out.println("Error creating Gobs folder(possibly already exists)");
+        file = new File("./sound");
+        make = file.mkdir();
+        if(!make)
+            System.out.println("Error creating Sound folder(possibly already exists)");
+
     }
 
     //get all those csv downloads
@@ -163,7 +186,7 @@ public class Runner {
         FileWriter creatureDisplayExtraWriter = new FileWriter("export/CreatureDisplayExtraNew.csv");
         HashMap<String, String> modelData = setupMap(tables[8] + csvEndSuffix);
         HashMap<String, String> displayExtra = setupMap(tables[7] + csvEndSuffix);
-        HashMap<String, String> displayExtraItems = setupDisplayExtraItemsMap(tables[9] + csvEndSuffix);
+        HashMap<String, String> displayExtraItems = setupMultiMap(tables[9] + csvEndSuffix);
         HashMap<Integer, String> modelMap = new HashMap<>();
         HashMap<Integer, String> displayExtraMap = new HashMap<>();
         try (BufferedReader br = new BufferedReader(new FileReader(tables[6] + csvEndSuffix))) {
@@ -205,7 +228,7 @@ public class Runner {
                             String a = fileIDs.get(textureFDID.get(extraSplit[10]));
                             if (a != null) {
                                 for (int i=1;i< extraSplit.length;i++){
-                                    extraSplit[i] = surroundQuotes(extraSplit[i]).replace(".",",");
+                                    extraSplit[i] = surroundQuotes(extraSplit[i]).replace(".",delimiter);
                                 }
                                 String texture = surroundQuotes(returnLast(a));
                                 displayExtraMap.put(Integer.parseInt(extraSplit[0]),surroundQuotes(extraSplit[0]) + delimiter + extraSplit[1] + delimiter + extraSplit[2] + delimiter + extraSplit[4] + delimiter + extraSplit[5] + delimiter + extraSplit[6] + delimiter + extraSplit[7] + delimiter + extraSplit[8] + delimiter + head + delimiter + shoulder + delimiter + shirt + delimiter + chest + delimiter + belt + delimiter + legs + delimiter + boots + delimiter + wrist + delimiter + gloves + delimiter + tabard + delimiter + cape + delimiter + surroundQuotes("0") + delimiter + texture +"\n");
@@ -217,10 +240,10 @@ public class Runner {
                         String path;
                         path = surroundQuotes(modelLine.substring(0, modelLine.length() - 1) + "dx");
                         for (int i=1;i< modelRow.length;i++){
-                            modelRow[i] = surroundQuotes(modelRow[i]).replace(".",",");
+                            modelRow[i] = surroundQuotes(modelRow[i]).replace(".",delimiter);
                         }
                         for (int i=0;i< displayRow.length;i++){
-                            displayRow[i] = surroundQuotes(displayRow[i]).replace(".",",");
+                            displayRow[i] = surroundQuotes(displayRow[i]).replace(".",delimiter);
                         }
                         modelMap.put(Integer.parseInt(modelRow[0]),surroundQuotes(modelRow[0]) + delimiter + modelRow[7] + delimiter + path.replace("/","\\") + delimiter + surroundQuotes("1") + delimiter + modelRow[25] + delimiter + modelRow[9] + delimiter + modelRow[10] + delimiter + modelRow[11] + delimiter + modelRow[12] + delimiter + modelRow[13] + delimiter + modelRow[14] + delimiter + surroundQuotes("0") + delimiter + modelRow[17] + delimiter + surroundQuotes("0") + delimiter + modelRow[20] + delimiter + modelRow[21] + delimiter + modelRow[30] + delimiter + modelRow[1] + delimiter + modelRow[2] + delimiter + modelRow[3] + delimiter + modelRow[4] + delimiter + modelRow[5] + delimiter + modelRow[6] + delimiter + surroundQuotes("1,0") + delimiter + modelRow[22] + delimiter + modelRow[25] + delimiter + surroundQuotes("0,0") + delimiter + surroundQuotes("0,0") + "\n");
                         creatureDisplayWriter.write(displayRow[0] + delimiter + displayRow[1] + delimiter + displayRow[2] + delimiter + displayRow[7] + delimiter + displayRow[4] + delimiter + displayRow[5] + delimiter + text1 + delimiter + text2 + delimiter + text3 + delimiter + surroundQuotes(displayRow[10]) + delimiter + displayRow[7] + delimiter + displayRow[9] + delimiter + displayRow[10] + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + displayRow[13] + "\n");
@@ -245,7 +268,7 @@ public class Runner {
     //all item csv creation
     private static void itemDB2Convert() throws IOException {
         System.out.println("Starting Items...");
-        HashMap<String, String> itemDisplayInfoMaterials = setupDisplayExtraItemsMap(tables[3] + "Sorted" + csvEndSuffix);
+        HashMap<String, String> itemDisplayInfoMaterials = setupMultiMap(tables[3] + "Sorted" + csvEndSuffix);
         HashMap<String, String> itemModifiedAppearance = setupItemModMap();
         HashMap<String, String> itemAppearance = setupItemAppMap();
         HashMap<String, String> itemModifiedAppearanceReversed = setupItemModReversedMap();
@@ -316,7 +339,7 @@ public class Runner {
                     icon = surroundQuotes(substringFour(returnLast(icon)));
                 }
                 for (int i=0;i< displayRow.length;i++){
-                    displayRow[i] = surroundQuotes(displayRow[i]).replace(".",",");
+                    displayRow[i] = surroundQuotes(displayRow[i]).replace(".",delimiter);
                 }
                 itemDisplayInfoWriter.write(displayRow[0] + delimiter + Lmodel + delimiter + Rmodel + delimiter + Ltexture + delimiter + Rtexture + delimiter + icon + delimiter + emptyQuotes + delimiter + displayRow[16] + delimiter + displayRow[17] + delimiter + displayRow[18] + delimiter + displayRow[9] + delimiter + displayRow[6] + delimiter + surroundQuotes("0") + delimiter + displayRow[28] + delimiter + displayRow[29] + delimiter + upArm + delimiter + lowArm + delimiter + hands + delimiter + upTor + delimiter + lowTor + delimiter + upLeg + delimiter + lowLeg + delimiter + foot + delimiter + displayRow[1] + delimiter + displayRow[2] + "\n");
                 resetVarsItem();
@@ -334,7 +357,7 @@ public class Runner {
                     }
                 }
                 for (int i=0;i< displayRow.length;i++){
-                    displayRow[i] = surroundQuotes(displayRow[i]).replace(".",",");
+                    displayRow[i] = surroundQuotes(displayRow[i]).replace(".",delimiter);
                 }
                 itemWriter.write(displayRow[0] + delimiter + displayRow[1] + delimiter + displayRow[2] + delimiter + displayRow[6] + delimiter + displayRow[3] + delimiter + surroundQuotes(display) + delimiter + displayRow[4] + delimiter + displayRow[5] + "\n");
             }
@@ -357,6 +380,93 @@ public class Runner {
         itemWriter.close();
     }
 
+    //ground effect texture/doodads
+    private static void GroundEffects() throws IOException{
+        System.out.println("Starting Ground Effects...");
+        FileWriter groundEffectDoodad = new FileWriter("export/GroundEffectDoodad.csv");
+        FileWriter groundEffectTexture = new FileWriter("export/GroundEffectTexture.csv");
+        try (BufferedReader br = new BufferedReader(new FileReader(tables[12] + csvEndSuffix))) {
+            String line;
+            br.readLine();//skip header
+            while ((line = br.readLine()) != null) {
+                String[] split = line.split(delimiter);
+                int flag = Integer.parseInt(split[2]);
+                if (flag >1 && flag < 4){
+                    flag = 1;
+                }
+                String flagString = String.valueOf(flag);
+                String pathToModel = fileIDs.get(split[1]);
+                if(pathToModel != null) {
+                    pathToModel = returnLast(pathToModel);
+                    pathToModel = pathToModel.substring(0,pathToModel.length()-2) + "mdl";
+                    groundEffectDoodad.write(surroundQuotes(split[0]) + delimiter + surroundQuotes(pathToModel) + delimiter + surroundQuotes(flagString) + "\n");
+                }
+            }
+        }
+        try (BufferedReader br = new BufferedReader(new FileReader(tables[13] + csvEndSuffix))) {
+            String line;
+            br.readLine();//skip header
+            while ((line = br.readLine()) != null) {
+                String[] split = line.split(delimiter);
+                groundEffectTexture.write(surroundQuotes(split[0]) + delimiter + surroundQuotes(split[3]) + delimiter + surroundQuotes(split[4]) + delimiter + surroundQuotes(split[5]) + delimiter + surroundQuotes(split[6]) + delimiter + surroundQuotes(split[7]) + delimiter + surroundQuotes(split[8]) + delimiter + surroundQuotes(split[9]) + delimiter + surroundQuotes(split[10]) + delimiter + surroundQuotes(split[1]) + delimiter + surroundQuotes(split[2]) + "\n");
+            }
+        }
+        groundEffectDoodad.close();
+        groundEffectTexture.close();
+    }
+
+    //start of game object
+    private static void GameObject() throws IOException{
+        System.out.println("Starting Gameobjects...");
+        FileWriter gameobjectDisplay = new FileWriter("export/GameObjectDisplayInfo.csv");
+        FileWriter soundEntries = new FileWriter("export/SoundEntries.csv");
+        FileWriter soundEntriesAdvanced = new FileWriter("export/SoundEntriesAdvanced.csv");
+        HashMap<String, String> gameObjectIDToSoundKit = setupMultiMap(tables[15] + "Sorted" + csvEndSuffix);
+        HashMap<String, String> soundKit = setupMap(tables[16] + csvEndSuffix);
+        HashMap<String, String> soundKitEntry = setupSoundKitEntryMap();
+        HashMap<Integer, String> beenMade = new HashMap<>();
+        try (BufferedReader br = new BufferedReader(new FileReader(tables[14] + csvEndSuffix))) {
+            String line;
+            br.readLine();//skip header
+            while ((line = br.readLine()) != null) {
+                String[] split = line.split(delimiter);
+                String[] sound = new String[10];
+                Arrays.fill(sound, "0");//auto set to 0 when not a sound
+                String a = gameObjectIDToSoundKit.get(split[0]);
+                if (a != null){
+                    for (int i = 0; i < a.split(",").length; i++) {
+                        String[] mm = a.split(",")[i].split("\\.");
+                        String soundkitLine = soundKit.get(mm[0]);
+                        String[] soundkitsplit = soundkitLine.split(delimiter);
+                        if(beenMade.get(Integer.parseInt(soundkitsplit[0])) == null){
+                            sound[Integer.parseInt(mm[1])] = soundkitsplit[0];
+                            String path = fileIDs.get(soundKitEntry.get(soundkitsplit[0]).split(delimiter)[2]);
+                            String filename = path.split("/")[path.split("/").length - 1];
+                            path = path.substring(0, path.length() - filename.length());
+                            beenMade.put(Integer.parseInt(soundkitsplit[0]),soundkitsplit[0] + delimiter + soundkitsplit[1] + delimiter + filename + delimiter + filename + delimiter + "" + delimiter + "" + delimiter + "" + delimiter + "" + delimiter + "" + delimiter + "" + delimiter + "" + delimiter + "" + delimiter + "" + delimiter + soundKitEntry.get(soundkitsplit[0]).split(delimiter)[3] + delimiter + 0 + delimiter + 0 + delimiter + 0 + delimiter + 0 + delimiter + 0 + delimiter + 0 + delimiter + 0 + delimiter + 0 + delimiter + 0 + delimiter + path + delimiter + soundkitsplit[2] + delimiter + soundkitsplit[3] + delimiter + soundkitsplit[4] + delimiter + soundkitsplit[5] + delimiter + "0" + "\n");
+                        }
+                    }
+                }
+                gameobjectDisplay.write(split[0] + delimiter + fileIDs.get(split[7]) + sound[0] + delimiter + sound[1] + delimiter + sound[2] + delimiter + sound[3] + delimiter + sound[4] + delimiter + sound[5] + delimiter + sound[6] + delimiter + sound[7] + delimiter + sound[8] + delimiter + sound[9] + delimiter + split[1] + delimiter + split[2] + delimiter + split[3] + delimiter + split[4] + delimiter + split[5] + delimiter + split[6] + delimiter + split[8] + "\n");
+            }
+        }
+        try (BufferedReader br = new BufferedReader(new FileReader(tables[18] + csvEndSuffix))) {
+            String line;
+            br.readLine();//skip header
+            while ((line = br.readLine()) != null) {
+                String[] split = line.split(delimiter);
+                soundEntriesAdvanced.write(split[0] + delimiter + split[1] + delimiter + split[2] + delimiter + split[4] + delimiter + split[5] + delimiter + split[6] + delimiter + split[7] + delimiter + split[8] + delimiter + split[9] + delimiter + split[10] + delimiter + split[11] + delimiter + split[14] + delimiter + split[15] + delimiter + split[16] + delimiter + split[17] + delimiter + split[22] + delimiter + split[23] + delimiter + split[24] + delimiter + split[25] + delimiter + split[26] + delimiter + split[27] + delimiter + split[28] + delimiter + split[2] + delimiter + "" + "\n");
+            }
+        }
+        TreeMap<Integer, String> sorted = new TreeMap<>(beenMade);
+        for (Map.Entry<Integer, String> entry : sorted.entrySet())
+            soundEntries.write(entry.getValue());
+        soundEntries.close();
+        gameobjectDisplay.close();
+        soundEntriesAdvanced.close();
+
+    }
+
     //general map, used in multiple places
     private static HashMap<String, String> setupMap(String filename) throws IOException
     {
@@ -367,6 +477,21 @@ public class Runner {
         while ((line = br.readLine()) != null) {
             String[] values = line.split(delimiter);
             hm.put(values[0], line);
+        }
+        br.close();
+        return hm;
+    }
+
+    //general map, used in multiple places
+    private static HashMap<String, String> setupSoundKitEntryMap() throws IOException
+    {
+        HashMap<String, String> hm = new HashMap<>();
+        BufferedReader br = new BufferedReader(new FileReader(tables[17] + csvEndSuffix));
+        String line;
+        br.readLine();//skip header
+        while ((line = br.readLine()) != null) {
+            String[] values = line.split(delimiter);
+            hm.put(values[1], line);
         }
         br.close();
         return hm;
@@ -471,8 +596,8 @@ public class Runner {
         return hm;
     }
 
-    //setup itemdisplayinfoextra map for items (tables npcmodelitemslotdisplayinfo and itemdisplayinfomaterialres)
-    private static HashMap<String, String> setupDisplayExtraItemsMap(String filename) throws IOException
+    //setup tables npcmodelitemslotdisplayinfo and itemdisplayinfomaterialres and gameobjectdisplayinfoxsoundkit
+    private static HashMap<String, String> setupMultiMap(String filename) throws IOException
     {
         String splitter = ".";
         HashMap<String, String> hm = new HashMap<>();
