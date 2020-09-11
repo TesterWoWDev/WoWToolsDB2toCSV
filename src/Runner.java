@@ -9,7 +9,7 @@ public class Runner {
     //updated in main method
     private static String buildNumber = "9.0.1.35482";
     //filled in fillTable
-    private static final String[] tables = new String[19];
+    private static final String[] tables = new String[20];
     //shit
     private static final String delimiter = ",";
     private static final String csvEndSuffix = ".csv";
@@ -49,7 +49,7 @@ public class Runner {
        GroundEffects();
        itemDB2Convert();
        GameObject();
-       creatureDB2Convert();//most likely to break on newer builds, so it runs last so the others can run and finish
+      // creatureDB2Convert();//bricked on newer build. effort to fix
 
     }
 
@@ -116,6 +116,7 @@ public class Runner {
         tables[16] = "sound/soundkit";
         tables[17] = "sound/soundkitentry";
         tables[18] = "sound/soundkitadvanced";
+        tables[19] = "item/helmetgeosetvisdata";
     }
 
     //creates folders, will mostly error. peeps got folders, but for startup
@@ -278,6 +279,8 @@ public class Runner {
         FileWriter itemDisplayInfoWriter = new FileWriter("export/ItemDisplayInfoNew.csv");
         FileWriter itemWriter = new FileWriter("export/ItemNew.csv");
         FileWriter itemSQL = new FileWriter("export/itemSQL.sql");
+        FileWriter helmGeoset = new FileWriter("export/HelmetGeosetVisData.csv");
+
         try (BufferedReader br = new BufferedReader(new FileReader(tables[2] + csvEndSuffix))) {
                 String line;
                 br.readLine();//skip header
@@ -360,8 +363,8 @@ public class Runner {
                     displayRow[i] = surroundQuotes(displayRow[i]).replace(".",delimiter);
                 }
                 String subClass = displayRow[2];
-                if(Integer.parseInt(subClass) == 4 || Integer.parseInt(subClass) == 5){
-                    subClass = "5";
+                if(subClass.equals("\"5\"") || subClass.equals("\"4\"")){
+                    subClass = "\"1\"";
                 }
                 itemWriter.write(displayRow[0] + delimiter + displayRow[1] + delimiter + subClass + delimiter + displayRow[6] + delimiter + displayRow[3] + delimiter + surroundQuotes(display) + delimiter + displayRow[4] + delimiter + displayRow[5] + "\n");
 
@@ -380,6 +383,15 @@ public class Runner {
                     itemSQL.write("UPDATE `item_template` SET `name` = '" + split[1].replace("'", "''").replace("\"","") + delimiter + split[2].replace("'", "''").replace("\"","") + delimiter + split[3].replace("'", "''").replace("\"","") + "', `Quality` = " + split[5] + " WHERE `entry` = " + split[4] + ";\n");
             }
         }
+        try (BufferedReader br = new BufferedReader(new FileReader(tables[19] + csvEndSuffix))) {
+            String line;
+            br.readLine();//skip header
+            while ((line = br.readLine()) != null) {
+                String[] split = line.split(delimiter);
+                helmGeoset.write(split[0] + delimiter + split[1] + delimiter + split[2] + delimiter + split[3] + delimiter + split[4] + delimiter + split[5] + delimiter + split[6] + delimiter + split[7] + "\n");
+            }
+        }
+        helmGeoset.close();
         itemSQL.close();
         itemDisplayInfoWriter.close();
         itemWriter.close();
@@ -390,6 +402,7 @@ public class Runner {
         System.out.println("Starting Ground Effects...");
         FileWriter groundEffectDoodad = new FileWriter("export/GroundEffectDoodad.csv");
         FileWriter groundEffectTexture = new FileWriter("export/GroundEffectTexture.csv");
+        FileWriter doodadListfile = new FileWriter("export/GroundEffectDoodadListfile.csv");
         try (BufferedReader br = new BufferedReader(new FileReader(tables[12] + csvEndSuffix))) {
             String line;
             br.readLine();//skip header
@@ -405,6 +418,7 @@ public class Runner {
                     pathToModel = returnLast(pathToModel);
                     pathToModel = pathToModel.substring(0,pathToModel.length()-2) + "mdl";
                     groundEffectDoodad.write(surroundQuotes(split[0]) + delimiter + surroundQuotes(pathToModel) + delimiter + surroundQuotes(flagString) + "\n");
+                    doodadListfile.write(split[1] + ";" + fileIDs.get(split[1]) + "\n");
                 }
             }
         }
