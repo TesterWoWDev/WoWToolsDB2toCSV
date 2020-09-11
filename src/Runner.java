@@ -359,7 +359,12 @@ public class Runner {
                 for (int i=0;i< displayRow.length;i++){
                     displayRow[i] = surroundQuotes(displayRow[i]).replace(".",delimiter);
                 }
-                itemWriter.write(displayRow[0] + delimiter + displayRow[1] + delimiter + displayRow[2] + delimiter + displayRow[6] + delimiter + displayRow[3] + delimiter + surroundQuotes(display) + delimiter + displayRow[4] + delimiter + displayRow[5] + "\n");
+                String subClass = displayRow[2];
+                if(Integer.parseInt(subClass) == 4 || Integer.parseInt(subClass) == 5){
+                    subClass = "5";
+                }
+                itemWriter.write(displayRow[0] + delimiter + displayRow[1] + delimiter + subClass + delimiter + displayRow[6] + delimiter + displayRow[3] + delimiter + surroundQuotes(display) + delimiter + displayRow[4] + delimiter + displayRow[5] + "\n");
+
             }
         }
         try (BufferedReader br = new BufferedReader(new FileReader(tables[5] + csvEndSuffix))) {
