@@ -466,7 +466,7 @@ public class Runner {
                         }
                     }
                 }
-                gameobjectDisplay.write(split[0] + delimiter + fileIDs.get(split[7]) + sound[0] + delimiter + sound[1] + delimiter + sound[2] + delimiter + sound[3] + delimiter + sound[4] + delimiter + sound[5] + delimiter + sound[6] + delimiter + sound[7] + delimiter + sound[8] + delimiter + sound[9] + delimiter + split[1] + delimiter + split[2] + delimiter + split[3] + delimiter + split[4] + delimiter + split[5] + delimiter + split[6] + delimiter + split[8] + "\n");
+                gameobjectDisplay.write(surroundQuotes(split[0]) + delimiter + surroundQuotes(fileIDs.get(split[7])) + surroundQuotes(sound[0]) + delimiter + surroundQuotes(sound[1]) + delimiter + surroundQuotes(sound[2]) + delimiter + surroundQuotes(sound[3]) + delimiter + surroundQuotes(sound[4]) + delimiter + surroundQuotes(sound[5]) + delimiter + surroundQuotes(sound[6]) + delimiter + surroundQuotes(sound[7]) + delimiter + surroundQuotes(sound[8]) + delimiter + surroundQuotes(sound[9]) + delimiter + surroundQuotes(split[1]) + delimiter + surroundQuotes(split[2]) + delimiter + surroundQuotes(split[3]) + delimiter + surroundQuotes(split[4]) + delimiter + surroundQuotes(split[5]) + delimiter + surroundQuotes(split[6]) + delimiter + surroundQuotes(split[8]) + "\n");
             }
         }
         try (BufferedReader br = new BufferedReader(new FileReader(tables[18] + csvEndSuffix))) {
