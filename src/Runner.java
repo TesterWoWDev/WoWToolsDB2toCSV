@@ -366,7 +366,7 @@ public class Runner {
                 if(subClass.equals("\"5\"") || subClass.equals("\"4\"")){
                     subClass = "\"1\"";
                 }
-                itemWriter.write(displayRow[0] + delimiter + displayRow[1] + delimiter + subClass + delimiter + displayRow[6] + delimiter + displayRow[3] + delimiter + surroundQuotes(display) + delimiter + displayRow[4] + delimiter + displayRow[5] + "\n");
+                itemWriter.write(surroundQuotes(displayRow[0]) + delimiter + surroundQuotes(displayRow[1]) + delimiter + surroundQuotes(subClass) + delimiter + surroundQuotes(displayRow[6]) + delimiter + surroundQuotes(displayRow[3]) + delimiter + surroundQuotes(display) + delimiter + surroundQuotes(displayRow[4]) + delimiter + surroundQuotes(displayRow[5]) + "\n");
 
             }
         }
