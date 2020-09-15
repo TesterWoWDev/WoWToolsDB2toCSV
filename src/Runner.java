@@ -276,6 +276,8 @@ public class Runner {
         HashMap<String, String> itemAppearanceReversed = setupItemAppReversedMap();
         HashMap<String, String> itemIcon = setupItemMap();
         HashMap<String, String> itemAppearanceIcon = setupItemAppIconMap();
+        HashMap<String, String> displayToModel = new HashMap<>();
+        HashMap<String, String> itemIDtoSpell = new HashMap<>();
         FileWriter itemDisplayInfoWriter = new FileWriter("export/ItemDisplayInfoNew.csv");
         FileWriter itemWriter = new FileWriter("export/ItemNew.csv");
         FileWriter itemSQL = new FileWriter("export/itemSQL.sql");
@@ -345,6 +347,7 @@ public class Runner {
                     displayRow[i] = surroundQuotes(displayRow[i]).replace(".",delimiter);
                 }
                 itemDisplayInfoWriter.write(surroundQuotes(displayRow[0]) + delimiter + Lmodel + delimiter + Rmodel + delimiter + Ltexture + delimiter + Rtexture + delimiter + icon + delimiter + emptyQuotes + delimiter + surroundQuotes(displayRow[16]) + delimiter + surroundQuotes(displayRow[17]) + delimiter + surroundQuotes(displayRow[18]) + delimiter + surroundQuotes(displayRow[9]) + delimiter + surroundQuotes(displayRow[6]) + delimiter + surroundQuotes("0") + delimiter + surroundQuotes(displayRow[28]) + delimiter + surroundQuotes(displayRow[29]) + delimiter + upArm + delimiter + lowArm + delimiter + hands + delimiter + upTor + delimiter + lowTor + delimiter + upLeg + delimiter + lowLeg + delimiter + foot + delimiter + surroundQuotes(displayRow[1]) + delimiter + surroundQuotes(displayRow[2]) + "\n");
+                    displayToModel.put(displayRow[0],Lmodel);
                 resetVarsItem();
             }
         }
@@ -366,6 +369,10 @@ public class Runner {
                 if(subClass.equals("\"5\"") || subClass.equals("\"4\"")){
                     subClass = "\"1\"";
                 }
+                if(displayRow[4].equals("6") && !displayToModel.get(displayRow[1]).equals("") && displayToModel.get(displayRow[1]) != null){
+//write spell stuff?
+                    itemIDtoSpell.put(displayRow[0],"spellID");
+                }
                 itemWriter.write(surroundQuotes(displayRow[0]) + delimiter + surroundQuotes(displayRow[1]) + delimiter + surroundQuotes(subClass) + delimiter + surroundQuotes(displayRow[6]) + delimiter + surroundQuotes(displayRow[3]) + delimiter + surroundQuotes(display) + delimiter + surroundQuotes(displayRow[4]) + delimiter + surroundQuotes(displayRow[5]) + "\n");
 
             }
@@ -375,12 +382,23 @@ public class Runner {
             br.readLine();//skip header
             while ((line = br.readLine()) != null) {
                 String[] split = line.split(delimiter);
+                String spellid_1 = "";
+                String spelltrigger_1 = "";
+                if(itemIDtoSpell.get(split[2]) != null){
+                    if(split.length == 17)
+                    spellid_1 = itemIDtoSpell.get(split[2]);
+                    if(split.length == 18)
+                    spellid_1 = itemIDtoSpell.get(split[3]);
+                    if(split.length == 19)
+                    spellid_1 = itemIDtoSpell.get(split[4]);
+                    spelltrigger_1 = "1";
+                }
                 if(split.length == 17)
-                    itemSQL.write("UPDATE `item_template` SET `name` = '" + split[1].replace("'", "''").replace("\"","") + "', `Quality` = " + split[3] + " WHERE `entry` = " + split[2] + ";\n");
+                    itemSQL.write("UPDATE `item_template` SET `name` = '" + split[1].replace("'", "''").replace("\"","") + "', `Quality` = " + split[3] + ", `spellid_1` = " + spellid_1 + ", spelltrigger_1 = " + spelltrigger_1 + " WHERE `entry` = " + split[2] + ";\n");
                 if(split.length == 18)
-                    itemSQL.write("UPDATE `item_template` SET `name` = '" + split[1].replace("'", "''").replace("\"","") + delimiter + split[2].replace("'", "''").replace("\"","") +"', `Quality` = " + split[4] + " WHERE `entry` = " + split[3] + ";\n");
+                    itemSQL.write("UPDATE `item_template` SET `name` = '" + split[1].replace("'", "''").replace("\"","") + delimiter + split[2].replace("'", "''").replace("\"","") +"', `Quality` = " + split[4] + ", `spellid_1` = " + spellid_1 + ", spelltrigger_1 = " + spelltrigger_1 + " WHERE `entry` = " + split[3] + ";\n");
                 if(split.length == 19)
-                    itemSQL.write("UPDATE `item_template` SET `name` = '" + split[1].replace("'", "''").replace("\"","") + delimiter + split[2].replace("'", "''").replace("\"","") + delimiter + split[3].replace("'", "''").replace("\"","") + "', `Quality` = " + split[5] + " WHERE `entry` = " + split[4] + ";\n");
+                    itemSQL.write("UPDATE `item_template` SET `name` = '" + split[1].replace("'", "''").replace("\"","") + delimiter + split[2].replace("'", "''").replace("\"","") + delimiter + split[3].replace("'", "''").replace("\"","") + "', `Quality` = " + split[5] + ", `spellid_1` = " + spellid_1 + ", spelltrigger_1 = " + spelltrigger_1 + " WHERE `entry` = " + split[4] + ";\n");
             }
         }
         try (BufferedReader br = new BufferedReader(new FileReader(tables[19] + csvEndSuffix))) {
