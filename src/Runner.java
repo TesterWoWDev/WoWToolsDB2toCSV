@@ -370,7 +370,8 @@ public class Runner {
                     subClass = "\"1\"";
                 }
                 if(displayRow[4].equals("6") && !displayToModel.get(displayRow[1]).equals("") && displayToModel.get(displayRow[1]) != null){
-//write spell stuff?
+                    //starting ID 100k
+                    //write spell stuff?
                     itemIDtoSpell.put(displayRow[0],"spellID");
                 }
                 itemWriter.write(surroundQuotes(displayRow[0]) + delimiter + surroundQuotes(displayRow[1]) + delimiter + surroundQuotes(subClass) + delimiter + surroundQuotes(displayRow[6]) + delimiter + surroundQuotes(displayRow[3]) + delimiter + surroundQuotes(display) + delimiter + surroundQuotes(displayRow[4]) + delimiter + surroundQuotes(displayRow[5]) + "\n");
