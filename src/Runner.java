@@ -369,7 +369,8 @@ public class Runner {
                 if(subClass.equals("\"5\"") || subClass.equals("\"4\"")){
                     subClass = "\"1\"";
                 }
-                if(displayRow[4].equals("6") && !displayToModel.get(displayRow[1]).equals("") && displayToModel.get(displayRow[1]) != null){
+                if(displayRow[4] != null && displayToModel.get(displayRow[1]) != null)
+                if(displayRow[4].equals(surroundQuotes("6")) && !displayToModel.get(displayRow[1]).equals("") ){
                     //starting ID 100k
                     //write spell stuff?
                     itemIDtoSpell.put(displayRow[0],"spellID");
@@ -383,23 +384,28 @@ public class Runner {
             br.readLine();//skip header
             while ((line = br.readLine()) != null) {
                 String[] split = line.split(delimiter);
-                String spellid_1 = "";
-                String spelltrigger_1 = "";
-                if(itemIDtoSpell.get(split[2]) != null){
-                    if(split.length == 17)
-                    spellid_1 = itemIDtoSpell.get(split[2]);
-                    if(split.length == 18)
-                    spellid_1 = itemIDtoSpell.get(split[3]);
-                    if(split.length == 19)
-                    spellid_1 = itemIDtoSpell.get(split[4]);
-                    spelltrigger_1 = "1";
+
+                String spell = "";
+                String itemid = "";
+                if(split.length == 17)
+                    itemid = split[2];
+                if(split.length == 18)
+                    itemid = split[3];
+                if(split.length == 19)
+                    itemid = split[4];
+
+                if(itemIDtoSpell.get(itemid) != null){
+                    String spelltrigger_1 = "1";
+                    String spellid_1 = itemIDtoSpell.get(itemid);
+
+                    spell =  ", `spellid_1` = " + spellid_1 + ", `spelltrigger_1` = " + spelltrigger_1;
                 }
                 if(split.length == 17)
-                    itemSQL.write("UPDATE `item_template` SET `name` = '" + split[1].replace("'", "''").replace("\"","") + "', `Quality` = " + split[3] + ", `spellid_1` = " + spellid_1 + ", spelltrigger_1 = " + spelltrigger_1 + " WHERE `entry` = " + split[2] + ";\n");
+                    itemSQL.write("UPDATE `item_template` SET `name` = '" + split[1].replace("'", "''").replace("\"","") + "', `Quality` = " + split[3] + spell + " WHERE `entry` = " + itemid + ";\n");
                 if(split.length == 18)
-                    itemSQL.write("UPDATE `item_template` SET `name` = '" + split[1].replace("'", "''").replace("\"","") + delimiter + split[2].replace("'", "''").replace("\"","") +"', `Quality` = " + split[4] + ", `spellid_1` = " + spellid_1 + ", spelltrigger_1 = " + spelltrigger_1 + " WHERE `entry` = " + split[3] + ";\n");
+                    itemSQL.write("UPDATE `item_template` SET `name` = '" + split[1].replace("'", "''").replace("\"","") + delimiter + split[2].replace("'", "''").replace("\"","") +"', `Quality` = " + split[4] + spell + " WHERE `entry` = " + itemid + ";\n");
                 if(split.length == 19)
-                    itemSQL.write("UPDATE `item_template` SET `name` = '" + split[1].replace("'", "''").replace("\"","") + delimiter + split[2].replace("'", "''").replace("\"","") + delimiter + split[3].replace("'", "''").replace("\"","") + "', `Quality` = " + split[5] + ", `spellid_1` = " + spellid_1 + ", spelltrigger_1 = " + spelltrigger_1 + " WHERE `entry` = " + split[4] + ";\n");
+                    itemSQL.write("UPDATE `item_template` SET `name` = '" + split[1].replace("'", "''").replace("\"","") + delimiter + split[2].replace("'", "''").replace("\"","") + delimiter + split[3].replace("'", "''").replace("\"","") + "', `Quality` = " + split[5] + spell + " WHERE `entry` = " + itemid + ";\n");
             }
         }
         try (BufferedReader br = new BufferedReader(new FileReader(tables[19] + csvEndSuffix))) {
