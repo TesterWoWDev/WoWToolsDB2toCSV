@@ -387,26 +387,26 @@ public class Runner {
                 String[] split = line.split(delimiter);
 
                 String spell = "";
-                String itemid = "";
+                String ItemID = "";
                 if(split.length == 17)
-                    itemid = split[2];
+                    ItemID = split[2];
                 if(split.length == 18)
-                    itemid = split[3];
+                    ItemID = split[3];
                 if(split.length == 19)
-                    itemid = split[4];
+                    ItemID = split[4];
 
-                if(itemIDtoSpell.get(surroundQuotes(itemid)) != null){
-                    String spelltrigger_1 = "1";
-                    String spellid_1 = itemIDtoSpell.get(surroundQuotes(itemid));
+                if(itemIDtoSpell.get(surroundQuotes(ItemID)) != null){
+                    String SpellTrigger = "1";
+                    String SpellID = itemIDtoSpell.get(surroundQuotes(ItemID));
 
-                    spell =  ", `spellid_1` = " + spellid_1 + ", `spelltrigger_1` = " + spelltrigger_1;
+                    spell =  ", `spellid_1` = " + SpellID + ", `spelltrigger_1` = " + SpellTrigger;
                 }
                 if(split.length == 17)
-                    itemSQL.write("UPDATE `item_template` SET `name` = '" + split[1].replace("'", "''").replace("\"","") + "', `Quality` = " + split[3] + spell + " WHERE `entry` = " + itemid + ";\n");
+                    itemSQL.write("UPDATE `item_template` SET `name` = '" + split[1].replace("'", "''").replace("\"","") + "', `Quality` = " + split[3] + spell + " WHERE `entry` = " + ItemID + ";\n");
                 if(split.length == 18)
-                    itemSQL.write("UPDATE `item_template` SET `name` = '" + split[1].replace("'", "''").replace("\"","") + delimiter + split[2].replace("'", "''").replace("\"","") +"', `Quality` = " + split[4] + spell + " WHERE `entry` = " + itemid + ";\n");
+                    itemSQL.write("UPDATE `item_template` SET `name` = '" + split[1].replace("'", "''").replace("\"","") + delimiter + split[2].replace("'", "''").replace("\"","") +"', `Quality` = " + split[4] + spell + " WHERE `entry` = " + ItemID + ";\n");
                 if(split.length == 19)
-                    itemSQL.write("UPDATE `item_template` SET `name` = '" + split[1].replace("'", "''").replace("\"","") + delimiter + split[2].replace("'", "''").replace("\"","") + delimiter + split[3].replace("'", "''").replace("\"","") + "', `Quality` = " + split[5] + spell + " WHERE `entry` = " + itemid + ";\n");
+                    itemSQL.write("UPDATE `item_template` SET `name` = '" + split[1].replace("'", "''").replace("\"","") + delimiter + split[2].replace("'", "''").replace("\"","") + delimiter + split[3].replace("'", "''").replace("\"","") + "', `Quality` = " + split[5] + spell + " WHERE `entry` = " + ItemID + ";\n");
             }
         }
         try (BufferedReader br = new BufferedReader(new FileReader(tables[19] + csvEndSuffix))) {
