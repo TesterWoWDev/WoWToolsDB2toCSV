@@ -395,9 +395,9 @@ public class Runner {
                 if(split.length == 19)
                     itemid = split[4];
 
-                if(itemIDtoSpell.get(itemid) != null){
+                if(itemIDtoSpell.get(surroundQuotes(itemid)) != null){
                     String spelltrigger_1 = "1";
-                    String spellid_1 = itemIDtoSpell.get(itemid);
+                    String spellid_1 = itemIDtoSpell.get(surroundQuotes(itemid));
 
                     spell =  ", `spellid_1` = " + spellid_1 + ", `spelltrigger_1` = " + spelltrigger_1;
                 }
