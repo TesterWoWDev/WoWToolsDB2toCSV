@@ -346,7 +346,7 @@ public class Runner {
                 for (int i=0;i< displayRow.length;i++){
                     displayRow[i] = surroundQuotes(displayRow[i]).replace(".",delimiter);
                 }
-                itemDisplayInfoWriter.write(surroundQuotes(displayRow[0]) + delimiter + Lmodel + delimiter + Rmodel + delimiter + Ltexture + delimiter + Rtexture + delimiter + icon + delimiter + emptyQuotes + delimiter + surroundQuotes(displayRow[16]) + delimiter + surroundQuotes(displayRow[17]) + delimiter + surroundQuotes(displayRow[18]) + delimiter + surroundQuotes(displayRow[9]) + delimiter + surroundQuotes(displayRow[6]) + delimiter + surroundQuotes("0") + delimiter + surroundQuotes(displayRow[28]) + delimiter + surroundQuotes(displayRow[29]) + delimiter + upArm + delimiter + lowArm + delimiter + hands + delimiter + upTor + delimiter + lowTor + delimiter + upLeg + delimiter + lowLeg + delimiter + foot + delimiter + surroundQuotes(displayRow[1]) + delimiter + surroundQuotes(displayRow[2]) + "\n");
+                itemDisplayInfoWriter.write(displayRow[0] + delimiter + Lmodel + delimiter + Rmodel + delimiter + Ltexture + delimiter + Rtexture + delimiter + icon + delimiter + emptyQuotes + delimiter + displayRow[16] + delimiter + displayRow[17] + delimiter + displayRow[18] + delimiter + displayRow[9] + delimiter +displayRow[6] + delimiter + "0" + delimiter + displayRow[28] + delimiter + displayRow[29] + delimiter + upArm + delimiter + lowArm + delimiter + hands + delimiter + upTor + delimiter + lowTor + delimiter + upLeg + delimiter + lowLeg + delimiter + foot + delimiter + displayRow[1] + delimiter + displayRow[2] + "\n");
                     displayToModel.put(displayRow[0],Lmodel);
                 resetVarsItem();
             }
@@ -369,13 +369,13 @@ public class Runner {
                 if(subClass.equals("\"5\"") || subClass.equals("\"4\"")){
                     subClass = "\"1\"";
                 }
-                if(displayRow[4] != null && displayToModel.get(displayRow[1]) != null)
-                if(displayRow[4].equals(surroundQuotes("6")) && !displayToModel.get(displayRow[1]).equals("") ){
-                    //starting ID 100k
+                if(displayToModel.get(display) != null)
+                if(displayRow[4].equals(surroundQuotes("6")) && !displayToModel.get(display).equals("") ){
+                    //starting ID 500k
                     //write spell stuff?
                     itemIDtoSpell.put(displayRow[0],"spellID");
                 }
-                itemWriter.write(surroundQuotes(displayRow[0]) + delimiter + surroundQuotes(displayRow[1]) + delimiter + surroundQuotes(subClass) + delimiter + surroundQuotes(displayRow[6]) + delimiter + surroundQuotes(displayRow[3]) + delimiter + surroundQuotes(display) + delimiter + surroundQuotes(displayRow[4]) + delimiter + surroundQuotes(displayRow[5]) + "\n");
+                itemWriter.write(displayRow[0] + delimiter + displayRow[1] + delimiter + subClass + delimiter + displayRow[6] + delimiter + displayRow[3] + delimiter + surroundQuotes(display) + delimiter + displayRow[4] + delimiter + displayRow[5] + "\n");
 
             }
         }
