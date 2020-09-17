@@ -49,7 +49,7 @@ public class Runner {
        GroundEffects();
        itemDB2Convert();
        GameObject();
-       //creatureDB2Convert();//bricked on newer build. effort to fix
+       //creatureDB2Convert();//bricked on newer build. effort to fix. it's displayextra
 
     }
 
@@ -60,7 +60,7 @@ public class Runner {
         if(download) {
             setupFolders();
             System.out.println("What is the current build? (Get this from WoW.Tools) Default is: "+ buildNumber + " No promises on builds past this.");
-            buildNumber = keyboard.nextLine();//for the skip line(scanner sux)
+            keyboard.nextLine();//for the skip line(scanner sux)
             buildNumber = keyboard.nextLine();
             downloadFiles();
             sortTable(3);
@@ -377,7 +377,6 @@ public class Runner {
                     itemIDtoSpell.put(displayRow[0],"spellID");
                 }
                 itemWriter.write(displayRow[0] + delimiter + displayRow[1] + delimiter + subClass + delimiter + displayRow[6] + delimiter + displayRow[3] + delimiter + surroundQuotes(display) + delimiter + displayRow[4] + delimiter + displayRow[5] + "\n");
-
             }
         }
         try (BufferedReader br = new BufferedReader(new FileReader(tables[5] + csvEndSuffix))) {
