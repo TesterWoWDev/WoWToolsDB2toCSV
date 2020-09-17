@@ -369,8 +369,9 @@ public class Runner {
                 if(subClass.equals("\"5\"") || subClass.equals("\"4\"")){
                     subClass = "\"1\"";
                 }
-                if(displayToModel.get(display) != null)
-                if(displayRow[4].equals(surroundQuotes("6")) && !displayToModel.get(display).equals("") ){
+                if(displayToModel.get(surroundQuotes(display)) != null)
+                if(displayRow[4].equals(surroundQuotes("6")) && !displayToModel.get(surroundQuotes(display)).equals("\"\"") ){
+                    System.out.println(displayToModel.get(surroundQuotes(display)));
                     //starting ID 500k
                     //write spell stuff?
                     itemIDtoSpell.put(displayRow[0],"spellID");
