@@ -283,6 +283,13 @@ public class Runner {
         FileWriter itemSQL = new FileWriter("export/itemSQL.sql");
         FileWriter helmGeoset = new FileWriter("export/HelmetGeosetVisData.csv");
 
+        FileWriter spellWriter = new FileWriter("export/Spell.csv");
+        FileWriter spellVisualWriter = new FileWriter("export/SpellVisual.csv");
+        FileWriter spellVisualKitWriter = new FileWriter("export/SpellVisualKit.csv");
+        FileWriter spellVisualEffectNameWriter = new FileWriter("export/SpellVisualEffectName.csv");
+        FileWriter spellVisualModelAttachWriter = new FileWriter("export/SpellVisualModelAttach.csv");
+        int spellStartingID = 500000;
+
         try (BufferedReader br = new BufferedReader(new FileReader(tables[2] + csvEndSuffix))) {
                 String line;
                 br.readLine();//skip header
@@ -371,14 +378,18 @@ public class Runner {
                 }
                 if(displayToModel.get(surroundQuotes(display)) != null)
                 if(displayRow[4].equals(surroundQuotes("6")) && !displayToModel.get(surroundQuotes(display)).equals("\"\"") ){
-                    System.out.println(displayToModel.get(surroundQuotes(display)));
-                    //starting ID 500k
-                    //write spell stuff?
-                    itemIDtoSpell.put(displayRow[0],"spellID");
+                    spellWriter.write(spellStartingID + ",0,0,0,0x100,0x10000000,0x0,0x0,0x1,0x0,0x0,0x0,0x0,,0x0,,0x0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0x0,101,0,0,0,0,21,0,0,0,0,,1,0.0,0,0,0,0x0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0x0,0x0,-1,0,0x0,6,0,0,0,0,0,0.0,0.0,0.0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,4,0,0,0,0,0,0.0,0.0,0.0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0,0,0x0,0,0x0,0,0,0,0," + spellStartingID + ",0,1,0,0x0,\"Floating Skull (DND)\",,,,,,,,,,,,,,,,0xFF01FE,\"\",,,,,,,,,,,,,,,,0xFF01FC,\"Creates a Floating Skull on the creature's Chest.\",,,,,,,,,,,,,,,,0xFF01FE,\"\",,,,,,,,,,,,,,,,0xFF01FC,0,0x0,0,0,0,0x0,0x0,0x0,0,0,0x0,0,1.0,1.0,1.0,0x0,0,0,0,0,0,0x1,0,0,0,0.0,0.0,0.0,0,0,\n");
+                    spellVisualWriter.write(spellStartingID +",0,0,0," + spellStartingID + ",0,0,0,0,0x0,0,0,0,0x0,0,0,-1,0,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,0.0,\n");
+                    spellVisualKitWriter.write(spellStartingID + ",-1,-1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-1,-1,-1,-1,0.0,0.0,0.0,,0.0,0.0,0.0,,0.0,0.0,0.0,,0.0,0.0,,0.0,0,\n");
+                    spellVisualEffectNameWriter.write(spellStartingID + "," + surroundQuotes("3D Belt") + "," + surroundQuotes("item/objectcomponents/waist/" + displayToModel.get(surroundQuotes(display)).replace("\"","")) + ",1.0,1.0,0.00999999977648,100.0,\n");
+                    spellVisualModelAttachWriter.write(spellStartingID + "," + spellStartingID + "," + spellStartingID + ",53,0.0,0.0,0.0,0.0,0.0,0.0,\n");
+                    itemIDtoSpell.put(displayRow[0], String.valueOf(spellStartingID));
+                    spellStartingID++;
                 }
                 itemWriter.write(displayRow[0] + delimiter + displayRow[1] + delimiter + subClass + delimiter + displayRow[6] + delimiter + displayRow[3] + delimiter + surroundQuotes(display) + delimiter + displayRow[4] + delimiter + displayRow[5] + "\n");
             }
         }
+
         try (BufferedReader br = new BufferedReader(new FileReader(tables[5] + csvEndSuffix))) {
             String line;
             br.readLine();//skip header
@@ -420,6 +431,12 @@ public class Runner {
         itemSQL.close();
         itemDisplayInfoWriter.close();
         itemWriter.close();
+
+        spellVisualEffectNameWriter.close();
+        spellVisualKitWriter.close();
+        spellVisualModelAttachWriter.close();
+        spellVisualWriter.close();
+        spellWriter.close();
     }
 
     //ground effect texture/doodads
