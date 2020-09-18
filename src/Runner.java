@@ -116,7 +116,6 @@ public class Runner {
         tables[16] = "sound/soundkit";
         tables[17] = "sound/soundkitentry";
         tables[18] = "sound/soundkitadvanced";
-        tables[19] = "item/helmetgeosetvisdata";
     }
 
     //creates folders, will mostly error. peeps got folders, but for startup
@@ -278,6 +277,7 @@ public class Runner {
         HashMap<String, String> itemAppearanceIcon = setupItemAppIconMap();
         HashMap<String, String> displayToModel = new HashMap<>();
         HashMap<String, String> itemIDtoSpell = new HashMap<>();
+        HashMap<String, Integer> alreadyModel = new HashMap<>();
         FileWriter itemDisplayInfoWriter = new FileWriter("export/ItemDisplayInfoNew.csv");
         FileWriter itemWriter = new FileWriter("export/ItemNew.csv");
         FileWriter itemSQL = new FileWriter("export/itemSQL.sql");
@@ -376,15 +376,24 @@ public class Runner {
                 if(subClass.equals("\"5\"") || subClass.equals("\"4\"")){
                     subClass = "\"1\"";
                 }
-                if(displayToModel.get(surroundQuotes(display)) != null)
-                if(displayRow[4].equals(surroundQuotes("6")) && !displayToModel.get(surroundQuotes(display)).equals("\"\"") ){
-                    spellWriter.write(spellStartingID + ",0,0,0,0x100,0x10000000,0x0,0x0,0x1,0x0,0x0,0x0,0x0,,0x0,,0x0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0x0,101,0,0,0,0,21,0,0,0,0,,1,0.0,0,0,0,0x0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0x0,0x0,-1,0,0x0,6,0,0,0,0,0,0.0,0.0,0.0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,4,0,0,0,0,0,0.0,0.0,0.0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0,0,0x0,0,0x0,0,0,0,0," + spellStartingID + ",0,1,0,0x0,\"Floating Skull (DND)\",,,,,,,,,,,,,,,,0xFF01FE,\"\",,,,,,,,,,,,,,,,0xFF01FC,\"Creates a Floating Skull on the creature's Chest.\",,,,,,,,,,,,,,,,0xFF01FE,\"\",,,,,,,,,,,,,,,,0xFF01FC,0,0x0,0,0,0,0x0,0x0,0x0,0,0,0x0,0,1.0,1.0,1.0,0x0,0,0,0,0,0,0x1,0,0,0,0.0,0.0,0.0,0,0,\n");
-                    spellVisualWriter.write(spellStartingID +",0,0,0," + spellStartingID + ",0,0,0,0,0x0,0,0,0,0x0,0,0,-1,0,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,0.0,\n");
-                    spellVisualKitWriter.write(spellStartingID + ",-1,-1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-1,-1,-1,-1,0.0,0.0,0.0,,0.0,0.0,0.0,,0.0,0.0,0.0,,0.0,0.0,,0.0,0,\n");
-                    spellVisualEffectNameWriter.write(spellStartingID + "," + surroundQuotes("3D Belt") + "," + surroundQuotes("item/objectcomponents/waist/" + displayToModel.get(surroundQuotes(display)).replace("\"","")) + ",1.0,1.0,0.00999999977648,100.0,\n");
-                    spellVisualModelAttachWriter.write(spellStartingID + "," + spellStartingID + "," + spellStartingID + ",53,0.0,0.0,0.0,0.0,0.0,0.0,\n");
-                    itemIDtoSpell.put(displayRow[0], String.valueOf(spellStartingID));
-                    spellStartingID++;
+
+                if(displayToModel.get(surroundQuotes(display)) != null){
+                    if(displayRow[4].equals(surroundQuotes("6")) && !displayToModel.get(surroundQuotes(display)).equals("\"\"") ){
+                        String itemName = displayToModel.get(surroundQuotes(display)).replace("\"","");
+                        if(alreadyModel.get(itemName) == null) {
+                            spellWriter.write(spellStartingID + ",0,0,0,0x100,0x10000000,0x0,0x0,0x1,0x0,0x0,0x0,0x0,,0x0,,0x0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0x0,101,0,0,0,0,21,0,0,0,0,,1,0.0,0,0,0,0x0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0x0,0x0,-1,0,0x0,6,0,0,0,0,0,0.0,0.0,0.0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,4,0,0,0,0,0,0.0,0.0,0.0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0,0,0x0,0,0x0,0,0,0,0," + spellStartingID + ",0,1,0,0x0,\"Floating Skull (DND)\",,,,,,,,,,,,,,,,0xFF01FE,\"\",,,,,,,,,,,,,,,,0xFF01FC,\"Creates a Floating Skull on the creature's Chest.\",,,,,,,,,,,,,,,,0xFF01FE,\"\",,,,,,,,,,,,,,,,0xFF01FC,0,0x0,0,0,0,0x0,0x0,0x0,0,0,0x0,0,1.0,1.0,1.0,0x0,0,0,0,0,0,0x1,0,0,0,0.0,0.0,0.0,0,0,\n");
+                            spellVisualWriter.write(spellStartingID + ",0,0,0," + spellStartingID + ",0,0,0,0,0x0,0,0,0,0x0,0,0,-1,0,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,0.0,\n");
+                            spellVisualKitWriter.write(spellStartingID + ",-1,-1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-1,-1,-1,-1,0.0,0.0,0.0,,0.0,0.0,0.0,,0.0,0.0,0.0,,0.0,0.0,,0.0,0,\n");
+                            spellVisualEffectNameWriter.write(spellStartingID + "," + surroundQuotes("3D Belt") + "," + surroundQuotes("item/objectcomponents/waist/" + itemName) + ",1.0,1.0,0.01,100.0,\n");
+                            spellVisualModelAttachWriter.write(spellStartingID + "," + spellStartingID + "," + spellStartingID + ",53,0.0,0.0,0.0,0.0,0.0,0.0,\n");
+                            itemIDtoSpell.put(displayRow[0], String.valueOf(spellStartingID));
+                            alreadyModel.put(itemName, spellStartingID);
+                            spellStartingID++;
+                        }
+                        else{
+                            itemIDtoSpell.put(displayRow[0], String.valueOf(alreadyModel.get(itemName)));
+                        }
+                    }
                 }
                 itemWriter.write(displayRow[0] + delimiter + displayRow[1] + delimiter + subClass + delimiter + displayRow[6] + delimiter + displayRow[3] + delimiter + surroundQuotes(display) + delimiter + displayRow[4] + delimiter + displayRow[5] + "\n");
             }
@@ -419,7 +428,7 @@ public class Runner {
                     itemSQL.write("UPDATE `item_template` SET `name` = '" + split[1].replace("'", "''").replace("\"","") + delimiter + split[2].replace("'", "''").replace("\"","") + delimiter + split[3].replace("'", "''").replace("\"","") + "', `Quality` = " + split[5] + spell + " WHERE `entry` = " + ItemID + ";\n");
             }
         }
-        try (BufferedReader br = new BufferedReader(new FileReader(tables[19] + csvEndSuffix))) {
+        try (BufferedReader br = new BufferedReader(new FileReader("item/helmetgeosetvisdata.csv"))) {
             String line;
             br.readLine();//skip header
             while ((line = br.readLine()) != null) {
