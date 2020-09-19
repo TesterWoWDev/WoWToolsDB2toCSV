@@ -282,7 +282,7 @@ public class Runner {
         FileWriter itemWriter = new FileWriter("export/ItemNew.csv");
         FileWriter itemSQL = new FileWriter("export/itemSQL.sql");
         FileWriter helmGeoset = new FileWriter("export/HelmetGeosetVisData.csv");
-
+        FileWriter beltListfileWriter = new FileWriter("export/BeltListfile.csv");
         FileWriter spellWriter = new FileWriter("export/Spell.csv");
         FileWriter spellVisualWriter = new FileWriter("export/SpellVisual.csv");
         FileWriter spellVisualKitWriter = new FileWriter("export/SpellVisualKit.csv");
@@ -299,6 +299,7 @@ public class Runner {
                 String Rmodel = fileIDs.get(modelFDID.get(displayRow[11]));
                 String Ltexture = fileIDs.get(textureFDID.get(displayRow[12]));
                 String Rtexture = fileIDs.get(textureFDID.get(displayRow[13]));
+                String Lmm = fileIDs.get(modelFDID.get(displayRow[10]));
                 if(Lmodel == null){
                     Lmodel = emptyQuotes;
                 }else{
@@ -354,7 +355,7 @@ public class Runner {
                     displayRow[i] = surroundQuotes(displayRow[i]).replace(".",delimiter);
                 }
                 itemDisplayInfoWriter.write(displayRow[0] + delimiter + Lmodel + delimiter + Rmodel + delimiter + Ltexture + delimiter + Rtexture + delimiter + icon + delimiter + emptyQuotes + delimiter + displayRow[16] + delimiter + displayRow[17] + delimiter + displayRow[18] + delimiter + displayRow[9] + delimiter +displayRow[6] + delimiter + "0" + delimiter + displayRow[28] + delimiter + displayRow[29] + delimiter + upArm + delimiter + lowArm + delimiter + hands + delimiter + upTor + delimiter + lowTor + delimiter + upLeg + delimiter + lowLeg + delimiter + foot + delimiter + displayRow[1] + delimiter + displayRow[2] + "\n");
-                    displayToModel.put(displayRow[0],Lmodel);
+                    displayToModel.put(displayRow[0],Ltexture.replace("\"","") + ";" + Lmm + "\n");
                 resetVarsItem();
             }
         }
@@ -378,8 +379,8 @@ public class Runner {
                 }
 
                 if(displayToModel.get(surroundQuotes(display)) != null){
-                    if(displayRow[4].equals(surroundQuotes("6")) && !displayToModel.get(surroundQuotes(display)).equals("\"\"") ){
-                        String itemName = displayToModel.get(surroundQuotes(display)).replace("\"","");
+                    if(displayRow[4].equals(surroundQuotes("6")) && !displayToModel.get(surroundQuotes(display)).split(";")[1].equals("\"\"") ){
+                        String itemName = displayToModel.get(surroundQuotes(display)).split(";")[0].replace("\"","") + ".mdx";
                         if(alreadyModel.get(itemName) == null) {
                             spellWriter.write(surroundQuotes(String.valueOf(spellStartingID)) + ",\"0\",\"0\",\"0\",\"159645696\",\"160\",\"0\",\"0\",\"131139\",\"393224\",\"4096\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"1\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"101\",\"0\",\"0\",\"0\",\"0\",\"21\",\"0\",\"0\",\"0\",\"0\",\"0\",\"1\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"-1\",\"0\",\"0\",\"6\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"1\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"4\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"" + spellStartingID + "\",\"0\",\"1\",\"0\",\"0\",\"3D Belt\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"16712190\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"16712188\",\"Issa 3D Belt\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"16712190\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"16712188\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"1\",\"1\",\"1\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"1\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\"\n");
                             spellVisualWriter.write(surroundQuotes(String.valueOf(spellStartingID)) + ",\"0\",\"0\",\"0\"," + surroundQuotes(String.valueOf(spellStartingID)) + ",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"-1\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\"\n");
@@ -388,6 +389,7 @@ public class Runner {
                             spellVisualModelAttachWriter.write(surroundQuotes(String.valueOf(spellStartingID)) + "," + surroundQuotes(String.valueOf(spellStartingID)) + "," + surroundQuotes(String.valueOf(spellStartingID)) + ",\"53\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\"\n");
                             itemIDtoSpell.put(displayRow[0], String.valueOf(spellStartingID));
                             alreadyModel.put(itemName, spellStartingID);
+                            beltListfileWriter.write(displayToModel.get(surroundQuotes(display)));
                             spellStartingID++;
                         }
                         else{
@@ -440,7 +442,7 @@ public class Runner {
         itemSQL.close();
         itemDisplayInfoWriter.close();
         itemWriter.close();
-
+        beltListfileWriter.close();
         spellVisualEffectNameWriter.close();
         spellVisualKitWriter.close();
         spellVisualModelAttachWriter.close();
