@@ -278,8 +278,8 @@ public class Runner {
         HashMap<String, String> displayToModel = new HashMap<>();
         HashMap<String, String> itemIDtoSpell = new HashMap<>();
         HashMap<String, Integer> alreadyModel = new HashMap<>();
-        FileWriter itemDisplayInfoWriter = new FileWriter("export/ItemDisplayInfoNew.csv");
-        FileWriter itemWriter = new FileWriter("export/ItemNew.csv");
+        FileWriter itemDisplayInfoWriter = new FileWriter("export/ItemDisplayInfo.csv");
+        FileWriter itemWriter = new FileWriter("export/Item.csv");
         FileWriter itemSQL = new FileWriter("export/itemSQL.sql");
         FileWriter helmGeoset = new FileWriter("export/HelmetGeosetVisData.csv");
         FileWriter beltListfileWriter = new FileWriter("export/BeltListfile.csv");
@@ -389,14 +389,15 @@ public class Runner {
                             spellVisualModelAttachWriter.write(surroundQuotes(String.valueOf(spellStartingID)) + "," + surroundQuotes(String.valueOf(spellStartingID)) + "," + surroundQuotes(String.valueOf(spellStartingID)) + ",\"53\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\"\n");
                             itemIDtoSpell.put(displayRow[0], String.valueOf(spellStartingID));
                             alreadyModel.put(itemName, spellStartingID);
+                            spellStartingID++;
                             if(!displayToModel.get(surroundQuotes(display)).split(";")[1].contains("null"))
                             beltListfileWriter.write(displayToModel.get(surroundQuotes(display)));
 
                         }
                         else{
-                            itemIDtoSpell.put(displayRow[0], String.valueOf(spellStartingID));
+                            itemIDtoSpell.put(displayRow[0], String.valueOf(alreadyModel.get(surroundQuotes(itemName))));
                         }
-                        spellStartingID++;
+
                     }
                 }
                 itemWriter.write(displayRow[0] + delimiter + displayRow[1] + delimiter + subClass + delimiter + displayRow[6] + delimiter + displayRow[3] + delimiter + surroundQuotes(display) + delimiter + displayRow[4] + delimiter + displayRow[5] + "\n");
