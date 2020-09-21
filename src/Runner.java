@@ -354,7 +354,7 @@ public class Runner {
                     displayRow[i] = surroundQuotes(displayRow[i]).replace(".",delimiter);
                 }
                 itemDisplayInfoWriter.write(displayRow[0] + delimiter + Lmodel + delimiter + Rmodel + delimiter + Ltexture + delimiter + Rtexture + delimiter + icon + delimiter + emptyQuotes + delimiter + displayRow[16] + delimiter + displayRow[17] + delimiter + displayRow[18] + delimiter + displayRow[9] + delimiter +displayRow[6] + delimiter + "0" + delimiter + displayRow[28] + delimiter + displayRow[29] + delimiter + upArm + delimiter + lowArm + delimiter + hands + delimiter + upTor + delimiter + lowTor + delimiter + upLeg + delimiter + lowLeg + delimiter + foot + delimiter + displayRow[1] + delimiter + displayRow[2] + "\n");
-                    displayToModel.put(displayRow[0],Ltexture.replace("\"","") + ";" + Lmm + "\n");
+                displayToModel.put(displayRow[0],Ltexture.replace("\"","") + ";" + Lmm + "\n");
                 resetVarsItem();
             }
         }
@@ -392,6 +392,15 @@ public class Runner {
                             beltListfileWriter.write(displayToModel.get(surroundQuotes(display)));
 
                         }
+                        else if((displayToModel.get(surroundQuotes(display)).split(";")[1].replace("\"","").replace(".m2",".mdx")).length() > 10)
+                            itemName = displayToModel.get(surroundQuotes(display)).split(";")[1].replace("\"","").replace(".m2",".mdx").replace("/","\\");
+                            spellWriter.write(surroundQuotes(String.valueOf(spellStartingID)) + ",\"0\",\"0\",\"0\",\"159645696\",\"160\",\"0\",\"0\",\"131139\",\"393224\",\"4096\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"1\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"101\",\"0\",\"0\",\"0\",\"0\",\"21\",\"0\",\"0\",\"0\",\"0\",\"0\",\"1\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"-1\",\"0\",\"0\",\"6\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"1\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"4\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"" + spellStartingID + "\",\"0\",\"1\",\"0\",\"0\",\"3D Belt\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"16712190\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"16712188\",\"Issa 3D Belt\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"16712190\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"16712188\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"1\",\"1\",\"1\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"1\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\"\n");
+                            spellVisualWriter.write(surroundQuotes(String.valueOf(spellStartingID)) + ",\"0\",\"0\",\"0\"," + surroundQuotes(String.valueOf(spellStartingID)) + ",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"-1\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\"\n");
+                            spellVisualKitWriter.write(surroundQuotes(String.valueOf(spellStartingID)) + ",\"-1\",\"-1\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"-1\",\"-1\",\"-1\",\"-1\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\"\n");
+                            spellVisualEffectNameWriter.write(surroundQuotes(String.valueOf(spellStartingID)) + "," + surroundQuotes("3D Belt") + "," + surroundQuotes(itemName) + ",\"1\",\"1\",\"0,01\",\"100\"\n");
+                            spellVisualModelAttachWriter.write(surroundQuotes(String.valueOf(spellStartingID)) + "," + surroundQuotes(String.valueOf(spellStartingID)) + "," + surroundQuotes(String.valueOf(spellStartingID)) + ",\"53\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\"\n");
+                            itemIDtoSpell.put(displayRow[0], String.valueOf(spellStartingID));
+                            spellStartingID++;
                     }
                 }
                 itemWriter.write(displayRow[0] + delimiter + displayRow[1] + delimiter + subClass + delimiter + displayRow[6] + delimiter + displayRow[3] + delimiter + surroundQuotes(display) + delimiter + displayRow[4] + delimiter + displayRow[5] + "\n");
