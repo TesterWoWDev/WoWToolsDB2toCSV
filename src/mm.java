@@ -15,7 +15,7 @@ public class mm {
                 String[] displayRow = line.split(",");
                 System.out.println(Arrays.toString(displayRow));
                 if(isParsable(displayRow[0].replace("\"","")))
-                spellSQL.write("UPDATE `item_template` SET `Name_lang` = '" + displayRow[1].replace("\"","") + "', `Description_lang = '" + displayRow[3].replace("\"","") + "' WHERE `ID` = " +  displayRow[0].replace("\"","") + ";\n");
+                spellSQL.write("UPDATE `item_template` SET `Name_lang` = '" + displayRow[1].replace("\"","") + "', `Description_lang = '" + displayRow[3].replace("\"","") + "', `AuraDescription_lang` = '" + displayRow[4].replace("\"","") + "', `NameSubtext_lang` = '" + displayRow[2].replace("\"","") + "' WHERE `ID` = " +  displayRow[0].replace("\"","") + ";\n");
             }
         }
         spellSQL.close();
