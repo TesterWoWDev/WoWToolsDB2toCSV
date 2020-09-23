@@ -9,7 +9,7 @@ public class Runner {
     //updated in main method
     private static String buildNumber = "9.0.1.35482";
     //filled in fillTable
-    private static final String[] tables = new String[20];
+    private static final String[] tables = new String[19];
     //shit
     private static final String delimiter = ",";
     private static final String csvEndSuffix = ".csv";
@@ -49,6 +49,7 @@ public class Runner {
        GroundEffects();
        itemDB2Convert();
        GameObject();
+       soundEffects();
        //creatureDB2Convert();//bricked on newer build. effort to fix. it's displayextra
 
     }
@@ -497,12 +498,7 @@ public class Runner {
     private static void GameObject() throws IOException{
         System.out.println("Starting Gameobjects...");
         FileWriter gameobjectDisplay = new FileWriter("export/GameObjectDisplayInfo.csv");
-        FileWriter soundEntries = new FileWriter("export/SoundEntries.csv");
-        FileWriter soundEntriesAdvanced = new FileWriter("export/SoundEntriesAdvanced.csv");
         HashMap<String, String> gameObjectIDToSoundKit = setupMultiMap(tables[15] + "Sorted" + csvEndSuffix);
-        HashMap<String, String> soundKit = setupMap(tables[16] + csvEndSuffix);
-        HashMap<String, String> soundKitEntry = setupSoundKitEntryMap();
-        HashMap<Integer, String> soundEntriesMap = new HashMap<>();
         try (BufferedReader br = new BufferedReader(new FileReader(tables[14] + csvEndSuffix))) {
             String line;
             br.readLine();//skip header
@@ -514,20 +510,51 @@ public class Runner {
                 if (a != null){
                     for (int i = 0; i < a.split(",").length; i++) {
                         String[] mm = a.split(",")[i].split("\\.");
-                        String soundkitLine = soundKit.get(mm[0]);
-                        String[] soundkitsplit = soundkitLine.split(delimiter);
-                        if(soundEntriesMap.get(Integer.parseInt(soundkitsplit[0])) == null){
-                            sound[Integer.parseInt(mm[1])] = soundkitsplit[0];
-                            String path = fileIDs.get(soundKitEntry.get(soundkitsplit[0]).split(delimiter)[2]);
-                            String filename = path.split("/")[path.split("/").length - 1];
-                            path = path.substring(0, path.length() - filename.length());
-                            soundEntriesMap.put(Integer.parseInt(soundkitsplit[0]),surroundQuotes(soundkitsplit[0]) + delimiter + surroundQuotes(soundkitsplit[1]) + delimiter + surroundQuotes(filename) + delimiter + surroundQuotes(filename) + delimiter + emptyQuotes + delimiter + emptyQuotes + delimiter + emptyQuotes + delimiter + emptyQuotes + delimiter + emptyQuotes + delimiter + emptyQuotes+ delimiter + emptyQuotes + delimiter + emptyQuotes + delimiter + emptyQuotes + delimiter + surroundQuotes(soundKitEntry.get(soundkitsplit[0]).split(delimiter)[3]) + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter +surroundQuotes( "0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + path + delimiter + surroundQuotes(soundkitsplit[2]) + delimiter + surroundQuotes(soundkitsplit[3]) + delimiter + surroundQuotes(soundkitsplit[4]) + delimiter + surroundQuotes(soundkitsplit[5]) + delimiter + surroundQuotes("0") + "\n");
-                        }
+                            sound[Integer.parseInt(mm[1])] = mm[0];
                     }
                 }
                 gameobjectDisplay.write(surroundQuotes(split[0]) + delimiter + surroundQuotes(fileIDs.get(split[7])) + surroundQuotes(sound[0]) + delimiter + surroundQuotes(sound[1]) + delimiter + surroundQuotes(sound[2]) + delimiter + surroundQuotes(sound[3]) + delimiter + surroundQuotes(sound[4]) + delimiter + surroundQuotes(sound[5]) + delimiter + surroundQuotes(sound[6]) + delimiter + surroundQuotes(sound[7]) + delimiter + surroundQuotes(sound[8]) + delimiter + surroundQuotes(sound[9]) + delimiter + surroundQuotes(split[1]) + delimiter + surroundQuotes(split[2]) + delimiter + surroundQuotes(split[3]) + delimiter + surroundQuotes(split[4]) + delimiter + surroundQuotes(split[5]) + delimiter + surroundQuotes(split[6]) + delimiter + surroundQuotes(split[8]) + "\n");
             }
         }
+        gameobjectDisplay.close();
+    }
+
+    private static void soundEffects() throws IOException{
+        System.out.println("Starting Sound Effects...");
+        FileWriter soundEntries = new FileWriter("export/SoundEntries.csv");
+        HashMap<Integer, String> soundEntriesMap = new HashMap<>();
+        FileWriter soundEntriesAdvanced = new FileWriter("export/SoundEntriesAdvanced.csv");
+        HashMap<String, String> soundKitEntryMap = setupSoundKitEntryMap();
+        String[] sounds = new String[50];
+        String[] frequency = new String[50];
+        try (BufferedReader br = new BufferedReader(new FileReader(tables[16] + csvEndSuffix))) {
+            String line;
+            br.readLine();//skip header
+            while ((line = br.readLine()) != null) {
+                StringBuilder lastPath = new StringBuilder();
+                Arrays.fill(sounds,emptyQuotes);
+                Arrays.fill(frequency,surroundQuotes("0"));
+                String[] split = line.split(delimiter);
+                if(soundKitEntryMap.get(split[0]) != null) {
+                    String[] kitEntryLine = soundKitEntryMap.get(split[0]).split(delimiter);
+                    for (int i = 0; i < kitEntryLine.length; i++) {
+                        String[] kitLinePiece = kitEntryLine[i].split("\\.");
+                        if(fileIDs.get(kitLinePiece[0]) != null) {
+                            String path = fileIDs.get(kitLinePiece[0]).replace("/","\\");
+                            int index=path.lastIndexOf('/');
+                            if(index > 0) {
+                                lastPath = new StringBuilder();
+                                lastPath.append(path, 0, index);
+                            }
+                            sounds[i] = path.substring(index+1);
+                            frequency[i] = kitLinePiece[1];
+                        }
+                    }
+                    soundEntriesMap.put(Integer.parseInt(split[0]),surroundQuotes(split[0]) + delimiter + surroundQuotes(split[1]) + delimiter + sounds[0] + delimiter + sounds[0] + delimiter + sounds[1] + delimiter + sounds[2] + delimiter + sounds[3] + delimiter + sounds[4] + delimiter + sounds[5] + delimiter + sounds[6] + delimiter + sounds[7] + delimiter + sounds[8] + delimiter + sounds[9] + delimiter + frequency[0] + delimiter + frequency[1] + delimiter + frequency[2] + delimiter + frequency[3] + delimiter + frequency[4] + delimiter + frequency[5] + delimiter + frequency[6] + delimiter + frequency[7] + delimiter + frequency[8] + delimiter + frequency[9] + delimiter + surroundQuotes(String.valueOf(lastPath)) + delimiter + surroundQuotes("1") + delimiter + surroundQuotes(split[3]) + delimiter + surroundQuotes(split[4]) + delimiter + surroundQuotes(split[5]) + delimiter + surroundQuotes(split[6]) + delimiter + surroundQuotes(split[7]) + "\n");
+                }
+            }
+        }
+
         try (BufferedReader br = new BufferedReader(new FileReader(tables[18] + csvEndSuffix))) {
             String line;
             br.readLine();//skip header
@@ -540,11 +567,8 @@ public class Runner {
         for (Map.Entry<Integer, String> entry : sorted.entrySet())
             soundEntries.write(entry.getValue());
         soundEntries.close();
-        gameobjectDisplay.close();
         soundEntriesAdvanced.close();
-
     }
-
     //general map, used in multiple places
     private static HashMap<String, String> setupMap(String filename) throws IOException
     {
@@ -563,13 +587,22 @@ public class Runner {
     //general map, used in multiple places
     private static HashMap<String, String> setupSoundKitEntryMap() throws IOException
     {
+        String splitter = ".";
         HashMap<String, String> hm = new HashMap<>();
         BufferedReader br = new BufferedReader(new FileReader(tables[17] + csvEndSuffix));
+        StringBuilder perline = new StringBuilder();
+        String last = "";
         String line;
         br.readLine();//skip header
-        while ((line = br.readLine()) != null) {
+        while ( (line = br.readLine()) != null ) {
             String[] values = line.split(delimiter);
-            hm.put(values[1], line);
+            if (!last.equals(values[1])){
+                hm.put(last, perline.toString());
+                perline = new StringBuilder();
+            }
+
+            perline.append(values[2]).append(splitter).append(values[3]).append(delimiter);
+            last = values[1];
         }
         br.close();
         return hm;
