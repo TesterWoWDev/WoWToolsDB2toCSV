@@ -9,7 +9,7 @@ public class Runner {
     //updated in main method
     private static String buildNumber = "9.0.1.35482";
     //filled in fillTable
-    private static final String[] tables = new String[19];
+    private static final String[] tables = new String[20];
     //shit
     private static final String delimiter = ",";
     private static final String csvEndSuffix = ".csv";
@@ -117,6 +117,7 @@ public class Runner {
         tables[16] = "sound/soundkit";
         tables[17] = "sound/soundkitentry";
         tables[18] = "sound/soundkitadvanced";
+        tables[19] = "sound/creaturesounddata";
     }
 
     //creates folders, will mostly error. peeps got folders, but for startup
@@ -524,6 +525,7 @@ public class Runner {
         FileWriter soundEntries = new FileWriter("export/SoundEntries.csv");
         HashMap<Integer, String> soundEntriesMap = new HashMap<>();
         FileWriter soundEntriesAdvanced = new FileWriter("export/SoundEntriesAdvanced.csv");
+        FileWriter creatureSound = new FileWriter("export/CreatureSoundData.csv");
         HashMap<String, String> soundKitEntryMap = setupSoundKitEntryMap();
         String[] sounds = new String[50];
         String[] frequency = new String[50];
@@ -541,16 +543,16 @@ public class Runner {
                         String[] kitLinePiece = kitEntryLine[i].split("\\.");
                         if(fileIDs.get(kitLinePiece[0]) != null) {
                             String path = fileIDs.get(kitLinePiece[0]).replace("/","\\");
-                            int index=path.lastIndexOf('/');
+                            int index=path.lastIndexOf('\\');
                             if(index > 0) {
                                 lastPath = new StringBuilder();
                                 lastPath.append(path, 0, index);
                             }
                             sounds[i] = path.substring(index+1);
-                            frequency[i] = kitLinePiece[1];
+                            frequency[i] = surroundQuotes(kitLinePiece[1]);
                         }
                     }
-                    soundEntriesMap.put(Integer.parseInt(split[0]),surroundQuotes(split[0]) + delimiter + surroundQuotes(split[1]) + delimiter + sounds[0] + delimiter + sounds[0] + delimiter + sounds[1] + delimiter + sounds[2] + delimiter + sounds[3] + delimiter + sounds[4] + delimiter + sounds[5] + delimiter + sounds[6] + delimiter + sounds[7] + delimiter + sounds[8] + delimiter + sounds[9] + delimiter + frequency[0] + delimiter + frequency[1] + delimiter + frequency[2] + delimiter + frequency[3] + delimiter + frequency[4] + delimiter + frequency[5] + delimiter + frequency[6] + delimiter + frequency[7] + delimiter + frequency[8] + delimiter + frequency[9] + delimiter + surroundQuotes(String.valueOf(lastPath)) + delimiter + surroundQuotes("1") + delimiter + surroundQuotes(split[3]) + delimiter + surroundQuotes(split[4]) + delimiter + surroundQuotes(split[5]) + delimiter + surroundQuotes(split[6]) + delimiter + surroundQuotes(split[7]) + "\n");
+                    soundEntriesMap.put(Integer.parseInt(split[0]),surroundQuotes(split[0]) + delimiter + surroundQuotes(split[1]) + delimiter + sounds[0].replace(".ogg","").replace(".wav","") + delimiter + sounds[0] + delimiter + sounds[1] + delimiter + sounds[2] + delimiter + sounds[3] + delimiter + sounds[4] + delimiter + sounds[5] + delimiter + sounds[6] + delimiter + sounds[7] + delimiter + sounds[8] + delimiter + sounds[9] + delimiter + frequency[0] + delimiter + frequency[1] + delimiter + frequency[2] + delimiter + frequency[3] + delimiter + frequency[4] + delimiter + frequency[5] + delimiter + frequency[6] + delimiter + frequency[7] + delimiter + frequency[8] + delimiter + frequency[9] + delimiter + surroundQuotes(String.valueOf(lastPath)) + delimiter + surroundQuotes("1") + delimiter + surroundQuotes(split[3]) + delimiter + surroundQuotes(split[4]) + delimiter + surroundQuotes(split[5]) + delimiter + surroundQuotes(split[6]) + delimiter + surroundQuotes(split[7]) + "\n");
                 }
             }
         }
@@ -563,7 +565,16 @@ public class Runner {
                 soundEntriesAdvanced.write(surroundQuotes(split[0]) + delimiter + surroundQuotes(split[1]) + delimiter + surroundQuotes(split[2]) + delimiter + surroundQuotes(split[4]) + delimiter + surroundQuotes(split[5]) + delimiter + surroundQuotes(split[6]) + delimiter + surroundQuotes(split[7]) + delimiter + surroundQuotes(split[8]) + delimiter + surroundQuotes(split[9]) + delimiter + surroundQuotes(split[10]) + delimiter + surroundQuotes(split[11]) + delimiter + surroundQuotes(split[14]) + delimiter + surroundQuotes(split[15]) + delimiter + surroundQuotes(split[16]) + delimiter + surroundQuotes(split[17]) + delimiter + surroundQuotes(split[22]) + delimiter + surroundQuotes(split[23]) + delimiter + surroundQuotes(split[24]) + delimiter + surroundQuotes(split[25]) + delimiter + surroundQuotes(split[26]) + delimiter + surroundQuotes(split[27]) + delimiter + surroundQuotes(split[28]) + delimiter + surroundQuotes(split[2]) + delimiter + surroundQuotes("") + "\n");
             }
         }
-        TreeMap<Integer, String> sorted = new TreeMap<>(soundEntriesMap);
+
+        try (BufferedReader br = new BufferedReader(new FileReader(tables[19] + csvEndSuffix))) {
+            String line;
+            br.readLine();//skip header
+            while ((line = br.readLine()) != null) {
+                String[] split = line.split(delimiter);
+                creatureSound.write(surroundQuotes(split[0]) + delimiter + surroundQuotes(split[1]) + delimiter + surroundQuotes(split[2]) + delimiter + surroundQuotes(split[3]) + delimiter + surroundQuotes(split[4]) + delimiter + surroundQuotes(split[5]) + delimiter + surroundQuotes(split[6]) + delimiter + surroundQuotes(split[7]) + delimiter + surroundQuotes(split[8]) + delimiter + surroundQuotes(split[9]) + delimiter + surroundQuotes(split[10]) + delimiter + surroundQuotes(split[11]) + delimiter + surroundQuotes(split[12]) + delimiter + surroundQuotes(split[13]) + delimiter + surroundQuotes(split[36]) + delimiter + surroundQuotes(split[37]) + delimiter + surroundQuotes(split[38]) + delimiter + surroundQuotes(split[39]) + delimiter + surroundQuotes(split[40]) + delimiter + surroundQuotes(split[41]) + delimiter + surroundQuotes(split[42]) + delimiter + surroundQuotes(split[43]) + delimiter + surroundQuotes(split[44]) + delimiter + surroundQuotes(split[35]) + delimiter + surroundQuotes(split[19]) + delimiter + surroundQuotes(split[34]) + delimiter + surroundQuotes(split[14]) + delimiter + surroundQuotes(split[15]) + delimiter + surroundQuotes(split[16]) + delimiter + surroundQuotes(split[17]) + delimiter + surroundQuotes(split[18]) + delimiter + surroundQuotes(split[32]) + delimiter + surroundQuotes(split[33]) + delimiter + surroundQuotes(split[21]) + delimiter + surroundQuotes(split[22]) + delimiter + surroundQuotes(split[23]) + delimiter + surroundQuotes(split[31]) + "\n");
+            }
+        }
+                TreeMap<Integer, String> sorted = new TreeMap<>(soundEntriesMap);
         for (Map.Entry<Integer, String> entry : sorted.entrySet())
             soundEntries.write(entry.getValue());
         soundEntries.close();
