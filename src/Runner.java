@@ -2,6 +2,10 @@ import java.io.*;
 import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.*;
 
 public class Runner {
@@ -40,9 +44,19 @@ public class Runner {
     private static String upLeg = emptyQuotes;
     private static String lowLeg = emptyQuotes;
     private static String foot = emptyQuotes;
+    private static Connection conn;
+    private static Statement st;
+    static {
+        try {
+            conn = DriverManager.getConnection("jdbc:msql://200.210.220.1:1114/Demo","root","pass");
+            st = conn.createStatement();
+        } catch (SQLException thrown) {
+            thrown.printStackTrace();
+        }
+    }
 
-    public static void main(String[] args) throws IOException
-    {
+
+    public static void main(String[] args) throws IOException, SQLException {
        fillTable();
        startupText();
        startupTables();
@@ -268,7 +282,7 @@ public class Runner {
     }
 
     //all item csv creation
-    private static void itemDB2Convert() throws IOException {
+    private static void itemDB2Convert() throws IOException, SQLException {
         System.out.println("Starting Items...");
         HashMap<String, String> itemDisplayInfoMaterials = setupMultiMap(tables[3] + "Sorted" + csvEndSuffix);
         HashMap<String, String> itemModifiedAppearance = setupItemModMap();
@@ -355,7 +369,9 @@ public class Runner {
                 for (int i=0;i< displayRow.length;i++){
                     displayRow[i] = surroundQuotes(displayRow[i]).replace(".",delimiter);
                 }
-                itemDisplayInfoWriter.write(displayRow[0] + delimiter + Lmodel + delimiter + Rmodel + delimiter + Ltexture + delimiter + Rtexture + delimiter + icon + delimiter + emptyQuotes + delimiter + displayRow[16] + delimiter + displayRow[17] + delimiter + displayRow[18] + delimiter + displayRow[9] + delimiter +displayRow[6] + delimiter + "0" + delimiter + displayRow[28] + delimiter + displayRow[29] + delimiter + upArm + delimiter + lowArm + delimiter + hands + delimiter + upTor + delimiter + lowTor + delimiter + upLeg + delimiter + lowLeg + delimiter + foot + delimiter + displayRow[1] + delimiter + displayRow[2] + "\n");
+
+                    //itemDisplayInfoWriter.write( displayRow[0] + delimiter + Lmodel + delimiter + Rmodel + delimiter + Ltexture + delimiter + Rtexture + delimiter + icon + delimiter + emptyQuotes + delimiter + displayRow[16] + delimiter + displayRow[17] + delimiter + displayRow[18] + delimiter + displayRow[9] + delimiter +displayRow[6] + delimiter + "0" + delimiter + displayRow[28] + delimiter + displayRow[29] + delimiter + upArm + delimiter + lowArm + delimiter + hands + delimiter + upTor + delimiter + lowTor + delimiter + upLeg + delimiter + lowLeg + delimiter + foot + delimiter + displayRow[1] + delimiter + displayRow[2] + "\n");
+                st.execute("INSERT INTO ItemDisplayInfo VALUES(" + displayRow[0] + delimiter + Lmodel + delimiter + Rmodel + delimiter + Ltexture + delimiter + Rtexture + delimiter + icon + delimiter + emptyQuotes + delimiter + displayRow[16] + delimiter + displayRow[17] + delimiter + displayRow[18] + delimiter + displayRow[9] + delimiter +displayRow[6] + delimiter + "0" + delimiter + displayRow[28] + delimiter + displayRow[29] + delimiter + upArm + delimiter + lowArm + delimiter + hands + delimiter + upTor + delimiter + lowTor + delimiter + upLeg + delimiter + lowLeg + delimiter + foot + delimiter + displayRow[1] + delimiter + displayRow[2] + ")");
                 displayToModel.put(displayRow[0],Ltexture.replace("\"","") + ";" + Lmm + "\n");
                 resetVarsItem();
             }
@@ -376,18 +392,24 @@ public class Runner {
                 }
                 String subClass = displayRow[2];
                 if(subClass.equals("\"5\"") || subClass.equals("\"4\"")){
-                    subClass = "\"1\"";
+                    subClass = "'1'";
                 }
 
                 if(displayToModel.get(surroundQuotes(display)) != null){
                     if(displayRow[4].equals(surroundQuotes("6")) && !displayToModel.get(surroundQuotes(display)).split(";")[1].equals("\"\"") ){
                         String itemName = displayToModel.get(surroundQuotes(display)).split(";")[0].replace("\"","") + ".mdx";
                         if(!itemName.equals(".mdx")) {
-                            spellWriter.write(surroundQuotes(String.valueOf(spellStartingID)) + ",\"0\",\"0\",\"0\",\"159646080\",\"268435616\",\"1\",\"1048576\",\"131139\",\"393224\",\"16789504\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"1\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"101\",\"0\",\"0\",\"0\",\"0\",\"21\",\"0\",\"0\",\"0\",\"0\",\"0\",\"1\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"-1\",\"0\",\"0\",\"6\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"1\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"4\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"" + spellStartingID + "\",\"0\",\"1\",\"0\",\"0\",\"3D Belt\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"16712190\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"16712188\",\"Issa 3D Belt\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"16712190\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"16712188\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"1\",\"1\",\"1\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"1\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\"\n");
-                            spellVisualWriter.write(surroundQuotes(String.valueOf(spellStartingID)) + ",\"0\",\"0\",\"0\"," + surroundQuotes(String.valueOf(spellStartingID)) + ",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"-1\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\"\n");
-                            spellVisualKitWriter.write(surroundQuotes(String.valueOf(spellStartingID)) + ",\"-1\",\"-1\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"-1\",\"-1\",\"-1\",\"-1\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\"\n");
-                            spellVisualEffectNameWriter.write(surroundQuotes(String.valueOf(spellStartingID)) + "," + surroundQuotes("3D Belt") + "," + surroundQuotes("item\\objectcomponents\\waist\\" + itemName) + ",\"1\",\"1\",\"0,01\",\"100\"\n");
-                            spellVisualModelAttachWriter.write(surroundQuotes(String.valueOf(spellStartingID)) + "," + surroundQuotes(String.valueOf(spellStartingID)) + "," + surroundQuotes(String.valueOf(spellStartingID)) + ",\"53\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\"\n");
+                            //spellWriter.write(surroundQuotes(String.valueOf(spellStartingID)) + ",\"0\",\"0\",\"0\",\"159646080\",\"268435616\",\"1\",\"1048576\",\"131139\",\"393224\",\"16789504\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"1\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"101\",\"0\",\"0\",\"0\",\"0\",\"21\",\"0\",\"0\",\"0\",\"0\",\"0\",\"1\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"-1\",\"0\",\"0\",\"6\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"1\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"4\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"" + spellStartingID + "\",\"0\",\"1\",\"0\",\"0\",\"3D Belt\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"16712190\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"16712188\",\"Issa 3D Belt\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"16712190\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"16712188\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"1\",\"1\",\"1\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"1\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\"\n");
+                            //spellVisualWriter.write(surroundQuotes(String.valueOf(spellStartingID)) + ",\"0\",\"0\",\"0\"," + surroundQuotes(String.valueOf(spellStartingID)) + ",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"-1\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\"\n");
+                            //spellVisualKitWriter.write(surroundQuotes(String.valueOf(spellStartingID)) + ",\"-1\",\"-1\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"-1\",\"-1\",\"-1\",\"-1\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\"\n");
+                            //spellVisualEffectNameWriter.write(surroundQuotes(String.valueOf(spellStartingID)) + "," + surroundQuotes("3D Belt") + "," + surroundQuotes("item\\objectcomponents\\waist\\" + itemName) + ",\"1\",\"1\",\"0,01\",\"100\"\n");
+                            //spellVisualModelAttachWriter.write(surroundQuotes(String.valueOf(spellStartingID)) + "," + surroundQuotes(String.valueOf(spellStartingID)) + "," + surroundQuotes(String.valueOf(spellStartingID)) + ",\"53\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\"\n");
+
+                            st.execute("INSERT INTO Spell VALUES(" + surroundQuotes(String.valueOf(spellStartingID)) + ",'0','0','0','159646080','268435616','1','1048576','131139','393224','16789504','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','1','0','0','0','0','0','0','101','0','0','0','0','21','0','0','0','0','0','1','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','-1','0','0','6','0','0','0','0','0','0','0','0','0','0','0','0','0','0','1','0','0','0','0','0','0','0','0','4','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','" + spellStartingID + "','0','1','0','0','3D Belt','','','','','','','','','','','','','','','','16712190','','','','','','','','','','','','','','','','','16712188','Issa 3D Belt','','','','','','','','','','','','','','','','16712190','','','','','','','','','','','','','','','','','16712188','0','0','0','0','0','0','0','0','0','0','0','0','1','1','1','0','0','0','0','0','0','1','0','0','0','0','0','0','0','0')");
+                            st.execute("INSERT INTO SpellVisual VALUES(" + surroundQuotes(String.valueOf(spellStartingID)) + ",'0','0','0'," + surroundQuotes(String.valueOf(spellStartingID)) + ",'0','0','0','0','0','0','0','0','0','0','0','-1','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0')");
+                            st.execute("INSERT INTO SpellVisualKit VALUES(" + surroundQuotes(String.valueOf(spellStartingID)) + ",'-1','-1','0','0','0','0','0','0','0','0','0','0','0','0','0','0','-1','-1','-1','-1','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0')");
+                            st.execute("INSERT INTO SpellVisualEffectName VALUES(" + surroundQuotes(String.valueOf(spellStartingID)) + delimiter + surroundQuotes("3D Belt") + delimiter + surroundQuotes("item\\objectcomponents\\waist\'" + itemName) + ",'1','1','0,01','100')");
+                            st.execute("INSERT INTO SpellVisualModelAttach VALUES(" + surroundQuotes(String.valueOf(spellStartingID)) + delimiter + surroundQuotes(String.valueOf(spellStartingID)) + delimiter + surroundQuotes(String.valueOf(spellStartingID)) + ",'53','0','0','0','0','0','0')");
                             itemIDtoSpell.put(displayRow[0], String.valueOf(spellStartingID));
                             spellStartingID++;
                             if(!displayToModel.get(surroundQuotes(display)).split(";")[1].contains("null"))
@@ -397,17 +419,24 @@ public class Runner {
                         else if((displayToModel.get(surroundQuotes(display)).split(";")[1].replace("\"","").replace(".m2",".mdx").replace("\n","")).length() > 10) {
                             itemName = displayToModel.get(surroundQuotes(display)).split(";")[1].replace("\"", "").replace(".m2", ".mdx").replace("/", "\\");
                             itemName = itemName.substring(0,itemName.length()-1);
-                            spellWriter.write(surroundQuotes(String.valueOf(spellStartingID)) + ",\"0\",\"0\",\"0\",\"159646080\",\"268435616\",\"1\",\"1048576\",\"131139\",\"393224\",\"16789504\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"1\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"101\",\"0\",\"0\",\"0\",\"0\",\"21\",\"0\",\"0\",\"0\",\"0\",\"0\",\"1\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"-1\",\"0\",\"0\",\"6\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"1\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"4\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"" + spellStartingID + "\",\"0\",\"1\",\"0\",\"0\",\"3D Belt\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"16712190\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"16712188\",\"Issa 3D Belt\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"16712190\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"16712188\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"1\",\"1\",\"1\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"1\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\"\n");
-                            spellVisualWriter.write(surroundQuotes(String.valueOf(spellStartingID)) + ",\"0\",\"0\",\"0\"," + surroundQuotes(String.valueOf(spellStartingID)) + ",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"-1\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\"\n");
-                            spellVisualKitWriter.write(surroundQuotes(String.valueOf(spellStartingID)) + ",\"-1\",\"-1\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"-1\",\"-1\",\"-1\",\"-1\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\"\n");
-                            spellVisualEffectNameWriter.write(surroundQuotes(String.valueOf(spellStartingID)) + "," + surroundQuotes("3D Belt") + "," + surroundQuotes(itemName) + ",\"1\",\"1\",\"0,01\",\"100\"\n");
-                            spellVisualModelAttachWriter.write(surroundQuotes(String.valueOf(spellStartingID)) + "," + surroundQuotes(String.valueOf(spellStartingID)) + "," + surroundQuotes(String.valueOf(spellStartingID)) + ",\"53\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\"\n");
+                            //spellWriter.write(surroundQuotes(String.valueOf(spellStartingID)) + ",\"0\",\"0\",\"0\",\"159646080\",\"268435616\",\"1\",\"1048576\",\"131139\",\"393224\",\"16789504\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"1\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"101\",\"0\",\"0\",\"0\",\"0\",\"21\",\"0\",\"0\",\"0\",\"0\",\"0\",\"1\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"-1\",\"0\",\"0\",\"6\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"1\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"4\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"" + spellStartingID + "\",\"0\",\"1\",\"0\",\"0\",\"3D Belt\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"16712190\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"16712188\",\"Issa 3D Belt\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"16712190\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"16712188\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"1\",\"1\",\"1\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"1\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\"\n");
+                            //spellVisualWriter.write(surroundQuotes(String.valueOf(spellStartingID)) + ",\"0\",\"0\",\"0\"," + surroundQuotes(String.valueOf(spellStartingID)) + ",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"-1\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\"\n");
+                            //spellVisualKitWriter.write(surroundQuotes(String.valueOf(spellStartingID)) + ",\"-1\",\"-1\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"-1\",\"-1\",\"-1\",\"-1\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\"\n");
+                            //spellVisualEffectNameWriter.write(surroundQuotes(String.valueOf(spellStartingID)) + "," + surroundQuotes("3D Belt") + "," + surroundQuotes(itemName) + ",\"1\",\"1\",\"0,01\",\"100\"\n");
+                            //spellVisualModelAttachWriter.write(surroundQuotes(String.valueOf(spellStartingID)) + "," + surroundQuotes(String.valueOf(spellStartingID)) + "," + surroundQuotes(String.valueOf(spellStartingID)) + ",\"53\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\"\n");
+
+                            st.execute("INSERT INTO Spell VALUES(" + surroundQuotes(String.valueOf(spellStartingID)) + ",'0','0','0','159646080','268435616','1','1048576','131139','393224','16789504','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','1','0','0','0','0','0','0','101','0','0','0','0','21','0','0','0','0','0','1','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','-1','0','0','6','0','0','0','0','0','0','0','0','0','0','0','0','0','0','1','0','0','0','0','0','0','0','0','4','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','" + spellStartingID + "','0','1','0','0','3D Belt','','','','','','','','','','','','','','','','16712190','','','','','','','','','','','','','','','','','16712188','Issa 3D Belt','','','','','','','','','','','','','','','','16712190','','','','','','','','','','','','','','','','','16712188','0','0','0','0','0','0','0','0','0','0','0','0','1','1','1','0','0','0','0','0','0','1','0','0','0','0','0','0','0','0')");
+                            st.execute("INSERT INTO SpellVisual VALUES(" + surroundQuotes(String.valueOf(spellStartingID)) + ",'0','0','0'," + surroundQuotes(String.valueOf(spellStartingID)) + ",'0','0','0','0','0','0','0','0','0','0','0','-1','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0')");
+                            st.execute("INSERT INTO SpellVisualKit VALUES(" + surroundQuotes(String.valueOf(spellStartingID)) + ",'-1','-1','0','0','0','0','0','0','0','0','0','0','0','0','0','0','-1','-1','-1','-1','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0')");
+                            st.execute("INSERT INTO SpellVisualEffectName VALUES(" + surroundQuotes(String.valueOf(spellStartingID)) + delimiter + surroundQuotes("3D Belt") + delimiter + surroundQuotes(itemName) + ",'1','1','0,01','100')");
+                            st.execute("INSERT INTO SpellVisualModelAttach VALUES(" + surroundQuotes(String.valueOf(spellStartingID)) + delimiter + surroundQuotes(String.valueOf(spellStartingID)) + delimiter + surroundQuotes(String.valueOf(spellStartingID)) + ",'53','0','0','0','0','0','0')");
                             itemIDtoSpell.put(displayRow[0], String.valueOf(spellStartingID));
                             spellStartingID++;
                         }
                     }
                 }
-                itemWriter.write(displayRow[0] + delimiter + displayRow[1] + delimiter + subClass + delimiter + displayRow[6] + delimiter + displayRow[3] + delimiter + surroundQuotes(display) + delimiter + displayRow[4] + delimiter + displayRow[5] + "\n");
+                //itemWriter.write(displayRow[0] + delimiter + displayRow[1] + delimiter + subClass + delimiter + displayRow[6] + delimiter + displayRow[3] + delimiter + surroundQuotes(display) + delimiter + displayRow[4] + delimiter + displayRow[5] + "\n");
+                st.execute("INSERT INTO Item VALUES(" + displayRow[0] + delimiter + displayRow[1] + delimiter + subClass + delimiter + displayRow[6] + delimiter + displayRow[3] + delimiter + surroundQuotes(display) + delimiter + displayRow[4] + delimiter + displayRow[5] + ")");
             }
         }
 
@@ -430,12 +459,20 @@ public class Runner {
                     String SpellID = itemIDtoSpell.get(surroundQuotes(ItemID));
                     spell =  ", `spellid_1` = " + SpellID + ", `spelltrigger_1` = " + SpellTrigger;
                 }
+//                if(split.length == 17)
+//                    itemSQL.write("UPDATE `item_template` SET `name` = '" + split[1].replace("'", "''").replace("\"","") + "', `Quality` = " + split[3] + spell + " WHERE `entry` = " + ItemID + ";\n");
+//                if(split.length == 18)
+//                    itemSQL.write("UPDATE `item_template` SET `name` = '" + split[1].replace("'", "''").replace("\"","") + delimiter + split[2].replace("'", "''").replace("\"","") +"', `Quality` = " + split[4] + spell + " WHERE `entry` = " + ItemID + ";\n");
+//                if(split.length == 19)
+//                    itemSQL.write("UPDATE `item_template` SET `name` = '" + split[1].replace("'", "''").replace("\"","") + delimiter + split[2].replace("'", "''").replace("\"","") + delimiter + split[3].replace("'", "''").replace("\"","") + "', `Quality` = " + split[5] + spell + " WHERE `entry` = " + ItemID + ";\n");
+//
                 if(split.length == 17)
-                    itemSQL.write("UPDATE `item_template` SET `name` = '" + split[1].replace("'", "''").replace("\"","") + "', `Quality` = " + split[3] + spell + " WHERE `entry` = " + ItemID + ";\n");
+                    st.execute("UPDATE `item_template` SET `name` = '" + split[1].replace("'", "''").replace("\"","") + "', `Quality` = " + split[3] + spell + " WHERE `entry` = " + ItemID + ";");
                 if(split.length == 18)
-                    itemSQL.write("UPDATE `item_template` SET `name` = '" + split[1].replace("'", "''").replace("\"","") + delimiter + split[2].replace("'", "''").replace("\"","") +"', `Quality` = " + split[4] + spell + " WHERE `entry` = " + ItemID + ";\n");
+                    st.execute("UPDATE `item_template` SET `name` = '" + split[1].replace("'", "''").replace("\"","") + delimiter + split[2].replace("'", "''").replace("\"","") +"', `Quality` = " + split[4] + spell + " WHERE `entry` = " + ItemID + ";");
                 if(split.length == 19)
-                    itemSQL.write("UPDATE `item_template` SET `name` = '" + split[1].replace("'", "''").replace("\"","") + delimiter + split[2].replace("'", "''").replace("\"","") + delimiter + split[3].replace("'", "''").replace("\"","") + "', `Quality` = " + split[5] + spell + " WHERE `entry` = " + ItemID + ";\n");
+                    st.execute("UPDATE `item_template` SET `name` = '" + split[1].replace("'", "''").replace("\"","") + delimiter + split[2].replace("'", "''").replace("\"","") + delimiter + split[3].replace("'", "''").replace("\"","") + "', `Quality` = " + split[5] + spell + " WHERE `entry` = " + ItemID + ";");
+
             }
         }
         try (BufferedReader br = new BufferedReader(new FileReader("item/helmetgeosetvisdata.csv"))) {
@@ -443,7 +480,9 @@ public class Runner {
             br.readLine();//skip header
             while ((line = br.readLine()) != null) {
                 String[] split = line.split(delimiter);
-                helmGeoset.write(surroundQuotes(split[0]) + delimiter + surroundQuotes(split[1]) + delimiter + surroundQuotes(split[2]) + delimiter + surroundQuotes(split[3]) + delimiter + surroundQuotes(split[4]) + delimiter + surroundQuotes(split[5]) + delimiter + surroundQuotes(split[6]) + delimiter + surroundQuotes(split[7]) + "\n");
+                //helmGeoset.write(surroundQuotes(split[0]) + delimiter + surroundQuotes(split[1]) + delimiter + surroundQuotes(split[2]) + delimiter + surroundQuotes(split[3]) + delimiter + surroundQuotes(split[4]) + delimiter + surroundQuotes(split[5]) + delimiter + surroundQuotes(split[6]) + delimiter + surroundQuotes(split[7]) + "\n");
+                st.execute("INSERT INTO HelmetGeoset VALUES(" + surroundQuotes(split[0]) + delimiter + surroundQuotes(split[1]) + delimiter + surroundQuotes(split[2]) + delimiter + surroundQuotes(split[3]) + delimiter + surroundQuotes(split[4]) + delimiter + surroundQuotes(split[5]) + delimiter + surroundQuotes(split[6]) + delimiter + surroundQuotes(split[7]) + ")");
+
             }
         }
         helmGeoset.close();
@@ -459,7 +498,7 @@ public class Runner {
     }
 
     //ground effect texture/doodads
-    private static void GroundEffects() throws IOException{
+    private static void GroundEffects() throws IOException, SQLException {
         System.out.println("Starting Ground Effects...");
         FileWriter groundEffectDoodad = new FileWriter("export/GroundEffectDoodad.csv");
         FileWriter groundEffectTexture = new FileWriter("export/GroundEffectTexture.csv");
@@ -478,7 +517,8 @@ public class Runner {
                 if(pathToModel != null) {
                     pathToModel = returnLast(pathToModel);
                     pathToModel = pathToModel.substring(0,pathToModel.length()-2) + "mdl";
-                    groundEffectDoodad.write(surroundQuotes(split[0]) + delimiter + surroundQuotes(pathToModel) + delimiter + surroundQuotes(flagString) + "\n");
+                    //groundEffectDoodad.write(surroundQuotes(split[0]) + delimiter + surroundQuotes(pathToModel) + delimiter + surroundQuotes(flagString) + "\n");
+                    st.execute("INSERT INTO GroundEffectDoodad VALUES(" + surroundQuotes(split[0]) + delimiter + surroundQuotes(pathToModel) + delimiter + surroundQuotes(flagString) + ")");
                     doodadListfile.write(split[1] + ";" + fileIDs.get(split[1]) + "\n");
                 }
             }
@@ -488,7 +528,8 @@ public class Runner {
             br.readLine();//skip header
             while ((line = br.readLine()) != null) {
                 String[] split = line.split(delimiter);
-                groundEffectTexture.write(surroundQuotes(split[0]) + delimiter + surroundQuotes(split[3]) + delimiter + surroundQuotes(split[4]) + delimiter + surroundQuotes(split[5]) + delimiter + surroundQuotes(split[6]) + delimiter + surroundQuotes(split[7]) + delimiter + surroundQuotes(split[8]) + delimiter + surroundQuotes(split[9]) + delimiter + surroundQuotes(split[10]) + delimiter + surroundQuotes(split[1]) + delimiter + surroundQuotes(split[2]) + "\n");
+                //groundEffectTexture.write(surroundQuotes(split[0]) + delimiter + surroundQuotes(split[3]) + delimiter + surroundQuotes(split[4]) + delimiter + surroundQuotes(split[5]) + delimiter + surroundQuotes(split[6]) + delimiter + surroundQuotes(split[7]) + delimiter + surroundQuotes(split[8]) + delimiter + surroundQuotes(split[9]) + delimiter + surroundQuotes(split[10]) + delimiter + surroundQuotes(split[1]) + delimiter + surroundQuotes(split[2]) + "\n");
+                st.execute("INSERT INTO GroundEffectTexture VALUES(" + surroundQuotes(split[0]) + delimiter + surroundQuotes(split[3]) + delimiter + surroundQuotes(split[4]) + delimiter + surroundQuotes(split[5]) + delimiter + surroundQuotes(split[6]) + delimiter + surroundQuotes(split[7]) + delimiter + surroundQuotes(split[8]) + delimiter + surroundQuotes(split[9]) + delimiter + surroundQuotes(split[10]) + delimiter + surroundQuotes(split[1]) + delimiter + surroundQuotes(split[2]) + ")");
             }
         }
         groundEffectDoodad.close();
@@ -496,7 +537,7 @@ public class Runner {
     }
 
     //start of game object
-    private static void GameObject() throws IOException{
+    private static void GameObject() throws IOException, SQLException {
         System.out.println("Starting Gameobjects...");
         FileWriter gameobjectDisplay = new FileWriter("export/GameObjectDisplayInfo.csv");
         HashMap<String, String> gameObjectIDToSoundKit = setupMultiMap(tables[15] + "Sorted" + csvEndSuffix);
@@ -514,13 +555,14 @@ public class Runner {
                             sound[Integer.parseInt(mm[1])] = mm[0];
                     }
                 }
-                gameobjectDisplay.write(surroundQuotes(split[0]) + delimiter + surroundQuotes(fileIDs.get(split[7])) + surroundQuotes(sound[0]) + delimiter + surroundQuotes(sound[1]) + delimiter + surroundQuotes(sound[2]) + delimiter + surroundQuotes(sound[3]) + delimiter + surroundQuotes(sound[4]) + delimiter + surroundQuotes(sound[5]) + delimiter + surroundQuotes(sound[6]) + delimiter + surroundQuotes(sound[7]) + delimiter + surroundQuotes(sound[8]) + delimiter + surroundQuotes(sound[9]) + delimiter + surroundQuotes(split[1]) + delimiter + surroundQuotes(split[2]) + delimiter + surroundQuotes(split[3]) + delimiter + surroundQuotes(split[4]) + delimiter + surroundQuotes(split[5]) + delimiter + surroundQuotes(split[6]) + delimiter + surroundQuotes(split[8]) + "\n");
+                //gameobjectDisplay.write(surroundQuotes(split[0]) + delimiter + surroundQuotes(fileIDs.get(split[7])) + surroundQuotes(sound[0]) + delimiter + surroundQuotes(sound[1]) + delimiter + surroundQuotes(sound[2]) + delimiter + surroundQuotes(sound[3]) + delimiter + surroundQuotes(sound[4]) + delimiter + surroundQuotes(sound[5]) + delimiter + surroundQuotes(sound[6]) + delimiter + surroundQuotes(sound[7]) + delimiter + surroundQuotes(sound[8]) + delimiter + surroundQuotes(sound[9]) + delimiter + surroundQuotes(split[1]) + delimiter + surroundQuotes(split[2]) + delimiter + surroundQuotes(split[3]) + delimiter + surroundQuotes(split[4]) + delimiter + surroundQuotes(split[5]) + delimiter + surroundQuotes(split[6]) + delimiter + surroundQuotes(split[8]) + "\n");
+                st.execute("INSERT INTO GroundEffectTexture VALUES(" + surroundQuotes(split[0]) + delimiter + surroundQuotes(fileIDs.get(split[7])) + surroundQuotes(sound[0]) + delimiter + surroundQuotes(sound[1]) + delimiter + surroundQuotes(sound[2]) + delimiter + surroundQuotes(sound[3]) + delimiter + surroundQuotes(sound[4]) + delimiter + surroundQuotes(sound[5]) + delimiter + surroundQuotes(sound[6]) + delimiter + surroundQuotes(sound[7]) + delimiter + surroundQuotes(sound[8]) + delimiter + surroundQuotes(sound[9]) + delimiter + surroundQuotes(split[1]) + delimiter + surroundQuotes(split[2]) + delimiter + surroundQuotes(split[3]) + delimiter + surroundQuotes(split[4]) + delimiter + surroundQuotes(split[5]) + delimiter + surroundQuotes(split[6]) + delimiter + surroundQuotes(split[8]) + ")");
             }
         }
         gameobjectDisplay.close();
     }
 
-    private static void soundEffects() throws IOException{
+    private static void soundEffects() throws IOException, SQLException {
         System.out.println("Starting Sound Effects...");
         FileWriter soundEntries = new FileWriter("export/SoundEntries.csv");
         HashMap<Integer, String> soundEntriesMap = new HashMap<>();
@@ -548,11 +590,13 @@ public class Runner {
                                 lastPath = new StringBuilder();
                                 lastPath.append(path, 0, index);
                             }
-                            sounds[i] = path.substring(index+1);
+                            sounds[i] = surroundQuotes(path.substring(index+1));
                             frequency[i] = surroundQuotes(kitLinePiece[1]);
                         }
                     }
-                    soundEntriesMap.put(Integer.parseInt(split[0]),surroundQuotes(split[0]) + delimiter + surroundQuotes(split[1]) + delimiter + sounds[0].replace(".ogg","").replace(".wav","") + delimiter + sounds[0] + delimiter + sounds[1] + delimiter + sounds[2] + delimiter + sounds[3] + delimiter + sounds[4] + delimiter + sounds[5] + delimiter + sounds[6] + delimiter + sounds[7] + delimiter + sounds[8] + delimiter + sounds[9] + delimiter + frequency[0] + delimiter + frequency[1] + delimiter + frequency[2] + delimiter + frequency[3] + delimiter + frequency[4] + delimiter + frequency[5] + delimiter + frequency[6] + delimiter + frequency[7] + delimiter + frequency[8] + delimiter + frequency[9] + delimiter + surroundQuotes(String.valueOf(lastPath)) + delimiter + surroundQuotes("1") + delimiter + surroundQuotes(split[3]) + delimiter + surroundQuotes(split[4]) + delimiter + surroundQuotes(split[5]) + delimiter + surroundQuotes(split[6]) + delimiter + surroundQuotes(split[7]) + "\n");
+
+                    //soundEntriesMap.put(Integer.parseInt(split[0]),surroundQuotes(split[0]) + delimiter + surroundQuotes(split[1]) + delimiter + sounds[0].replace(".ogg","").replace(".wav","") + delimiter + sounds[0] + delimiter + sounds[1] + delimiter + sounds[2] + delimiter + sounds[3] + delimiter + sounds[4] + delimiter + sounds[5] + delimiter + sounds[6] + delimiter + sounds[7] + delimiter + sounds[8] + delimiter + sounds[9] + delimiter + frequency[0] + delimiter + frequency[1] + delimiter + frequency[2] + delimiter + frequency[3] + delimiter + frequency[4] + delimiter + frequency[5] + delimiter + frequency[6] + delimiter + frequency[7] + delimiter + frequency[8] + delimiter + frequency[9] + delimiter + surroundQuotes(String.valueOf(lastPath)) + delimiter + surroundQuotes("1") + delimiter + surroundQuotes(split[3]) + delimiter + surroundQuotes(split[4]) + delimiter + surroundQuotes(split[5]) + delimiter + surroundQuotes(split[6]) + delimiter + surroundQuotes(split[7]) + "\n");
+                    st.execute("INSERT INTO SoundEntries VALUES(" + surroundQuotes(split[0]) + delimiter + surroundQuotes(split[1]) + delimiter + sounds[0].replace(".ogg","").replace(".wav","") + delimiter + sounds[0] + delimiter + sounds[1] + delimiter + sounds[2] + delimiter + sounds[3] + delimiter + sounds[4] + delimiter + sounds[5] + delimiter + sounds[6] + delimiter + sounds[7] + delimiter + sounds[8] + delimiter + sounds[9] + delimiter + frequency[0] + delimiter + frequency[1] + delimiter + frequency[2] + delimiter + frequency[3] + delimiter + frequency[4] + delimiter + frequency[5] + delimiter + frequency[6] + delimiter + frequency[7] + delimiter + frequency[8] + delimiter + frequency[9] + delimiter + surroundQuotes(String.valueOf(lastPath)) + delimiter + surroundQuotes("1") + delimiter + surroundQuotes(split[3]) + delimiter + surroundQuotes(split[4]) + delimiter + surroundQuotes(split[5]) + delimiter + surroundQuotes(split[6]) + delimiter + surroundQuotes(split[7]) + ")");
                 }
             }
         }
@@ -562,7 +606,8 @@ public class Runner {
             br.readLine();//skip header
             while ((line = br.readLine()) != null) {
                 String[] split = line.split(delimiter);
-                soundEntriesAdvanced.write(surroundQuotes(split[0]) + delimiter + surroundQuotes(split[1]) + delimiter + surroundQuotes(split[2]) + delimiter + surroundQuotes(split[4]) + delimiter + surroundQuotes(split[5]) + delimiter + surroundQuotes(split[6]) + delimiter + surroundQuotes(split[7]) + delimiter + surroundQuotes(split[8]) + delimiter + surroundQuotes(split[9]) + delimiter + surroundQuotes(split[10]) + delimiter + surroundQuotes(split[11]) + delimiter + surroundQuotes(split[14]) + delimiter + surroundQuotes(split[15]) + delimiter + surroundQuotes(split[16]) + delimiter + surroundQuotes(split[17]) + delimiter + surroundQuotes(split[22]) + delimiter + surroundQuotes(split[23]) + delimiter + surroundQuotes(split[24]) + delimiter + surroundQuotes(split[25]) + delimiter + surroundQuotes(split[26]) + delimiter + surroundQuotes(split[27]) + delimiter + surroundQuotes(split[28]) + delimiter + surroundQuotes(split[2]) + delimiter + surroundQuotes("") + "\n");
+                //soundEntriesAdvanced.write(surroundQuotes(split[0]) + delimiter + surroundQuotes(split[1]) + delimiter + surroundQuotes(split[2]) + delimiter + surroundQuotes(split[4]) + delimiter + surroundQuotes(split[5]) + delimiter + surroundQuotes(split[6]) + delimiter + surroundQuotes(split[7]) + delimiter + surroundQuotes(split[8]) + delimiter + surroundQuotes(split[9]) + delimiter + surroundQuotes(split[10]) + delimiter + surroundQuotes(split[11]) + delimiter + surroundQuotes(split[14]) + delimiter + surroundQuotes(split[15]) + delimiter + surroundQuotes(split[16]) + delimiter + surroundQuotes(split[17]) + delimiter + surroundQuotes(split[22]) + delimiter + surroundQuotes(split[23]) + delimiter + surroundQuotes(split[24]) + delimiter + surroundQuotes(split[25]) + delimiter + surroundQuotes(split[26]) + delimiter + surroundQuotes(split[27]) + delimiter + surroundQuotes(split[28]) + delimiter + surroundQuotes(split[2]) + delimiter + surroundQuotes("") + "\n");
+                st.execute("INSERT INTO SoundEntriesAdvanced VALUES(" + surroundQuotes(split[0]) + delimiter + surroundQuotes(split[1]) + delimiter + surroundQuotes(split[2]) + delimiter + surroundQuotes(split[4]) + delimiter + surroundQuotes(split[5]) + delimiter + surroundQuotes(split[6]) + delimiter + surroundQuotes(split[7]) + delimiter + surroundQuotes(split[8]) + delimiter + surroundQuotes(split[9]) + delimiter + surroundQuotes(split[10]) + delimiter + surroundQuotes(split[11]) + delimiter + surroundQuotes(split[14]) + delimiter + surroundQuotes(split[15]) + delimiter + surroundQuotes(split[16]) + delimiter + surroundQuotes(split[17]) + delimiter + surroundQuotes(split[22]) + delimiter + surroundQuotes(split[23]) + delimiter + surroundQuotes(split[24]) + delimiter + surroundQuotes(split[25]) + delimiter + surroundQuotes(split[26]) + delimiter + surroundQuotes(split[27]) + delimiter + surroundQuotes(split[28]) + delimiter + surroundQuotes(split[2]) + delimiter + surroundQuotes("") + ")");
             }
         }
 
@@ -571,10 +616,11 @@ public class Runner {
             br.readLine();//skip header
             while ((line = br.readLine()) != null) {
                 String[] split = line.split(delimiter);
-                creatureSound.write(surroundQuotes(split[0]) + delimiter + surroundQuotes(split[1]) + delimiter + surroundQuotes(split[2]) + delimiter + surroundQuotes(split[3]) + delimiter + surroundQuotes(split[4]) + delimiter + surroundQuotes(split[5]) + delimiter + surroundQuotes(split[6]) + delimiter + surroundQuotes(split[7]) + delimiter + surroundQuotes(split[8]) + delimiter + surroundQuotes(split[9]) + delimiter + surroundQuotes(split[10]) + delimiter + surroundQuotes(split[11]) + delimiter + surroundQuotes(split[12]) + delimiter + surroundQuotes(split[13]) + delimiter + surroundQuotes(split[36]) + delimiter + surroundQuotes(split[37]) + delimiter + surroundQuotes(split[38]) + delimiter + surroundQuotes(split[39]) + delimiter + surroundQuotes(split[40]) + delimiter + surroundQuotes(split[41]) + delimiter + surroundQuotes(split[42]) + delimiter + surroundQuotes(split[43]) + delimiter + surroundQuotes(split[44]) + delimiter + surroundQuotes(split[35]) + delimiter + surroundQuotes(split[19]) + delimiter + surroundQuotes(split[34]) + delimiter + surroundQuotes(split[14]) + delimiter + surroundQuotes(split[15]) + delimiter + surroundQuotes(split[16]) + delimiter + surroundQuotes(split[17]) + delimiter + surroundQuotes(split[18]) + delimiter + surroundQuotes(split[32]) + delimiter + surroundQuotes(split[33]) + delimiter + surroundQuotes(split[21]) + delimiter + surroundQuotes(split[22]) + delimiter + surroundQuotes(split[23]) + delimiter + surroundQuotes(split[31]) + "\n");
+                //creatureSound.write(surroundQuotes(split[0]) + delimiter + surroundQuotes(split[1]) + delimiter + surroundQuotes(split[2]) + delimiter + surroundQuotes(split[3]) + delimiter + surroundQuotes(split[4]) + delimiter + surroundQuotes(split[5]) + delimiter + surroundQuotes(split[6]) + delimiter + surroundQuotes(split[7]) + delimiter + surroundQuotes(split[8]) + delimiter + surroundQuotes(split[9]) + delimiter + surroundQuotes(split[10]) + delimiter + surroundQuotes(split[11]) + delimiter + surroundQuotes(split[12]) + delimiter + surroundQuotes(split[13]) + delimiter + surroundQuotes(split[36]) + delimiter + surroundQuotes(split[37]) + delimiter + surroundQuotes(split[38]) + delimiter + surroundQuotes(split[39]) + delimiter + surroundQuotes(split[40]) + delimiter + surroundQuotes(split[41]) + delimiter + surroundQuotes(split[42]) + delimiter + surroundQuotes(split[43]) + delimiter + surroundQuotes(split[44]) + delimiter + surroundQuotes(split[35]) + delimiter + surroundQuotes(split[19]) + delimiter + surroundQuotes(split[34]) + delimiter + surroundQuotes(split[14]) + delimiter + surroundQuotes(split[15]) + delimiter + surroundQuotes(split[16]) + delimiter + surroundQuotes(split[17]) + delimiter + surroundQuotes(split[18]) + delimiter + surroundQuotes(split[32]) + delimiter + surroundQuotes(split[33]) + delimiter + surroundQuotes(split[21]) + delimiter + surroundQuotes(split[22]) + delimiter + surroundQuotes(split[23]) + delimiter + surroundQuotes(split[31]) + "\n");
+                st.execute("INSERT INTO CreatureSoundData VALUES(" + surroundQuotes(split[0]) + delimiter + surroundQuotes(split[1]) + delimiter + surroundQuotes(split[2]) + delimiter + surroundQuotes(split[3]) + delimiter + surroundQuotes(split[4]) + delimiter + surroundQuotes(split[5]) + delimiter + surroundQuotes(split[6]) + delimiter + surroundQuotes(split[7]) + delimiter + surroundQuotes(split[8]) + delimiter + surroundQuotes(split[9]) + delimiter + surroundQuotes(split[10]) + delimiter + surroundQuotes(split[11]) + delimiter + surroundQuotes(split[12]) + delimiter + surroundQuotes(split[13]) + delimiter + surroundQuotes(split[36]) + delimiter + surroundQuotes(split[37]) + delimiter + surroundQuotes(split[38]) + delimiter + surroundQuotes(split[39]) + delimiter + surroundQuotes(split[40]) + delimiter + surroundQuotes(split[41]) + delimiter + surroundQuotes(split[42]) + delimiter + surroundQuotes(split[43]) + delimiter + surroundQuotes(split[44]) + delimiter + surroundQuotes(split[35]) + delimiter + surroundQuotes(split[19]) + delimiter + surroundQuotes(split[34]) + delimiter + surroundQuotes(split[14]) + delimiter + surroundQuotes(split[15]) + delimiter + surroundQuotes(split[16]) + delimiter + surroundQuotes(split[17]) + delimiter + surroundQuotes(split[18]) + delimiter + surroundQuotes(split[32]) + delimiter + surroundQuotes(split[33]) + delimiter + surroundQuotes(split[21]) + delimiter + surroundQuotes(split[22]) + delimiter + surroundQuotes(split[23]) + delimiter + surroundQuotes(split[31]) + ")");
             }
         }
-                TreeMap<Integer, String> sorted = new TreeMap<>(soundEntriesMap);
+        TreeMap<Integer, String> sorted = new TreeMap<>(soundEntriesMap);
         for (Map.Entry<Integer, String> entry : sorted.entrySet())
             soundEntries.write(entry.getValue());
         soundEntries.close();
@@ -878,7 +924,7 @@ public class Runner {
     //helper functions
     //surrounds string with quotes for printout
     private static String surroundQuotes(String s) {
-        return "\"" + s + "\"";
+        return "'" + s + "'";
     }
     //returns last value after a split on /
     private static String returnLast(String str) {
