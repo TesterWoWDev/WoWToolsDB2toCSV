@@ -2,10 +2,7 @@ import java.io.*;
 import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.*;
 
 public class Runner {
@@ -47,7 +44,7 @@ public class Runner {
     private static Statement st;
     static {
         try {
-            Connection conn = DriverManager.getConnection("jdbc:msql://200.210.220.1:1114/Demo", "root", "pass");
+            Connection conn = DriverManager.getConnection("jdbc:msql://IP:PORT/DBC", "user", "pass");
             st = conn.createStatement();
         } catch (SQLException thrown) {
             thrown.printStackTrace();
