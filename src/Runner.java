@@ -17,7 +17,7 @@ public class Runner {
     //shit
     private static final String delimiter = ",";
     private static final String csvEndSuffix = ".csv";
-    private static final String emptyQuotes = "\"\"";
+    private static final String emptyQuotes = "''";
     
 //FileID maps
     private static HashMap<String, String> fileIDs;
@@ -44,11 +44,10 @@ public class Runner {
     private static String upLeg = emptyQuotes;
     private static String lowLeg = emptyQuotes;
     private static String foot = emptyQuotes;
-    private static Connection conn;
     private static Statement st;
     static {
         try {
-            conn = DriverManager.getConnection("jdbc:msql://200.210.220.1:1114/Demo","root","pass");
+            Connection conn = DriverManager.getConnection("jdbc:msql://200.210.220.1:1114/Demo", "root", "pass");
             st = conn.createStatement();
         } catch (SQLException thrown) {
             thrown.printStackTrace();
@@ -60,12 +59,30 @@ public class Runner {
        fillTable();
        startupText();
        startupTables();
+       emptySQLTables();
        GroundEffects();
        itemDB2Convert();
        GameObject();
        soundEffects();
        //creatureDB2Convert();//bricked on newer build. effort to fix. it's displayextra
 
+    }
+
+    private static void emptySQLTables() throws SQLException {
+        st.executeUpdate("TRUNCATE ItemDisplayInfo");
+        st.executeUpdate("TRUNCATE Spell");
+        st.executeUpdate("TRUNCATE SpellVisual");
+        st.executeUpdate("TRUNCATE SpellVisualKit");
+        st.executeUpdate("TRUNCATE SpellVisualEffectName");
+        st.executeUpdate("TRUNCATE SpellVisualModelAttach");
+        st.executeUpdate("TRUNCATE Item");
+        st.executeUpdate("TRUNCATE HelmetGeoset");
+        st.executeUpdate("TRUNCATE GroundEffectDoodad");
+        st.executeUpdate("TRUNCATE GroundEffectTexture");
+        st.executeUpdate("TRUNCATE GameObjectDisplay");
+        st.executeUpdate("TRUNCATE SoundEntries");
+        st.executeUpdate("TRUNCATE SoundEntriesAdvanced");
+        st.executeUpdate("TRUNCATE CreatureSoundData");
     }
 
     private static void startupText() throws IOException {
@@ -396,7 +413,7 @@ public class Runner {
                 }
 
                 if(displayToModel.get(surroundQuotes(display)) != null){
-                    if(displayRow[4].equals(surroundQuotes("6")) && !displayToModel.get(surroundQuotes(display)).split(";")[1].equals("\"\"") ){
+                    if(displayRow[4].equals(surroundQuotes("6")) && !displayToModel.get(surroundQuotes(display)).split(";")[1].equals("\"\"") && !displayToModel.get(surroundQuotes(display)).split(";")[1].equals("")){
                         String itemName = displayToModel.get(surroundQuotes(display)).split(";")[0].replace("\"","") + ".mdx";
                         if(!itemName.equals(".mdx")) {
                             //spellWriter.write(surroundQuotes(String.valueOf(spellStartingID)) + ",\"0\",\"0\",\"0\",\"159646080\",\"268435616\",\"1\",\"1048576\",\"131139\",\"393224\",\"16789504\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"1\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"101\",\"0\",\"0\",\"0\",\"0\",\"21\",\"0\",\"0\",\"0\",\"0\",\"0\",\"1\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"-1\",\"0\",\"0\",\"6\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"1\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"4\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"" + spellStartingID + "\",\"0\",\"1\",\"0\",\"0\",\"3D Belt\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"16712190\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"16712188\",\"Issa 3D Belt\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"16712190\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"16712188\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"1\",\"1\",\"1\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"1\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\"\n");
@@ -556,7 +573,7 @@ public class Runner {
                     }
                 }
                 //gameobjectDisplay.write(surroundQuotes(split[0]) + delimiter + surroundQuotes(fileIDs.get(split[7])) + surroundQuotes(sound[0]) + delimiter + surroundQuotes(sound[1]) + delimiter + surroundQuotes(sound[2]) + delimiter + surroundQuotes(sound[3]) + delimiter + surroundQuotes(sound[4]) + delimiter + surroundQuotes(sound[5]) + delimiter + surroundQuotes(sound[6]) + delimiter + surroundQuotes(sound[7]) + delimiter + surroundQuotes(sound[8]) + delimiter + surroundQuotes(sound[9]) + delimiter + surroundQuotes(split[1]) + delimiter + surroundQuotes(split[2]) + delimiter + surroundQuotes(split[3]) + delimiter + surroundQuotes(split[4]) + delimiter + surroundQuotes(split[5]) + delimiter + surroundQuotes(split[6]) + delimiter + surroundQuotes(split[8]) + "\n");
-                st.execute("INSERT INTO GroundEffectTexture VALUES(" + surroundQuotes(split[0]) + delimiter + surroundQuotes(fileIDs.get(split[7])) + surroundQuotes(sound[0]) + delimiter + surroundQuotes(sound[1]) + delimiter + surroundQuotes(sound[2]) + delimiter + surroundQuotes(sound[3]) + delimiter + surroundQuotes(sound[4]) + delimiter + surroundQuotes(sound[5]) + delimiter + surroundQuotes(sound[6]) + delimiter + surroundQuotes(sound[7]) + delimiter + surroundQuotes(sound[8]) + delimiter + surroundQuotes(sound[9]) + delimiter + surroundQuotes(split[1]) + delimiter + surroundQuotes(split[2]) + delimiter + surroundQuotes(split[3]) + delimiter + surroundQuotes(split[4]) + delimiter + surroundQuotes(split[5]) + delimiter + surroundQuotes(split[6]) + delimiter + surroundQuotes(split[8]) + ")");
+                st.execute("INSERT INTO GameObjectDisplay VALUES(" + surroundQuotes(split[0]) + delimiter + surroundQuotes(fileIDs.get(split[7])) + surroundQuotes(sound[0]) + delimiter + surroundQuotes(sound[1]) + delimiter + surroundQuotes(sound[2]) + delimiter + surroundQuotes(sound[3]) + delimiter + surroundQuotes(sound[4]) + delimiter + surroundQuotes(sound[5]) + delimiter + surroundQuotes(sound[6]) + delimiter + surroundQuotes(sound[7]) + delimiter + surroundQuotes(sound[8]) + delimiter + surroundQuotes(sound[9]) + delimiter + surroundQuotes(split[1]) + delimiter + surroundQuotes(split[2]) + delimiter + surroundQuotes(split[3]) + delimiter + surroundQuotes(split[4]) + delimiter + surroundQuotes(split[5]) + delimiter + surroundQuotes(split[6]) + delimiter + surroundQuotes(split[8]) + ")");
             }
         }
         gameobjectDisplay.close();
