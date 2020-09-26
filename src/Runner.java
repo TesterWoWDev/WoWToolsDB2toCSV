@@ -42,28 +42,28 @@ public class Runner {
     private static String lowLeg = emptyQuotes;
     private static String foot = emptyQuotes;
     private static Statement st;
-//    static {
-//        try {
-//            Connection conn = DriverManager.getConnection("jdbc:msql://IP:PORT/DBC", "user", "pass");
-//            st = conn.createStatement();
-//        } catch (SQLException thrown) {
-//            thrown.printStackTrace();
-//        }
-//    }
+    static {
+        try {
+            Connection conn = DriverManager.getConnection("jdbc:msql://IP:PORT/DBC", "user", "pass");
+            st = conn.createStatement();
+        } catch (SQLException thrown) {
+            thrown.printStackTrace();
+        }
+    }
 
 
     public static void main(String[] args) throws IOException, SQLException {
         fillTable();
         startupText();
         startupTables();
-        //emptySQLTables();
-        //emoteData();
-        //factionData();
-        //footstepData();
-        //GroundEffects();
-        //itemDB2Convert();
-        //GameObject();
-        //soundEffects();
+        emptySQLTables();
+        emoteData();
+        factionData();
+        footstepData();
+        GroundEffects();
+        itemDB2Convert();
+        GameObject();
+        soundEffects();
         //creatureDB2Convert();//bricked on newer build. effort to fix. it's displayextra
 
     }
@@ -767,6 +767,7 @@ public class Runner {
             soundEntries.write(entry.getValue());
         soundEntries.close();
         soundEntriesAdvanced.close();
+        creatureSound.close();
     }
 
     //general map, used in multiple places
