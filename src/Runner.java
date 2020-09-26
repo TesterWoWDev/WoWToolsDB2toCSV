@@ -10,7 +10,7 @@ public class Runner {
     //updated in main method
     private static String buildNumber = "9.0.1.35482";
     //filled in fillTable
-    private static final String[] tables = new String[20];
+    private static final String[] tables = new String[26];
     //shit
     private static final String delimiter = ",";
     private static final String csvEndSuffix = ".csv";
@@ -42,25 +42,27 @@ public class Runner {
     private static String lowLeg = emptyQuotes;
     private static String foot = emptyQuotes;
     private static Statement st;
-    static {
-        try {
-            Connection conn = DriverManager.getConnection("jdbc:msql://IP:PORT/DBC", "user", "pass");
-            st = conn.createStatement();
-        } catch (SQLException thrown) {
-            thrown.printStackTrace();
-        }
-    }
+//    static {
+//        try {
+//            Connection conn = DriverManager.getConnection("jdbc:msql://IP:PORT/DBC", "user", "pass");
+//            st = conn.createStatement();
+//        } catch (SQLException thrown) {
+//            thrown.printStackTrace();
+//        }
+//    }
 
 
     public static void main(String[] args) throws IOException, SQLException {
        fillTable();
        startupText();
        startupTables();
-       emptySQLTables();
-       GroundEffects();
-       itemDB2Convert();
-       GameObject();
-       soundEffects();
+       //emptySQLTables();
+       //emoteData();
+        factionData();
+       //GroundEffects();
+       //itemDB2Convert();
+       //GameObject();
+       //soundEffects();
        //creatureDB2Convert();//bricked on newer build. effort to fix. it's displayextra
 
     }
@@ -146,6 +148,12 @@ public class Runner {
         tables[17] = "sound/soundkitentry";
         tables[18] = "sound/soundkitadvanced";
         tables[19] = "sound/creaturesounddata";
+        tables[20] = "emote/emotestext";
+        tables[21] = "emote/emotestextdata";
+        tables[22] = "emote/emotestextsound";
+        tables[23] = "emote/emotes";
+        tables[24] = "faction/faction";
+        tables[25] = "faction/factiontemplate";
     }
 
     //creates folders, will mostly error. peeps got folders, but for startup
@@ -179,6 +187,10 @@ public class Runner {
         make = file.mkdir();
         if(!make)
             System.out.println("Error creating Sound folder(possibly already exists)");
+        file = new File("./emote");
+        make = file.mkdir();
+        if(!make)
+            System.out.println("Error creating Emote folder(possibly already exists)");
 
     }
 
@@ -206,7 +218,78 @@ public class Runner {
         modelFDID = setupModelMap();
         textureFDID = setupTextureMap();
     }
+    private static void emoteData() throws IOException, SQLException {
+        FileWriter emoteText = new FileWriter("export/EmotesText.csv");
+        FileWriter emotesTextData = new FileWriter("export/EmotesTextData.csv");
+        FileWriter emotesTextSound = new FileWriter("export/EmotesTextSound.csv");
+        FileWriter emotes = new FileWriter("export/Emotes.csv");
+        try (BufferedReader br = new BufferedReader(new FileReader(tables[20] + csvEndSuffix))) {
+            String line;
+            br.readLine();//skip header
+            while ((line = br.readLine()) != null) {
+                String[] split = line.split(delimiter);
+                //emoteText.write(surroundQuotes(split[0]) + delimiter + surroundQuotes(split[1]) + delimiter + surroundQuotes(split[2]) +"\n");
+                st.execute("INSERT INTO EmotesText VALUES(" + surroundQuotes(split[0]) + delimiter + surroundQuotes(split[1]) + delimiter + surroundQuotes(split[2]) + ")");
+            }
+        }
+        try (BufferedReader br = new BufferedReader(new FileReader(tables[21] + csvEndSuffix))) {
+            String line;
+            br.readLine();//skip header
+            while ((line = br.readLine()) != null) {
+                String[] split = line.split(delimiter);
+                //emotesTextData.write(surroundQuotes(split[0]) + delimiter + surroundQuotes(split[1]) + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + surroundQuotes("16712190") + "\n");
+                st.execute("INSERT INTO EmotesTextData VALUES(" + surroundQuotes(split[0]) + delimiter + surroundQuotes(split[1]) + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + surroundQuotes("16712190") + ")");
+            }
+        }
+        try (BufferedReader br = new BufferedReader(new FileReader(tables[22] + csvEndSuffix))) {
+            String line;
+            br.readLine();//skip header
+            while ((line = br.readLine()) != null) {
+                String[] split = line.split(delimiter);
+                //emotesTextSound.write(surroundQuotes(split[0]) + delimiter + surroundQuotes(split[5]) + delimiter + surroundQuotes(split[1]) + delimiter + surroundQuotes(split[3]) + delimiter + surroundQuotes(split[4]) + "\n");
+                st.execute("INSERT INTO EmotesTextSound VALUES(" +surroundQuotes(split[0]) + delimiter + surroundQuotes(split[5]) + delimiter + surroundQuotes(split[1]) + delimiter + surroundQuotes(split[3]) + delimiter + surroundQuotes(split[4]) + ")");
+            }
+        }
+        try (BufferedReader br = new BufferedReader(new FileReader(tables[23] + csvEndSuffix))) {
+            String line;
+            br.readLine();//skip header
+            while ((line = br.readLine()) != null) {
+                String[] split = line.split(delimiter);
+               // emotes.write(surroundQuotes(split[0]) + delimiter + surroundQuotes(split[2]) + delimiter + surroundQuotes(split[3]) + delimiter + surroundQuotes(split[4]) + delimiter + surroundQuotes(split[5]) + delimiter + surroundQuotes(split[6]) + delimiter + surroundQuotes(split[7]) + "\n");
+                st.execute("INSERT INTO Emotes VALUES(" + surroundQuotes(split[0]) + delimiter + surroundQuotes(split[2]) + delimiter + surroundQuotes(split[3]) + delimiter + surroundQuotes(split[4]) + delimiter + surroundQuotes(split[5]) + delimiter + surroundQuotes(split[6]) + delimiter + surroundQuotes(split[7]) + ")");
 
+            }
+        }
+        emotes.close();
+        emotesTextData.close();
+        emotesTextSound.close();
+        emoteText.close();
+    }
+
+    private static void factionData() throws IOException, SQLException {
+        FileWriter faction = new FileWriter("export/Faction.csv");
+        FileWriter factionTemplate = new FileWriter("export/FactionTemplate.csv");
+        try (BufferedReader br = new BufferedReader(new FileReader(tables[24] + csvEndSuffix))) {
+            String line;
+            br.readLine();//skip header
+            while ((line = br.readLine()) != null) {
+                String[] split = line.split(delimiter);
+                faction.write(surroundQuotes(split[6]) + delimiter + surroundQuotes(split[7]) + delimiter + surroundQuotes(split[0]) + delimiter + surroundQuotes(split[1]) + delimiter + surroundQuotes(split[2]) + delimiter + surroundQuotes(split[3]) + delimiter + surroundQuotes(split[13]) + delimiter + surroundQuotes(split[14]) + delimiter + surroundQuotes(split[15]) + delimiter + surroundQuotes(split[16]) + delimiter + surroundQuotes(split[21]) + delimiter + surroundQuotes(split[22]) + delimiter + surroundQuotes(split[23]) + delimiter + surroundQuotes(split[24]) + delimiter + surroundQuotes(split[17]) + delimiter + surroundQuotes(split[18]) + delimiter + surroundQuotes(split[19]) + delimiter + surroundQuotes(split[20]) + delimiter + surroundQuotes(split[8]) + delimiter + surroundQuotes(split[29]) + delimiter + surroundQuotes(split[30]) + delimiter + surroundQuotes(split[31]) + delimiter + surroundQuotes(split[32]) + delimiter + surroundQuotes(split[4]) + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("16712190") + delimiter + surroundQuotes(split[5]) + delimiter  + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + surroundQuotes("16712188") + "\n");
+                //st.execute("INSERT INTO Faction VALUES(" + surroundQuotes(split[6]) + delimiter + surroundQuotes(split[7]) + delimiter + surroundQuotes(split[0]) + delimiter + surroundQuotes(split[1]) + delimiter + surroundQuotes(split[2]) + delimiter + surroundQuotes(split[3]) + delimiter + surroundQuotes(split[13]) + delimiter + surroundQuotes(split[14]) + delimiter + surroundQuotes(split[15]) + delimiter + surroundQuotes(split[16]) + delimiter + surroundQuotes(split[21]) + delimiter + surroundQuotes(split[22]) + delimiter + surroundQuotes(split[23]) + delimiter + surroundQuotes(split[24]) + delimiter + surroundQuotes(split[17]) + delimiter + surroundQuotes(split[18]) + delimiter + surroundQuotes(split[19]) + delimiter + surroundQuotes(split[20]) + delimiter + surroundQuotes(split[8]) + delimiter + surroundQuotes(split[29]) + delimiter + surroundQuotes(split[30]) + delimiter + surroundQuotes(split[31]) + delimiter + surroundQuotes(split[32]) + delimiter + surroundQuotes(split[4]) + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("16712190") + delimiter + surroundQuotes(split[5]) + delimiter  + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + surroundQuotes("16712188") + ")");
+            }
+        }
+        try (BufferedReader br = new BufferedReader(new FileReader(tables[25] + csvEndSuffix))) {
+            String line;
+            br.readLine();//skip header
+            while ((line = br.readLine()) != null) {
+                String[] split = line.split(delimiter);
+                factionTemplate.write(surroundQuotes(split[0]) + delimiter + surroundQuotes(split[1]) + delimiter + surroundQuotes(split[3]) + delimiter + surroundQuotes(split[4]) + delimiter + surroundQuotes(split[5]) + delimiter + surroundQuotes(split[6]) + delimiter + surroundQuotes(split[7]) + delimiter + surroundQuotes(split[8]) + delimiter + surroundQuotes(split[9]) + delimiter + surroundQuotes(split[10]) + delimiter + surroundQuotes(split[11]) + delimiter + surroundQuotes(split[12]) + delimiter + surroundQuotes(split[13]) + "\n");
+                //st.execute("INSERT INTO FactionTemplate VALUES(" +surroundQuotes(split[0]) + delimiter + surroundQuotes(split[1]) + delimiter + surroundQuotes(split[3]) + delimiter + surroundQuotes(split[4]) + delimiter + surroundQuotes(split[5]) + delimiter + surroundQuotes(split[6]) + delimiter + surroundQuotes(split[7]) + delimiter + surroundQuotes(split[8]) + delimiter + surroundQuotes(split[9]) + delimiter + surroundQuotes(split[10]) + delimiter + surroundQuotes(split[11]) + delimiter + surroundQuotes(split[12]) + delimiter + surroundQuotes(split[13]) + ")");
+            }
+        }
+        faction.close();
+        factionTemplate.close();
+    }
     //all creature csv creation
     private static void creatureDB2Convert() throws IOException
     {
