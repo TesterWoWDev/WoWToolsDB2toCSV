@@ -15,12 +15,12 @@ public class Runner {
     private static final String delimiter = ",";
     private static final String csvEndSuffix = ".csv";
     private static final String emptyQuotes = "''";
-    
-//FileID maps
+
+    //FileID maps
     private static HashMap<String, String> fileIDs;
     private static HashMap<String, String> modelFDID;
     private static HashMap<String, String> textureFDID;
-//creature extra display
+    //creature extra display
     private static String head = surroundQuotes("0");
     private static String shoulder = surroundQuotes("0");
     private static String chest = surroundQuotes("0");
@@ -32,7 +32,7 @@ public class Runner {
     private static String cape = surroundQuotes("0");
     private static String shirt = surroundQuotes("0");
     private static String tabard = surroundQuotes("0");
-//item textures
+    //item textures
     private static String upArm = emptyQuotes;
     private static String lowArm = emptyQuotes;
     private static String hands = emptyQuotes;
@@ -53,18 +53,18 @@ public class Runner {
 
 
     public static void main(String[] args) throws IOException, SQLException {
-       fillTable();
-       startupText();
-       startupTables();
-       //emptySQLTables();
-       //emoteData();
-       //factionData();
-       //footstepData();
-       //GroundEffects();
-       //itemDB2Convert();
-       //GameObject();
-       //soundEffects();
-       //creatureDB2Convert();//bricked on newer build. effort to fix. it's displayextra
+        fillTable();
+        startupText();
+        startupTables();
+        //emptySQLTables();
+        //emoteData();
+        //factionData();
+        //footstepData();
+        //GroundEffects();
+        //itemDB2Convert();
+        //GameObject();
+        //soundEffects();
+        //creatureDB2Convert();//bricked on newer build. effort to fix. it's displayextra
 
     }
 
@@ -89,9 +89,9 @@ public class Runner {
         Scanner keyboard = new Scanner(System.in);
         System.out.println("Would you like to download the CSVs? True or False(Recommended first use)");
         boolean download = keyboard.nextBoolean();
-        if(download) {
+        if (download) {
             setupFolders();
-            System.out.println("What is the current build? (Get this from WoW.Tools) Default is: "+ buildNumber + " No promises on builds past this.");
+            System.out.println("What is the current build? (Get this from WoW.Tools) Default is: " + buildNumber + " No promises on builds past this.");
             keyboard.nextLine();//for the skip line(scanner sux)
             buildNumber = keyboard.nextLine();
             downloadFiles();
@@ -99,6 +99,7 @@ public class Runner {
             sortTable(15);
         }
     }
+
     //sorts itemdisplayinfomaterialres to put all displayIDs in groups for parsing later(cause blizzard cant keep their shit together)
     private static void sortTable(int tableNum) throws IOException {
         System.out.println("Sorting " + tables[tableNum]);
@@ -121,13 +122,14 @@ public class Runner {
         }
         writer.close();
     }
+
     // extract value you want to sort on(for sorting itemdisplayinfomaterialres)Used in sortInfoMatRes()
     private static String getField(String line) {
         return line.split(delimiter)[3];
     }
 
     //table and path downloads for files
-    private static void fillTable(){
+    private static void fillTable() {
         System.out.println("Filling Table...");
         tables[0] = "item/item";
         tables[1] = "item/itemappearance";
@@ -160,47 +162,47 @@ public class Runner {
     }
 
     //creates folders, will mostly error. peeps got folders, but for startup
-    private static void setupFolders(){
+    private static void setupFolders() {
         System.out.println("Setting up folders...");
         File file = new File("./item");
         boolean make = file.mkdir();
-        if(!make)
+        if (!make)
             System.out.println("Error creating Item folder(possibly already exists)");
         file = new File("./creature");
         make = file.mkdir();
-        if(!make)
+        if (!make)
             System.out.println("Error creating Creature folder(possibly already exists)");
         file = new File("./listfile");
         make = file.mkdir();
-        if(!make)
+        if (!make)
             System.out.println("Error creating Listfile folder(possibly already exists)");
         file = new File("./export");
         make = file.mkdir();
-        if(!make)
+        if (!make)
             System.out.println("Error creating Export folder(possibly already exists)");
         file = new File("./maps");
         make = file.mkdir();
-        if(!make)
+        if (!make)
             System.out.println("Error creating Maps folder(possibly already exists)");
         file = new File("./gobs");
         make = file.mkdir();
-        if(!make)
+        if (!make)
             System.out.println("Error creating Gobs folder(possibly already exists)");
         file = new File("./sound");
         make = file.mkdir();
-        if(!make)
+        if (!make)
             System.out.println("Error creating Sound folder(possibly already exists)");
         file = new File("./emote");
         make = file.mkdir();
-        if(!make)
+        if (!make)
             System.out.println("Error creating Emote folder(possibly already exists)");
         file = new File("./faction");
         make = file.mkdir();
-        if(!make)
+        if (!make)
             System.out.println("Error creating Faction folder(possibly already exists)");
         file = new File("./footprint");
         make = file.mkdir();
-        if(!make)
+        if (!make)
             System.out.println("Error creating Footprint folder(possibly already exists)");
 
     }
@@ -260,7 +262,7 @@ public class Runner {
             while ((line = br.readLine()) != null) {
                 String[] split = line.split(delimiter);
                 //emotesTextSound.write(surroundQuotes(split[0]) + delimiter + surroundQuotes(split[5]) + delimiter + surroundQuotes(split[1]) + delimiter + surroundQuotes(split[3]) + delimiter + surroundQuotes(split[4]) + "\n");
-                st.execute("INSERT INTO EmotesTextSound VALUES(" +surroundQuotes(split[0]) + delimiter + surroundQuotes(split[5]) + delimiter + surroundQuotes(split[1]) + delimiter + surroundQuotes(split[3]) + delimiter + surroundQuotes(split[4]) + ")");
+                st.execute("INSERT INTO EmotesTextSound VALUES(" + surroundQuotes(split[0]) + delimiter + surroundQuotes(split[5]) + delimiter + surroundQuotes(split[1]) + delimiter + surroundQuotes(split[3]) + delimiter + surroundQuotes(split[4]) + ")");
             }
         }
         try (BufferedReader br = new BufferedReader(new FileReader(tables[23] + csvEndSuffix))) {
@@ -268,7 +270,7 @@ public class Runner {
             br.readLine();//skip header
             while ((line = br.readLine()) != null) {
                 String[] split = line.split(delimiter);
-               // emotes.write(surroundQuotes(split[0]) + delimiter + surroundQuotes(split[2]) + delimiter + surroundQuotes(split[3]) + delimiter + surroundQuotes(split[4]) + delimiter + surroundQuotes(split[5]) + delimiter + surroundQuotes(split[6]) + delimiter + surroundQuotes(split[7]) + "\n");
+                // emotes.write(surroundQuotes(split[0]) + delimiter + surroundQuotes(split[2]) + delimiter + surroundQuotes(split[3]) + delimiter + surroundQuotes(split[4]) + delimiter + surroundQuotes(split[5]) + delimiter + surroundQuotes(split[6]) + delimiter + surroundQuotes(split[7]) + "\n");
                 st.execute("INSERT INTO Emotes VALUES(" + surroundQuotes(split[0]) + delimiter + surroundQuotes(split[2]) + delimiter + surroundQuotes(split[3]) + delimiter + surroundQuotes(split[4]) + delimiter + surroundQuotes(split[5]) + delimiter + surroundQuotes(split[6]) + delimiter + surroundQuotes(split[7]) + ")");
 
             }
@@ -287,10 +289,10 @@ public class Runner {
             String line;
             br.readLine();//skip header
             while ((line = br.readLine()) != null) {
-                line = line.replace("\"","");
+                line = line.replace("\"", "");
                 String[] split = line.split(delimiter);
                 //faction.write(surroundQuotes(split[6]) + delimiter + surroundQuotes(split[7]) + delimiter + surroundQuotes(split[0]) + delimiter + surroundQuotes(split[1]) + delimiter + surroundQuotes(split[2]) + delimiter + surroundQuotes(split[3]) + delimiter + surroundQuotes(split[13]) + delimiter + surroundQuotes(split[14]) + delimiter + surroundQuotes(split[15]) + delimiter + surroundQuotes(split[16]) + delimiter + surroundQuotes(split[21]) + delimiter + surroundQuotes(split[22]) + delimiter + surroundQuotes(split[23]) + delimiter + surroundQuotes(split[24]) + delimiter + surroundQuotes(split[17]) + delimiter + surroundQuotes(split[18]) + delimiter + surroundQuotes(split[19]) + delimiter + surroundQuotes(split[20]) + delimiter + surroundQuotes(split[8]) + delimiter + surroundQuotes(split[29]) + delimiter + surroundQuotes(split[30]) + delimiter + surroundQuotes(split[31]) + delimiter + surroundQuotes(split[32]) + delimiter + surroundQuotes(split[4]) + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("16712190") + delimiter + surroundQuotes(split[5]) + delimiter  + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + surroundQuotes("16712188") + "\n");
-                st.execute("INSERT INTO Faction VALUES(" + surroundQuotes(split[6]) + delimiter + surroundQuotes(split[7]) + delimiter + surroundQuotes(split[0]) + delimiter + surroundQuotes(split[1]) + delimiter + surroundQuotes(split[2]) + delimiter + surroundQuotes(split[3]) + delimiter + surroundQuotes(split[13]) + delimiter + surroundQuotes(split[14]) + delimiter + surroundQuotes(split[15]) + delimiter + surroundQuotes(split[16]) + delimiter + surroundQuotes(split[21]) + delimiter + surroundQuotes(split[22]) + delimiter + surroundQuotes(split[23]) + delimiter + surroundQuotes(split[24]) + delimiter + surroundQuotes(split[17]) + delimiter + surroundQuotes(split[18]) + delimiter + surroundQuotes(split[19]) + delimiter + surroundQuotes(split[20]) + delimiter + surroundQuotes(split[8]) + delimiter + surroundQuotes(split[29]) + delimiter + surroundQuotes(split[30]) + delimiter + surroundQuotes(split[31]) + delimiter + surroundQuotes(split[32]) + delimiter + surroundQuotes(split[4]) + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("16712190") + delimiter + surroundQuotes(split[5]) + delimiter  + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + surroundQuotes("16712188") + ")");
+                st.execute("INSERT INTO Faction VALUES(" + surroundQuotes(split[6]) + delimiter + surroundQuotes(split[7]) + delimiter + surroundQuotes(split[0]) + delimiter + surroundQuotes(split[1]) + delimiter + surroundQuotes(split[2]) + delimiter + surroundQuotes(split[3]) + delimiter + surroundQuotes(split[13]) + delimiter + surroundQuotes(split[14]) + delimiter + surroundQuotes(split[15]) + delimiter + surroundQuotes(split[16]) + delimiter + surroundQuotes(split[21]) + delimiter + surroundQuotes(split[22]) + delimiter + surroundQuotes(split[23]) + delimiter + surroundQuotes(split[24]) + delimiter + surroundQuotes(split[17]) + delimiter + surroundQuotes(split[18]) + delimiter + surroundQuotes(split[19]) + delimiter + surroundQuotes(split[20]) + delimiter + surroundQuotes(split[8]) + delimiter + surroundQuotes(split[29]) + delimiter + surroundQuotes(split[30]) + delimiter + surroundQuotes(split[31]) + delimiter + surroundQuotes(split[32]) + delimiter + surroundQuotes(split[4]) + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("16712190") + delimiter + surroundQuotes(split[5]) + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + surroundQuotes("16712188") + ")");
             }
         }
         try (BufferedReader br = new BufferedReader(new FileReader(tables[25] + csvEndSuffix))) {
@@ -299,7 +301,7 @@ public class Runner {
             while ((line = br.readLine()) != null) {
                 String[] split = line.split(delimiter);
                 //factionTemplate.write(surroundQuotes(split[0]) + delimiter + surroundQuotes(split[1]) + delimiter + surroundQuotes(split[3]) + delimiter + surroundQuotes(split[4]) + delimiter + surroundQuotes(split[5]) + delimiter + surroundQuotes(split[6]) + delimiter + surroundQuotes(split[7]) + delimiter + surroundQuotes(split[8]) + delimiter + surroundQuotes(split[9]) + delimiter + surroundQuotes(split[10]) + delimiter + surroundQuotes(split[11]) + delimiter + surroundQuotes(split[12]) + delimiter + surroundQuotes(split[13]) + "\n");
-                st.execute("INSERT INTO FactionTemplate VALUES(" +surroundQuotes(split[0]) + delimiter + surroundQuotes(split[1]) + delimiter + surroundQuotes(split[3]) + delimiter + surroundQuotes(split[4]) + delimiter + surroundQuotes(split[5]) + delimiter + surroundQuotes(split[6]) + delimiter + surroundQuotes(split[7]) + delimiter + surroundQuotes(split[8]) + delimiter + surroundQuotes(split[9]) + delimiter + surroundQuotes(split[10]) + delimiter + surroundQuotes(split[11]) + delimiter + surroundQuotes(split[12]) + delimiter + surroundQuotes(split[13]) + ")");
+                st.execute("INSERT INTO FactionTemplate VALUES(" + surroundQuotes(split[0]) + delimiter + surroundQuotes(split[1]) + delimiter + surroundQuotes(split[3]) + delimiter + surroundQuotes(split[4]) + delimiter + surroundQuotes(split[5]) + delimiter + surroundQuotes(split[6]) + delimiter + surroundQuotes(split[7]) + delimiter + surroundQuotes(split[8]) + delimiter + surroundQuotes(split[9]) + delimiter + surroundQuotes(split[10]) + delimiter + surroundQuotes(split[11]) + delimiter + surroundQuotes(split[12]) + delimiter + surroundQuotes(split[13]) + ")");
             }
         }
         faction.close();
@@ -324,17 +326,16 @@ public class Runner {
             br.readLine();//skip header
             while ((line = br.readLine()) != null) {
                 String[] split = line.split(delimiter);
-                if(fileIDs.get(split[1]) != null)
-                //footTextures.write(surroundQuotes(split[0]) + delimiter + surroundQuotes(fileIDs.get(split[1]).replace(".blp","")) + "\n");
-                st.execute("INSERT INTO FootprintTextures VALUES(" + surroundQuotes(split[0]) + delimiter + surroundQuotes(fileIDs.get(split[1]).replace(".blp","")) + ")");
+                if (fileIDs.get(split[1]) != null)
+                    //footTextures.write(surroundQuotes(split[0]) + delimiter + surroundQuotes(fileIDs.get(split[1]).replace(".blp","")) + "\n");
+                    st.execute("INSERT INTO FootprintTextures VALUES(" + surroundQuotes(split[0]) + delimiter + surroundQuotes(fileIDs.get(split[1]).replace(".blp", "")) + ")");
             }
         }
         footTerrain.close();
         footTextures.close();
     }
 
-    private static void creatureDB2Convert() throws IOException
-    {
+    private static void creatureDB2Convert() throws IOException {
         System.out.println("Starting Creatures...");
         FileWriter creatureModelWriter = new FileWriter("export/CreatureModelDataNew.csv");
         FileWriter creatureDisplayWriter = new FileWriter("export/CreatureDisplayInfoNew.csv");
@@ -382,11 +383,11 @@ public class Runner {
                             }
                             String a = fileIDs.get(textureFDID.get(extraSplit[10]));
                             if (a != null) {
-                                for (int i=1;i< extraSplit.length;i++){
-                                    extraSplit[i] = surroundQuotes(extraSplit[i]).replace(".",delimiter);
+                                for (int i = 1; i < extraSplit.length; i++) {
+                                    extraSplit[i] = surroundQuotes(extraSplit[i]).replace(".", delimiter);
                                 }
                                 String texture = surroundQuotes(returnLast(a));
-                                displayExtraMap.put(Integer.parseInt(extraSplit[0]),surroundQuotes(extraSplit[0]) + delimiter + extraSplit[1] + delimiter + extraSplit[2] + delimiter + extraSplit[4] + delimiter + extraSplit[5] + delimiter + extraSplit[6] + delimiter + extraSplit[7] + delimiter + extraSplit[8] + delimiter + head + delimiter + shoulder + delimiter + shirt + delimiter + chest + delimiter + belt + delimiter + legs + delimiter + boots + delimiter + wrist + delimiter + gloves + delimiter + tabard + delimiter + cape + delimiter + surroundQuotes("0") + delimiter + texture +"\n");
+                                displayExtraMap.put(Integer.parseInt(extraSplit[0]), surroundQuotes(extraSplit[0]) + delimiter + extraSplit[1] + delimiter + extraSplit[2] + delimiter + extraSplit[4] + delimiter + extraSplit[5] + delimiter + extraSplit[6] + delimiter + extraSplit[7] + delimiter + extraSplit[8] + delimiter + head + delimiter + shoulder + delimiter + shirt + delimiter + chest + delimiter + belt + delimiter + legs + delimiter + boots + delimiter + wrist + delimiter + gloves + delimiter + tabard + delimiter + cape + delimiter + surroundQuotes("0") + delimiter + texture + "\n");
                                 resetVarsCreature();
                             }
                         }
@@ -394,13 +395,13 @@ public class Runner {
                     if (modelLine != null) {
                         String path;
                         path = surroundQuotes(modelLine.substring(0, modelLine.length() - 1) + "dx");
-                        for (int i=1;i< modelRow.length;i++){
-                            modelRow[i] = surroundQuotes(modelRow[i]).replace(".",delimiter);
+                        for (int i = 1; i < modelRow.length; i++) {
+                            modelRow[i] = surroundQuotes(modelRow[i]).replace(".", delimiter);
                         }
-                        for (int i=0;i< displayRow.length;i++){
-                            displayRow[i] = surroundQuotes(displayRow[i]).replace(".",delimiter);
+                        for (int i = 0; i < displayRow.length; i++) {
+                            displayRow[i] = surroundQuotes(displayRow[i]).replace(".", delimiter);
                         }
-                        modelMap.put(Integer.parseInt(modelRow[0]),surroundQuotes(modelRow[0]) + delimiter + modelRow[7] + delimiter + path.replace("/","\\") + delimiter + surroundQuotes("1") + delimiter + modelRow[25] + delimiter + modelRow[9] + delimiter + modelRow[10] + delimiter + modelRow[11] + delimiter + modelRow[12] + delimiter + modelRow[13] + delimiter + modelRow[14] + delimiter + surroundQuotes("0") + delimiter + modelRow[17] + delimiter + surroundQuotes("0") + delimiter + modelRow[20] + delimiter + modelRow[21] + delimiter + modelRow[30] + delimiter + modelRow[1] + delimiter + modelRow[2] + delimiter + modelRow[3] + delimiter + modelRow[4] + delimiter + modelRow[5] + delimiter + modelRow[6] + delimiter + surroundQuotes("1,0") + delimiter + modelRow[22] + delimiter + modelRow[25] + delimiter + surroundQuotes("0,0") + delimiter + surroundQuotes("0,0") + "\n");
+                        modelMap.put(Integer.parseInt(modelRow[0]), surroundQuotes(modelRow[0]) + delimiter + modelRow[7] + delimiter + path.replace("/", "\\") + delimiter + surroundQuotes("1") + delimiter + modelRow[25] + delimiter + modelRow[9] + delimiter + modelRow[10] + delimiter + modelRow[11] + delimiter + modelRow[12] + delimiter + modelRow[13] + delimiter + modelRow[14] + delimiter + surroundQuotes("0") + delimiter + modelRow[17] + delimiter + surroundQuotes("0") + delimiter + modelRow[20] + delimiter + modelRow[21] + delimiter + modelRow[30] + delimiter + modelRow[1] + delimiter + modelRow[2] + delimiter + modelRow[3] + delimiter + modelRow[4] + delimiter + modelRow[5] + delimiter + modelRow[6] + delimiter + surroundQuotes("1,0") + delimiter + modelRow[22] + delimiter + modelRow[25] + delimiter + surroundQuotes("0,0") + delimiter + surroundQuotes("0,0") + "\n");
                         creatureDisplayWriter.write(displayRow[0] + delimiter + displayRow[1] + delimiter + displayRow[2] + delimiter + displayRow[7] + delimiter + displayRow[4] + delimiter + displayRow[5] + delimiter + text1 + delimiter + text2 + delimiter + text3 + delimiter + surroundQuotes(displayRow[10]) + delimiter + displayRow[7] + delimiter + displayRow[9] + delimiter + displayRow[10] + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + displayRow[13] + "\n");
 
                     }
@@ -419,6 +420,7 @@ public class Runner {
         creatureModelWriter.close();
         creatureDisplayExtraWriter.close();
     }
+
     //all item csv creation
     private static void itemDB2Convert() throws IOException, SQLException {
         System.out.println("Starting Items...");
@@ -444,49 +446,52 @@ public class Runner {
         int spellStartingID = 500000;
 
         try (BufferedReader br = new BufferedReader(new FileReader(tables[2] + csvEndSuffix))) {
-                String line;
-                br.readLine();//skip header
-                while ((line = br.readLine()) != null) {
+            String line;
+            br.readLine();//skip header
+            while ((line = br.readLine()) != null) {
                 String[] displayRow = line.split(delimiter);
                 String Lmodel = fileIDs.get(modelFDID.get(displayRow[10]));
                 String Rmodel = fileIDs.get(modelFDID.get(displayRow[11]));
                 String Ltexture = fileIDs.get(textureFDID.get(displayRow[12]));
                 String Rtexture = fileIDs.get(textureFDID.get(displayRow[13]));
                 String Lmm = fileIDs.get(modelFDID.get(displayRow[10]));
-                if(Lmodel == null){
+                if (Lmodel == null) {
                     Lmodel = emptyQuotes;
-                }else{
+                } else {
                     Lmodel = returnLast(Lmodel);
-                    if(Lmodel.endsWith("_r.m2"))
+                    if (Lmodel.endsWith("_r.m2"))
                         Lmodel = substringFour(Lmodel) + "l.m2";
-                    Lmodel = Lmodel.substring(0,Lmodel.length() -3);
-                    if(Lmodel.startsWith("helm_"))
+                    Lmodel = Lmodel.substring(0, Lmodel.length() - 3);
+                    if (Lmodel.startsWith("helm_"))
                         Lmodel = substringFour(Lmodel);
-                    if(Lmodel.endsWith("_"))
-                        Lmodel = Lmodel.substring(0,Lmodel.length() - 1);
+                    if (Lmodel.endsWith("_"))
+                        Lmodel = Lmodel.substring(0, Lmodel.length() - 1);
                     Lmodel = surroundQuotes(appendMDX(Lmodel.replaceAll("rshoulder", "lshoulder")));
-                }if(Rmodel == null){
+                }
+                if (Rmodel == null) {
                     Rmodel = emptyQuotes;
-                }else{
+                } else {
                     Rmodel = returnLast(Rmodel);
-                    if(Rmodel.endsWith("_l.m2"))
+                    if (Rmodel.endsWith("_l.m2"))
                         Rmodel = substringFour(Rmodel) + "r.m2";
-                    Rmodel = Rmodel.substring(0,Rmodel.length() -3);
-                    if(Rmodel.startsWith("helm_"))
+                    Rmodel = Rmodel.substring(0, Rmodel.length() - 3);
+                    if (Rmodel.startsWith("helm_"))
                         Rmodel = substringFour(Rmodel);
-                    if(Rmodel.endsWith("_"))
-                        Rmodel = Rmodel.substring(0,Rmodel.length() - 1);
+                    if (Rmodel.endsWith("_"))
+                        Rmodel = Rmodel.substring(0, Rmodel.length() - 1);
                     Rmodel = surroundQuotes(appendMDX(Rmodel.replaceAll("lshoulder", "rshoulder")));
-                }if(Ltexture == null){
+                }
+                if (Ltexture == null) {
                     Ltexture = emptyQuotes;
-                }else{
+                } else {
                     Ltexture = surroundQuotes(substringFour(returnLast(Ltexture)));
-                }if(Rtexture == null){
+                }
+                if (Rtexture == null) {
                     Rtexture = emptyQuotes;
-                }else{
+                } else {
                     Rtexture = surroundQuotes(substringFour(returnLast(Rtexture)));
                 }
-                if(itemDisplayInfoMaterials.get(displayRow[0]) != null) {
+                if (itemDisplayInfoMaterials.get(displayRow[0]) != null) {
                     String displayInfoMats = itemDisplayInfoMaterials.get(displayRow[0]);
                     String[] itemSplit = displayInfoMats.split(delimiter);
                     for (String s : itemSplit) {
@@ -495,22 +500,22 @@ public class Runner {
                     }
                 }
                 String icon = emptyQuotes;
-                if(itemAppearanceIcon.get(displayRow[0]) != null) {
+                if (itemAppearanceIcon.get(displayRow[0]) != null) {
                     if (fileIDs.get(itemAppearanceIcon.get(displayRow[0])) != null) {
                         icon = surroundQuotes(substringFour(returnLast((fileIDs.get(itemAppearanceIcon.get(displayRow[0]))))));
                     }
-                }else if(itemAppearanceReversed.get(itemModifiedAppearanceReversed.get(displayRow[0])) != null){
+                } else if (itemAppearanceReversed.get(itemModifiedAppearanceReversed.get(displayRow[0])) != null) {
                     icon = fileIDs.get(itemIcon.get(itemAppearanceReversed.get(itemModifiedAppearanceReversed.get(displayRow[0]))));
-                    if(icon != null)
-                    icon = surroundQuotes(substringFour(returnLast(icon)));
+                    if (icon != null)
+                        icon = surroundQuotes(substringFour(returnLast(icon)));
                 }
-                for (int i=0;i< displayRow.length;i++){
-                    displayRow[i] = surroundQuotes(displayRow[i]).replace(".",delimiter);
+                for (int i = 0; i < displayRow.length; i++) {
+                    displayRow[i] = surroundQuotes(displayRow[i]).replace(".", delimiter);
                 }
 
-                    //itemDisplayInfoWriter.write( displayRow[0] + delimiter + Lmodel + delimiter + Rmodel + delimiter + Ltexture + delimiter + Rtexture + delimiter + icon + delimiter + emptyQuotes + delimiter + displayRow[16] + delimiter + displayRow[17] + delimiter + displayRow[18] + delimiter + displayRow[9] + delimiter +displayRow[6] + delimiter + "0" + delimiter + displayRow[28] + delimiter + displayRow[29] + delimiter + upArm + delimiter + lowArm + delimiter + hands + delimiter + upTor + delimiter + lowTor + delimiter + upLeg + delimiter + lowLeg + delimiter + foot + delimiter + displayRow[1] + delimiter + displayRow[2] + "\n");
-                st.execute("INSERT INTO ItemDisplayInfo VALUES(" + displayRow[0] + delimiter + Lmodel + delimiter + Rmodel + delimiter + Ltexture + delimiter + Rtexture + delimiter + icon + delimiter + emptyQuotes + delimiter + displayRow[16] + delimiter + displayRow[17] + delimiter + displayRow[18] + delimiter + displayRow[9] + delimiter +displayRow[6] + delimiter + "0" + delimiter + displayRow[28] + delimiter + displayRow[29] + delimiter + upArm + delimiter + lowArm + delimiter + hands + delimiter + upTor + delimiter + lowTor + delimiter + upLeg + delimiter + lowLeg + delimiter + foot + delimiter + displayRow[1] + delimiter + displayRow[2] + ")");
-                displayToModel.put(displayRow[0],Ltexture.replace("\"","") + ";" + Lmm + "\n");
+                //itemDisplayInfoWriter.write( displayRow[0] + delimiter + Lmodel + delimiter + Rmodel + delimiter + Ltexture + delimiter + Rtexture + delimiter + icon + delimiter + emptyQuotes + delimiter + displayRow[16] + delimiter + displayRow[17] + delimiter + displayRow[18] + delimiter + displayRow[9] + delimiter +displayRow[6] + delimiter + "0" + delimiter + displayRow[28] + delimiter + displayRow[29] + delimiter + upArm + delimiter + lowArm + delimiter + hands + delimiter + upTor + delimiter + lowTor + delimiter + upLeg + delimiter + lowLeg + delimiter + foot + delimiter + displayRow[1] + delimiter + displayRow[2] + "\n");
+                st.execute("INSERT INTO ItemDisplayInfo VALUES(" + displayRow[0] + delimiter + Lmodel + delimiter + Rmodel + delimiter + Ltexture + delimiter + Rtexture + delimiter + icon + delimiter + emptyQuotes + delimiter + displayRow[16] + delimiter + displayRow[17] + delimiter + displayRow[18] + delimiter + displayRow[9] + delimiter + displayRow[6] + delimiter + "0" + delimiter + displayRow[28] + delimiter + displayRow[29] + delimiter + upArm + delimiter + lowArm + delimiter + hands + delimiter + upTor + delimiter + lowTor + delimiter + upLeg + delimiter + lowLeg + delimiter + foot + delimiter + displayRow[1] + delimiter + displayRow[2] + ")");
+                displayToModel.put(displayRow[0], Ltexture.replace("\"", "") + ";" + Lmm + "\n");
                 resetVarsItem();
             }
         }
@@ -520,23 +525,23 @@ public class Runner {
             while ((line = br.readLine()) != null) {
                 String[] displayRow = line.split(delimiter);
                 String display = "0";
-                if(itemModifiedAppearance.get(displayRow[0]) != null) {
+                if (itemModifiedAppearance.get(displayRow[0]) != null) {
                     if (itemAppearance.get(itemModifiedAppearance.get(displayRow[0])) != null) {
                         display = itemAppearance.get(itemModifiedAppearance.get(displayRow[0])).split(delimiter)[0];
                     }
                 }
-                for (int i=0;i< displayRow.length;i++){
-                    displayRow[i] = surroundQuotes(displayRow[i]).replace(".",delimiter);
+                for (int i = 0; i < displayRow.length; i++) {
+                    displayRow[i] = surroundQuotes(displayRow[i]).replace(".", delimiter);
                 }
                 String subClass = displayRow[2];
-                if(subClass.equals("\"5\"") || subClass.equals("\"4\"")){
+                if (subClass.equals("\"5\"") || subClass.equals("\"4\"")) {
                     subClass = "'1'";
                 }
 
-                if(displayToModel.get(surroundQuotes(display)) != null){
-                    if(displayRow[4].equals(surroundQuotes("6")) && !displayToModel.get(surroundQuotes(display)).split(";")[1].equals("\"\"") && !displayToModel.get(surroundQuotes(display)).split(";")[1].equals("")){
-                        String itemName = displayToModel.get(surroundQuotes(display)).split(";")[0].replace("\"","") + ".mdx";
-                        if(!itemName.equals(".mdx")) {
+                if (displayToModel.get(surroundQuotes(display)) != null) {
+                    if (displayRow[4].equals(surroundQuotes("6")) && !displayToModel.get(surroundQuotes(display)).split(";")[1].equals("\"\"") && !displayToModel.get(surroundQuotes(display)).split(";")[1].equals("")) {
+                        String itemName = displayToModel.get(surroundQuotes(display)).split(";")[0].replace("\"", "") + ".mdx";
+                        if (!itemName.equals(".mdx")) {
                             //spellWriter.write(surroundQuotes(String.valueOf(spellStartingID)) + ",\"0\",\"0\",\"0\",\"159646080\",\"268435616\",\"1\",\"1048576\",\"131139\",\"393224\",\"16789504\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"1\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"101\",\"0\",\"0\",\"0\",\"0\",\"21\",\"0\",\"0\",\"0\",\"0\",\"0\",\"1\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"-1\",\"0\",\"0\",\"6\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"1\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"4\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"" + spellStartingID + "\",\"0\",\"1\",\"0\",\"0\",\"3D Belt\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"16712190\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"16712188\",\"Issa 3D Belt\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"16712190\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"16712188\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"1\",\"1\",\"1\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"1\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\"\n");
                             //spellVisualWriter.write(surroundQuotes(String.valueOf(spellStartingID)) + ",\"0\",\"0\",\"0\"," + surroundQuotes(String.valueOf(spellStartingID)) + ",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"-1\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\"\n");
                             //spellVisualKitWriter.write(surroundQuotes(String.valueOf(spellStartingID)) + ",\"-1\",\"-1\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"-1\",\"-1\",\"-1\",\"-1\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\"\n");
@@ -550,13 +555,12 @@ public class Runner {
                             st.execute("INSERT INTO SpellVisualModelAttach VALUES(" + surroundQuotes(String.valueOf(spellStartingID)) + delimiter + surroundQuotes(String.valueOf(spellStartingID)) + delimiter + surroundQuotes(String.valueOf(spellStartingID)) + ",'53','0','0','0','0','0','0')");
                             itemIDtoSpell.put(displayRow[0], String.valueOf(spellStartingID));
                             spellStartingID++;
-                            if(!displayToModel.get(surroundQuotes(display)).split(";")[1].contains("null"))
-                            beltListfileWriter.write(displayToModel.get(surroundQuotes(display)));
+                            if (!displayToModel.get(surroundQuotes(display)).split(";")[1].contains("null"))
+                                beltListfileWriter.write(displayToModel.get(surroundQuotes(display)));
 
-                        }
-                        else if((displayToModel.get(surroundQuotes(display)).split(";")[1].replace("\"","").replace(".m2",".mdx").replace("\n","")).length() > 10) {
+                        } else if ((displayToModel.get(surroundQuotes(display)).split(";")[1].replace("\"", "").replace(".m2", ".mdx").replace("\n", "")).length() > 10) {
                             itemName = displayToModel.get(surroundQuotes(display)).split(";")[1].replace("\"", "").replace(".m2", ".mdx").replace("/", "\\");
-                            itemName = itemName.substring(0,itemName.length()-1);
+                            itemName = itemName.substring(0, itemName.length() - 1);
                             //spellWriter.write(surroundQuotes(String.valueOf(spellStartingID)) + ",\"0\",\"0\",\"0\",\"159646080\",\"268435616\",\"1\",\"1048576\",\"131139\",\"393224\",\"16789504\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"1\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"101\",\"0\",\"0\",\"0\",\"0\",\"21\",\"0\",\"0\",\"0\",\"0\",\"0\",\"1\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"-1\",\"0\",\"0\",\"6\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"1\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"4\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"" + spellStartingID + "\",\"0\",\"1\",\"0\",\"0\",\"3D Belt\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"16712190\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"16712188\",\"Issa 3D Belt\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"16712190\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"16712188\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"1\",\"1\",\"1\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"1\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\"\n");
                             //spellVisualWriter.write(surroundQuotes(String.valueOf(spellStartingID)) + ",\"0\",\"0\",\"0\"," + surroundQuotes(String.valueOf(spellStartingID)) + ",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"-1\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\"\n");
                             //spellVisualKitWriter.write(surroundQuotes(String.valueOf(spellStartingID)) + ",\"-1\",\"-1\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"-1\",\"-1\",\"-1\",\"-1\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\"\n");
@@ -585,17 +589,17 @@ public class Runner {
                 String[] split = line.split(delimiter);
                 String spell = "";
                 String ItemID = "";
-                if(split.length == 17)
+                if (split.length == 17)
                     ItemID = split[2];
-                if(split.length == 18)
+                if (split.length == 18)
                     ItemID = split[3];
-                if(split.length == 19)
+                if (split.length == 19)
                     ItemID = split[4];
 
-                if(itemIDtoSpell.get(surroundQuotes(ItemID)) != null){
+                if (itemIDtoSpell.get(surroundQuotes(ItemID)) != null) {
                     String SpellTrigger = "1";
                     String SpellID = itemIDtoSpell.get(surroundQuotes(ItemID));
-                    spell =  ", `spellid_1` = " + SpellID + ", `spelltrigger_1` = " + SpellTrigger;
+                    spell = ", `spellid_1` = " + SpellID + ", `spelltrigger_1` = " + SpellTrigger;
                 }
 //                if(split.length == 17)
 //                    itemSQL.write("UPDATE `item_template` SET `name` = '" + split[1].replace("'", "''").replace("\"","") + "', `Quality` = " + split[3] + spell + " WHERE `entry` = " + ItemID + ";\n");
@@ -604,12 +608,12 @@ public class Runner {
 //                if(split.length == 19)
 //                    itemSQL.write("UPDATE `item_template` SET `name` = '" + split[1].replace("'", "''").replace("\"","") + delimiter + split[2].replace("'", "''").replace("\"","") + delimiter + split[3].replace("'", "''").replace("\"","") + "', `Quality` = " + split[5] + spell + " WHERE `entry` = " + ItemID + ";\n");
 //
-                if(split.length == 17)
-                    st.execute("UPDATE `item_template` SET `name` = '" + split[1].replace("'", "''").replace("\"","") + "', `Quality` = " + split[3] + spell + " WHERE `entry` = " + ItemID + ";");
-                if(split.length == 18)
-                    st.execute("UPDATE `item_template` SET `name` = '" + split[1].replace("'", "''").replace("\"","") + delimiter + split[2].replace("'", "''").replace("\"","") +"', `Quality` = " + split[4] + spell + " WHERE `entry` = " + ItemID + ";");
-                if(split.length == 19)
-                    st.execute("UPDATE `item_template` SET `name` = '" + split[1].replace("'", "''").replace("\"","") + delimiter + split[2].replace("'", "''").replace("\"","") + delimiter + split[3].replace("'", "''").replace("\"","") + "', `Quality` = " + split[5] + spell + " WHERE `entry` = " + ItemID + ";");
+                if (split.length == 17)
+                    st.execute("UPDATE `item_template` SET `name` = '" + split[1].replace("'", "''").replace("\"", "") + "', `Quality` = " + split[3] + spell + " WHERE `entry` = " + ItemID + ";");
+                if (split.length == 18)
+                    st.execute("UPDATE `item_template` SET `name` = '" + split[1].replace("'", "''").replace("\"", "") + delimiter + split[2].replace("'", "''").replace("\"", "") + "', `Quality` = " + split[4] + spell + " WHERE `entry` = " + ItemID + ";");
+                if (split.length == 19)
+                    st.execute("UPDATE `item_template` SET `name` = '" + split[1].replace("'", "''").replace("\"", "") + delimiter + split[2].replace("'", "''").replace("\"", "") + delimiter + split[3].replace("'", "''").replace("\"", "") + "', `Quality` = " + split[5] + spell + " WHERE `entry` = " + ItemID + ";");
 
             }
         }
@@ -634,6 +638,7 @@ public class Runner {
         spellVisualWriter.close();
         spellWriter.close();
     }
+
     //ground effect texture/doodads
     private static void GroundEffects() throws IOException, SQLException {
         System.out.println("Starting Ground Effects...");
@@ -646,14 +651,14 @@ public class Runner {
             while ((line = br.readLine()) != null) {
                 String[] split = line.split(delimiter);
                 int flag = Integer.parseInt(split[2]);
-                if (flag >1 && flag < 4){
+                if (flag > 1 && flag < 4) {
                     flag = 1;
                 }
                 String flagString = String.valueOf(flag);
                 String pathToModel = fileIDs.get(split[1]);
-                if(pathToModel != null) {
+                if (pathToModel != null) {
                     pathToModel = returnLast(pathToModel);
-                    pathToModel = pathToModel.substring(0,pathToModel.length()-2) + "mdl";
+                    pathToModel = pathToModel.substring(0, pathToModel.length() - 2) + "mdl";
                     //groundEffectDoodad.write(surroundQuotes(split[0]) + delimiter + surroundQuotes(pathToModel) + delimiter + surroundQuotes(flagString) + "\n");
                     st.execute("INSERT INTO GroundEffectDoodad VALUES(" + surroundQuotes(split[0]) + delimiter + surroundQuotes(pathToModel) + delimiter + surroundQuotes(flagString) + ")");
                     doodadListfile.write(split[1] + ";" + fileIDs.get(split[1]) + "\n");
@@ -672,6 +677,7 @@ public class Runner {
         groundEffectDoodad.close();
         groundEffectTexture.close();
     }
+
     //start of game object
     private static void GameObject() throws IOException, SQLException {
         System.out.println("Starting Gameobjects...");
@@ -685,10 +691,10 @@ public class Runner {
                 String[] sound = new String[10];
                 Arrays.fill(sound, "0");//auto set to 0 when not a sound
                 String a = gameObjectIDToSoundKit.get(split[0]);
-                if (a != null){
+                if (a != null) {
                     for (int i = 0; i < a.split(",").length; i++) {
                         String[] mm = a.split(",")[i].split("\\.");
-                            sound[Integer.parseInt(mm[1])] = mm[0];
+                        sound[Integer.parseInt(mm[1])] = mm[0];
                     }
                 }
                 //gameobjectDisplay.write(surroundQuotes(split[0]) + delimiter + surroundQuotes(fileIDs.get(split[7])) + surroundQuotes(sound[0]) + delimiter + surroundQuotes(sound[1]) + delimiter + surroundQuotes(sound[2]) + delimiter + surroundQuotes(sound[3]) + delimiter + surroundQuotes(sound[4]) + delimiter + surroundQuotes(sound[5]) + delimiter + surroundQuotes(sound[6]) + delimiter + surroundQuotes(sound[7]) + delimiter + surroundQuotes(sound[8]) + delimiter + surroundQuotes(sound[9]) + delimiter + surroundQuotes(split[1]) + delimiter + surroundQuotes(split[2]) + delimiter + surroundQuotes(split[3]) + delimiter + surroundQuotes(split[4]) + delimiter + surroundQuotes(split[5]) + delimiter + surroundQuotes(split[6]) + delimiter + surroundQuotes(split[8]) + "\n");
@@ -712,27 +718,27 @@ public class Runner {
             br.readLine();//skip header
             while ((line = br.readLine()) != null) {
                 StringBuilder lastPath = new StringBuilder();
-                Arrays.fill(sounds,emptyQuotes);
-                Arrays.fill(frequency,surroundQuotes("0"));
+                Arrays.fill(sounds, emptyQuotes);
+                Arrays.fill(frequency, surroundQuotes("0"));
                 String[] split = line.split(delimiter);
-                if(soundKitEntryMap.get(split[0]) != null) {
+                if (soundKitEntryMap.get(split[0]) != null) {
                     String[] kitEntryLine = soundKitEntryMap.get(split[0]).split(delimiter);
                     for (int i = 0; i < kitEntryLine.length; i++) {
                         String[] kitLinePiece = kitEntryLine[i].split("\\.");
-                        if(fileIDs.get(kitLinePiece[0]) != null) {
-                            String path = fileIDs.get(kitLinePiece[0]).replace("/","\\");
-                            int index=path.lastIndexOf('\\');
-                            if(index > 0) {
+                        if (fileIDs.get(kitLinePiece[0]) != null) {
+                            String path = fileIDs.get(kitLinePiece[0]).replace("/", "\\");
+                            int index = path.lastIndexOf('\\');
+                            if (index > 0) {
                                 lastPath = new StringBuilder();
                                 lastPath.append(path, 0, index);
                             }
-                            sounds[i] = surroundQuotes(path.substring(index+1));
+                            sounds[i] = surroundQuotes(path.substring(index + 1));
                             frequency[i] = surroundQuotes(kitLinePiece[1]);
                         }
                     }
 
                     //soundEntriesMap.put(Integer.parseInt(split[0]),surroundQuotes(split[0]) + delimiter + surroundQuotes(split[1]) + delimiter + sounds[0].replace(".ogg","").replace(".wav","") + delimiter + sounds[0] + delimiter + sounds[1] + delimiter + sounds[2] + delimiter + sounds[3] + delimiter + sounds[4] + delimiter + sounds[5] + delimiter + sounds[6] + delimiter + sounds[7] + delimiter + sounds[8] + delimiter + sounds[9] + delimiter + frequency[0] + delimiter + frequency[1] + delimiter + frequency[2] + delimiter + frequency[3] + delimiter + frequency[4] + delimiter + frequency[5] + delimiter + frequency[6] + delimiter + frequency[7] + delimiter + frequency[8] + delimiter + frequency[9] + delimiter + surroundQuotes(String.valueOf(lastPath)) + delimiter + surroundQuotes("1") + delimiter + surroundQuotes(split[3]) + delimiter + surroundQuotes(split[4]) + delimiter + surroundQuotes(split[5]) + delimiter + surroundQuotes(split[6]) + delimiter + surroundQuotes(split[7]) + "\n");
-                    st.execute("INSERT INTO SoundEntries VALUES(" + surroundQuotes(split[0]) + delimiter + surroundQuotes(split[1]) + delimiter + sounds[0].replace(".ogg","").replace(".wav","") + delimiter + sounds[0] + delimiter + sounds[1] + delimiter + sounds[2] + delimiter + sounds[3] + delimiter + sounds[4] + delimiter + sounds[5] + delimiter + sounds[6] + delimiter + sounds[7] + delimiter + sounds[8] + delimiter + sounds[9] + delimiter + frequency[0] + delimiter + frequency[1] + delimiter + frequency[2] + delimiter + frequency[3] + delimiter + frequency[4] + delimiter + frequency[5] + delimiter + frequency[6] + delimiter + frequency[7] + delimiter + frequency[8] + delimiter + frequency[9] + delimiter + surroundQuotes(String.valueOf(lastPath)) + delimiter + surroundQuotes("1") + delimiter + surroundQuotes(split[3]) + delimiter + surroundQuotes(split[4]) + delimiter + surroundQuotes(split[5]) + delimiter + surroundQuotes(split[6]) + delimiter + surroundQuotes(split[7]) + ")");
+                    st.execute("INSERT INTO SoundEntries VALUES(" + surroundQuotes(split[0]) + delimiter + surroundQuotes(split[1]) + delimiter + sounds[0].replace(".ogg", "").replace(".wav", "") + delimiter + sounds[0] + delimiter + sounds[1] + delimiter + sounds[2] + delimiter + sounds[3] + delimiter + sounds[4] + delimiter + sounds[5] + delimiter + sounds[6] + delimiter + sounds[7] + delimiter + sounds[8] + delimiter + sounds[9] + delimiter + frequency[0] + delimiter + frequency[1] + delimiter + frequency[2] + delimiter + frequency[3] + delimiter + frequency[4] + delimiter + frequency[5] + delimiter + frequency[6] + delimiter + frequency[7] + delimiter + frequency[8] + delimiter + frequency[9] + delimiter + surroundQuotes(String.valueOf(lastPath)) + delimiter + surroundQuotes("1") + delimiter + surroundQuotes(split[3]) + delimiter + surroundQuotes(split[4]) + delimiter + surroundQuotes(split[5]) + delimiter + surroundQuotes(split[6]) + delimiter + surroundQuotes(split[7]) + ")");
                 }
             }
         }
@@ -762,9 +768,9 @@ public class Runner {
         soundEntries.close();
         soundEntriesAdvanced.close();
     }
+
     //general map, used in multiple places
-    private static HashMap<String, String> setupMap(String filename) throws IOException
-    {
+    private static HashMap<String, String> setupMap(String filename) throws IOException {
         HashMap<String, String> hm = new HashMap<>();
         BufferedReader br = new BufferedReader(new FileReader(filename));
         String line;
@@ -776,9 +782,9 @@ public class Runner {
         br.close();
         return hm;
     }
+
     //general map, used in multiple places
-    private static HashMap<String, String> setupSoundKitEntryMap() throws IOException
-    {
+    private static HashMap<String, String> setupSoundKitEntryMap() throws IOException {
         String splitter = ".";
         HashMap<String, String> hm = new HashMap<>();
         BufferedReader br = new BufferedReader(new FileReader(tables[17] + csvEndSuffix));
@@ -786,9 +792,9 @@ public class Runner {
         String last = "";
         String line;
         br.readLine();//skip header
-        while ( (line = br.readLine()) != null ) {
+        while ((line = br.readLine()) != null) {
             String[] values = line.split(delimiter);
-            if (!last.equals(values[1])){
+            if (!last.equals(values[1])) {
                 hm.put(last, perline.toString());
                 perline = new StringBuilder();
             }
@@ -799,101 +805,101 @@ public class Runner {
         br.close();
         return hm;
     }
+
     //FDID map creation
-    private static HashMap<String, String> setupFDIDMap() throws IOException
-    {
+    private static HashMap<String, String> setupFDIDMap() throws IOException {
         String delim = ";";
         HashMap<String, String> hm = new HashMap<>();
         BufferedReader br = new BufferedReader(new FileReader("listfile/listfile.csv"));
         String line;
-        while ( (line = br.readLine()) != null ) {
+        while ((line = br.readLine()) != null) {
             String[] values = line.split(delim);
-            hm.put(values[0],values[1]);
+            hm.put(values[0], values[1]);
         }
         br.close();
         return hm;
     }
+
     //itemModifiedAppearance map creation
-    private static HashMap<String, String> setupItemModMap() throws IOException
-    {
+    private static HashMap<String, String> setupItemModMap() throws IOException {
         HashMap<String, String> hm = new HashMap<>();
         BufferedReader br = new BufferedReader(new FileReader(tables[4] + csvEndSuffix));
         String line;
-        while ( (line = br.readLine()) != null ) {
+        while ((line = br.readLine()) != null) {
             String[] values = line.split(delimiter);
-            hm.put(values[1],values[3]);
+            hm.put(values[1], values[3]);
         }
         br.close();
         return hm;
     }
+
     //itemAppearance map creation
-    private static HashMap<String, String> setupItemAppMap() throws IOException
-    {
+    private static HashMap<String, String> setupItemAppMap() throws IOException {
         HashMap<String, String> hm = new HashMap<>();
         BufferedReader br = new BufferedReader(new FileReader(tables[1] + csvEndSuffix));
         String line;
-        while ( (line = br.readLine()) != null ) {
+        while ((line = br.readLine()) != null) {
             String[] values = line.split(delimiter);
-            hm.put(values[0],values[2] + delimiter + values[3]);
+            hm.put(values[0], values[2] + delimiter + values[3]);
         }
         br.close();
         return hm;
     }
+
     //setup itemmodifiedappearance map but reversed
-    private static HashMap<String, String> setupItemModReversedMap() throws IOException
-    {
+    private static HashMap<String, String> setupItemModReversedMap() throws IOException {
         HashMap<String, String> hm = new HashMap<>();
         BufferedReader br = new BufferedReader(new FileReader(tables[4] + csvEndSuffix));
         String line;
-        while ( (line = br.readLine()) != null ) {
+        while ((line = br.readLine()) != null) {
             String[] values = line.split(delimiter);
-            hm.put(values[3],values[1]);
+            hm.put(values[3], values[1]);
         }
         br.close();
         return hm;
     }
+
     //setup item appearance map but reversed
-    private static HashMap<String, String> setupItemAppReversedMap() throws IOException
-    {
+    private static HashMap<String, String> setupItemAppReversedMap() throws IOException {
         HashMap<String, String> hm = new HashMap<>();
         BufferedReader br = new BufferedReader(new FileReader(tables[1] + csvEndSuffix));
         String line;
-        while ( (line = br.readLine()) != null ) {
+        while ((line = br.readLine()) != null) {
             String[] values = line.split(delimiter);
-            hm.put(values[2],values[0]);
+            hm.put(values[2], values[0]);
         }
         br.close();
         return hm;
     }
+
     //setup item map
-    private static HashMap<String, String> setupItemMap() throws IOException
-    {
+    private static HashMap<String, String> setupItemMap() throws IOException {
         HashMap<String, String> hm = new HashMap<>();
         BufferedReader br = new BufferedReader(new FileReader(tables[0] + csvEndSuffix));
         String line;
-        while ( (line = br.readLine()) != null ) {
+        while ((line = br.readLine()) != null) {
             String[] values = line.split(delimiter);
-            hm.put(values[0],values[7]);
+            hm.put(values[0], values[7]);
         }
         br.close();
         return hm;
     }
+
     //setup item appearance map for icons
-    private static HashMap<String, String> setupItemAppIconMap() throws IOException
-    {
+    private static HashMap<String, String> setupItemAppIconMap() throws IOException {
         HashMap<String, String> hm = new HashMap<>();
         BufferedReader br = new BufferedReader(new FileReader(tables[1] + csvEndSuffix));
         String line;
-        while ( (line = br.readLine()) != null ) {
+        while ((line = br.readLine()) != null) {
             String[] values = line.split(delimiter);
-            hm.put(values[2],values[3]);
+            hm.put(values[2], values[3]);
         }
         br.close();
         return hm;
     }
+
     //setup tables npcmodelitemslotdisplayinfo and itemdisplayinfomaterialres and gameobjectdisplayinfoxsoundkit
-    private static HashMap<String, String> setupMultiMap(String filename) throws IOException
-    {
+    private static HashMap<String, String> setupMultiMap(String filename) throws IOException {
         String splitter = ".";
         HashMap<String, String> hm = new HashMap<>();
         BufferedReader br = new BufferedReader(new FileReader(filename));
@@ -901,9 +907,9 @@ public class Runner {
         String last = "";
         String line;
         br.readLine();//skip header
-        while ( (line = br.readLine()) != null ) {
+        while ((line = br.readLine()) != null) {
             String[] values = line.split(delimiter);
-            if (!last.equals(values[3])){
+            if (!last.equals(values[3])) {
                 hm.put(last, perline.toString());
                 perline = new StringBuilder();
             }
@@ -914,35 +920,35 @@ public class Runner {
         br.close();
         return hm;
     }
+
     //setup creaturemodelinfo map
-    private static HashMap<String, String> setupModelMap() throws IOException
-    {
+    private static HashMap<String, String> setupModelMap() throws IOException {
         HashMap<String, String> hm = new HashMap<>();
         BufferedReader br = new BufferedReader(new FileReader(tables[10] + csvEndSuffix));
         String line;
-        while ( (line = br.readLine()) != null ) {
+        while ((line = br.readLine()) != null) {
             String[] values = line.split(delimiter);
-            hm.put(values[3],values[0]);
+            hm.put(values[3], values[0]);
         }
         br.close();
         return hm;
     }
+
     //setup textureID->FDID map
-    private static HashMap<String, String> setupTextureMap() throws IOException
-    {
+    private static HashMap<String, String> setupTextureMap() throws IOException {
         HashMap<String, String> hm = new HashMap<>();
         BufferedReader br = new BufferedReader(new FileReader(tables[11] + csvEndSuffix));
         String line;
-        while ( (line = br.readLine()) != null ) {
+        while ((line = br.readLine()) != null) {
             String[] values = line.split(delimiter);
-            hm.put(values[2],values[0]);
+            hm.put(values[2], values[0]);
         }
         br.close();
         return hm;
     }
+
     //reset CreatureDisplayInfoExtra variables
-    private static void resetVarsCreature()
-    {
+    private static void resetVarsCreature() {
         head = surroundQuotes("0");
         shoulder = surroundQuotes("0");
         chest = surroundQuotes("0");
@@ -955,10 +961,10 @@ public class Runner {
         shirt = surroundQuotes("0");
         tabard = surroundQuotes("0");
     }
+
     //set CreatureDisplayInfoExtra variables
-    private static void setVarsCreature(String[] curr)
-    {
-        if(curr.length == 2) {
+    private static void setVarsCreature(String[] curr) {
+        if (curr.length == 2) {
             curr[0] = surroundQuotes(curr[0]);
             switch (curr[1]) {
                 case "1":
@@ -997,9 +1003,9 @@ public class Runner {
             }
         }
     }
+
     //reset ItemDisplayInfo variables
-    private static void resetVarsItem()
-    {
+    private static void resetVarsItem() {
         upArm = emptyQuotes;
         lowArm = emptyQuotes;
         hands = emptyQuotes;
@@ -1009,9 +1015,10 @@ public class Runner {
         lowLeg = emptyQuotes;
         foot = emptyQuotes;
     }
+
     //set ItemDisplayInfo variables
     private static void setVarsItem(String[] curr) {
-        if(curr.length == 2) {
+        if (curr.length == 2) {
             String data = fileIDs.get(textureFDID.get(curr[1]));
             if (data != null) {
                 data = surroundQuotes(returnLast(data.substring(0, data.length() - 6)));
@@ -1044,22 +1051,27 @@ public class Runner {
             }
         }
     }
+
     //helper functions
     //surrounds string with quotes for printout
     private static String surroundQuotes(String s) {
         return "'" + s + "'";
     }
+
     //returns last value after a split on /
     private static String returnLast(String str) {
-        return str.split("/")[str.split("/").length -1];
+        return str.split("/")[str.split("/").length - 1];
     }
+
     private static String appendMDX(String str) {
         return str + ".mdx";
     }
+
     private static String substringFour(String str) {
         return str.substring(0, str.length() - 4);
     }
-    public static LinkedHashMap<Integer, String> sortHashMap(HashMap<Integer,String> unsortedMap){
+
+    public static LinkedHashMap<Integer, String> sortHashMap(HashMap<Integer, String> unsortedMap) {
 //LinkedHashMap preserve the ordering of elements in which they are inserted
         LinkedHashMap<Integer, String> sortedMap = new LinkedHashMap<>();
         ((Map<Integer, String>) unsortedMap).entrySet()
