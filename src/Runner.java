@@ -10,7 +10,7 @@ public class Runner {
     //updated in main method
     private static String buildNumber = "9.0.1.35482";
     //filled in fillTable
-    private static final String[] tables = new String[26];
+    private static final String[] tables = new String[28];
     //shit
     private static final String delimiter = ",";
     private static final String csvEndSuffix = ".csv";
@@ -58,7 +58,8 @@ public class Runner {
        startupTables();
        //emptySQLTables();
        //emoteData();
-        factionData();
+       // factionData();
+       // footstepData();
        //GroundEffects();
        //itemDB2Convert();
        //GameObject();
@@ -154,6 +155,8 @@ public class Runner {
         tables[23] = "emote/emotes";
         tables[24] = "faction/faction";
         tables[25] = "faction/factiontemplate";
+        tables[26] = "footprint/footstepterrainlookup";
+        tables[27] = "footprint/footprinttextures";
     }
 
     //creates folders, will mostly error. peeps got folders, but for startup
@@ -191,6 +194,14 @@ public class Runner {
         make = file.mkdir();
         if(!make)
             System.out.println("Error creating Emote folder(possibly already exists)");
+        file = new File("./faction");
+        make = file.mkdir();
+        if(!make)
+            System.out.println("Error creating Faction folder(possibly already exists)");
+        file = new File("./footprint");
+        make = file.mkdir();
+        if(!make)
+            System.out.println("Error creating Footprint folder(possibly already exists)");
 
     }
 
@@ -219,6 +230,7 @@ public class Runner {
         textureFDID = setupTextureMap();
     }
     private static void emoteData() throws IOException, SQLException {
+        System.out.println("Starting Emotes...");
         FileWriter emoteText = new FileWriter("export/EmotesText.csv");
         FileWriter emotesTextData = new FileWriter("export/EmotesTextData.csv");
         FileWriter emotesTextSound = new FileWriter("export/EmotesTextSound.csv");
@@ -267,15 +279,17 @@ public class Runner {
     }
 
     private static void factionData() throws IOException, SQLException {
+        System.out.println("Starting Factions...");
         FileWriter faction = new FileWriter("export/Faction.csv");
         FileWriter factionTemplate = new FileWriter("export/FactionTemplate.csv");
         try (BufferedReader br = new BufferedReader(new FileReader(tables[24] + csvEndSuffix))) {
             String line;
             br.readLine();//skip header
             while ((line = br.readLine()) != null) {
+                line = line.replace("\"","");
                 String[] split = line.split(delimiter);
-                faction.write(surroundQuotes(split[6]) + delimiter + surroundQuotes(split[7]) + delimiter + surroundQuotes(split[0]) + delimiter + surroundQuotes(split[1]) + delimiter + surroundQuotes(split[2]) + delimiter + surroundQuotes(split[3]) + delimiter + surroundQuotes(split[13]) + delimiter + surroundQuotes(split[14]) + delimiter + surroundQuotes(split[15]) + delimiter + surroundQuotes(split[16]) + delimiter + surroundQuotes(split[21]) + delimiter + surroundQuotes(split[22]) + delimiter + surroundQuotes(split[23]) + delimiter + surroundQuotes(split[24]) + delimiter + surroundQuotes(split[17]) + delimiter + surroundQuotes(split[18]) + delimiter + surroundQuotes(split[19]) + delimiter + surroundQuotes(split[20]) + delimiter + surroundQuotes(split[8]) + delimiter + surroundQuotes(split[29]) + delimiter + surroundQuotes(split[30]) + delimiter + surroundQuotes(split[31]) + delimiter + surroundQuotes(split[32]) + delimiter + surroundQuotes(split[4]) + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("16712190") + delimiter + surroundQuotes(split[5]) + delimiter  + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + surroundQuotes("16712188") + "\n");
-                //st.execute("INSERT INTO Faction VALUES(" + surroundQuotes(split[6]) + delimiter + surroundQuotes(split[7]) + delimiter + surroundQuotes(split[0]) + delimiter + surroundQuotes(split[1]) + delimiter + surroundQuotes(split[2]) + delimiter + surroundQuotes(split[3]) + delimiter + surroundQuotes(split[13]) + delimiter + surroundQuotes(split[14]) + delimiter + surroundQuotes(split[15]) + delimiter + surroundQuotes(split[16]) + delimiter + surroundQuotes(split[21]) + delimiter + surroundQuotes(split[22]) + delimiter + surroundQuotes(split[23]) + delimiter + surroundQuotes(split[24]) + delimiter + surroundQuotes(split[17]) + delimiter + surroundQuotes(split[18]) + delimiter + surroundQuotes(split[19]) + delimiter + surroundQuotes(split[20]) + delimiter + surroundQuotes(split[8]) + delimiter + surroundQuotes(split[29]) + delimiter + surroundQuotes(split[30]) + delimiter + surroundQuotes(split[31]) + delimiter + surroundQuotes(split[32]) + delimiter + surroundQuotes(split[4]) + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("16712190") + delimiter + surroundQuotes(split[5]) + delimiter  + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + surroundQuotes("16712188") + ")");
+                //faction.write(surroundQuotes(split[6]) + delimiter + surroundQuotes(split[7]) + delimiter + surroundQuotes(split[0]) + delimiter + surroundQuotes(split[1]) + delimiter + surroundQuotes(split[2]) + delimiter + surroundQuotes(split[3]) + delimiter + surroundQuotes(split[13]) + delimiter + surroundQuotes(split[14]) + delimiter + surroundQuotes(split[15]) + delimiter + surroundQuotes(split[16]) + delimiter + surroundQuotes(split[21]) + delimiter + surroundQuotes(split[22]) + delimiter + surroundQuotes(split[23]) + delimiter + surroundQuotes(split[24]) + delimiter + surroundQuotes(split[17]) + delimiter + surroundQuotes(split[18]) + delimiter + surroundQuotes(split[19]) + delimiter + surroundQuotes(split[20]) + delimiter + surroundQuotes(split[8]) + delimiter + surroundQuotes(split[29]) + delimiter + surroundQuotes(split[30]) + delimiter + surroundQuotes(split[31]) + delimiter + surroundQuotes(split[32]) + delimiter + surroundQuotes(split[4]) + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("16712190") + delimiter + surroundQuotes(split[5]) + delimiter  + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + surroundQuotes("16712188") + "\n");
+                st.execute("INSERT INTO Faction VALUES(" + surroundQuotes(split[6]) + delimiter + surroundQuotes(split[7]) + delimiter + surroundQuotes(split[0]) + delimiter + surroundQuotes(split[1]) + delimiter + surroundQuotes(split[2]) + delimiter + surroundQuotes(split[3]) + delimiter + surroundQuotes(split[13]) + delimiter + surroundQuotes(split[14]) + delimiter + surroundQuotes(split[15]) + delimiter + surroundQuotes(split[16]) + delimiter + surroundQuotes(split[21]) + delimiter + surroundQuotes(split[22]) + delimiter + surroundQuotes(split[23]) + delimiter + surroundQuotes(split[24]) + delimiter + surroundQuotes(split[17]) + delimiter + surroundQuotes(split[18]) + delimiter + surroundQuotes(split[19]) + delimiter + surroundQuotes(split[20]) + delimiter + surroundQuotes(split[8]) + delimiter + surroundQuotes(split[29]) + delimiter + surroundQuotes(split[30]) + delimiter + surroundQuotes(split[31]) + delimiter + surroundQuotes(split[32]) + delimiter + surroundQuotes(split[4]) + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("16712190") + delimiter + surroundQuotes(split[5]) + delimiter  + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + delimiter + surroundQuotes("0") + surroundQuotes("16712188") + ")");
             }
         }
         try (BufferedReader br = new BufferedReader(new FileReader(tables[25] + csvEndSuffix))) {
@@ -283,14 +297,40 @@ public class Runner {
             br.readLine();//skip header
             while ((line = br.readLine()) != null) {
                 String[] split = line.split(delimiter);
-                factionTemplate.write(surroundQuotes(split[0]) + delimiter + surroundQuotes(split[1]) + delimiter + surroundQuotes(split[3]) + delimiter + surroundQuotes(split[4]) + delimiter + surroundQuotes(split[5]) + delimiter + surroundQuotes(split[6]) + delimiter + surroundQuotes(split[7]) + delimiter + surroundQuotes(split[8]) + delimiter + surroundQuotes(split[9]) + delimiter + surroundQuotes(split[10]) + delimiter + surroundQuotes(split[11]) + delimiter + surroundQuotes(split[12]) + delimiter + surroundQuotes(split[13]) + "\n");
-                //st.execute("INSERT INTO FactionTemplate VALUES(" +surroundQuotes(split[0]) + delimiter + surroundQuotes(split[1]) + delimiter + surroundQuotes(split[3]) + delimiter + surroundQuotes(split[4]) + delimiter + surroundQuotes(split[5]) + delimiter + surroundQuotes(split[6]) + delimiter + surroundQuotes(split[7]) + delimiter + surroundQuotes(split[8]) + delimiter + surroundQuotes(split[9]) + delimiter + surroundQuotes(split[10]) + delimiter + surroundQuotes(split[11]) + delimiter + surroundQuotes(split[12]) + delimiter + surroundQuotes(split[13]) + ")");
+                //factionTemplate.write(surroundQuotes(split[0]) + delimiter + surroundQuotes(split[1]) + delimiter + surroundQuotes(split[3]) + delimiter + surroundQuotes(split[4]) + delimiter + surroundQuotes(split[5]) + delimiter + surroundQuotes(split[6]) + delimiter + surroundQuotes(split[7]) + delimiter + surroundQuotes(split[8]) + delimiter + surroundQuotes(split[9]) + delimiter + surroundQuotes(split[10]) + delimiter + surroundQuotes(split[11]) + delimiter + surroundQuotes(split[12]) + delimiter + surroundQuotes(split[13]) + "\n");
+                st.execute("INSERT INTO FactionTemplate VALUES(" +surroundQuotes(split[0]) + delimiter + surroundQuotes(split[1]) + delimiter + surroundQuotes(split[3]) + delimiter + surroundQuotes(split[4]) + delimiter + surroundQuotes(split[5]) + delimiter + surroundQuotes(split[6]) + delimiter + surroundQuotes(split[7]) + delimiter + surroundQuotes(split[8]) + delimiter + surroundQuotes(split[9]) + delimiter + surroundQuotes(split[10]) + delimiter + surroundQuotes(split[11]) + delimiter + surroundQuotes(split[12]) + delimiter + surroundQuotes(split[13]) + ")");
             }
         }
         faction.close();
         factionTemplate.close();
     }
     //all creature csv creation
+    private static void footstepData() throws IOException, SQLException {
+        System.out.println("Starting Factions...");
+        FileWriter footTerrain = new FileWriter("export/footstepTerrainLookup.csv");
+        FileWriter footTextures = new FileWriter("export/FootprintTextures.csv");
+        try (BufferedReader br = new BufferedReader(new FileReader(tables[26] + csvEndSuffix))) {
+            String line;
+            br.readLine();//skip header
+            while ((line = br.readLine()) != null) {
+                String[] split = line.split(delimiter);
+                //footTerrain.write(surroundQuotes(split[0]) + delimiter + surroundQuotes(split[1]) + delimiter + surroundQuotes(split[2]) + delimiter + surroundQuotes(split[3]) + delimiter + surroundQuotes(split[4]) + "\n");
+                st.execute("INSERT INTO footstepTerrainLookup VALUES(" + surroundQuotes(split[0]) + delimiter + surroundQuotes(split[1]) + delimiter + surroundQuotes(split[2]) + delimiter + surroundQuotes(split[3]) + delimiter + surroundQuotes(split[4]) + ")");
+            }
+        }
+        try (BufferedReader br = new BufferedReader(new FileReader(tables[27] + csvEndSuffix))) {
+            String line;
+            br.readLine();//skip header
+            while ((line = br.readLine()) != null) {
+                String[] split = line.split(delimiter);
+                if(fileIDs.get(split[1]) != null)
+                //footTextures.write(surroundQuotes(split[0]) + delimiter + surroundQuotes(fileIDs.get(split[1]).replace(".blp","")) + "\n");
+                st.execute("INSERT INTO FootprintTextures VALUES(" + surroundQuotes(split[0]) + delimiter + surroundQuotes(fileIDs.get(split[1]).replace(".blp","")) + ")");
+            }
+        }
+        footTerrain.close();
+        footTextures.close();
+    }
     private static void creatureDB2Convert() throws IOException
     {
         System.out.println("Starting Creatures...");
