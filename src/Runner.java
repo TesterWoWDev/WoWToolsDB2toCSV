@@ -58,8 +58,8 @@ public class Runner {
        startupTables();
        //emptySQLTables();
        //emoteData();
-       // factionData();
-       // footstepData();
+       //factionData();
+       //footstepData();
        //GroundEffects();
        //itemDB2Convert();
        //GameObject();
@@ -229,6 +229,7 @@ public class Runner {
         modelFDID = setupModelMap();
         textureFDID = setupTextureMap();
     }
+
     private static void emoteData() throws IOException, SQLException {
         System.out.println("Starting Emotes...");
         FileWriter emoteText = new FileWriter("export/EmotesText.csv");
@@ -304,7 +305,7 @@ public class Runner {
         faction.close();
         factionTemplate.close();
     }
-    //all creature csv creation
+
     private static void footstepData() throws IOException, SQLException {
         System.out.println("Starting Factions...");
         FileWriter footTerrain = new FileWriter("export/footstepTerrainLookup.csv");
@@ -331,6 +332,7 @@ public class Runner {
         footTerrain.close();
         footTextures.close();
     }
+
     private static void creatureDB2Convert() throws IOException
     {
         System.out.println("Starting Creatures...");
@@ -417,7 +419,6 @@ public class Runner {
         creatureModelWriter.close();
         creatureDisplayExtraWriter.close();
     }
-
     //all item csv creation
     private static void itemDB2Convert() throws IOException, SQLException {
         System.out.println("Starting Items...");
@@ -633,7 +634,6 @@ public class Runner {
         spellVisualWriter.close();
         spellWriter.close();
     }
-
     //ground effect texture/doodads
     private static void GroundEffects() throws IOException, SQLException {
         System.out.println("Starting Ground Effects...");
@@ -672,7 +672,6 @@ public class Runner {
         groundEffectDoodad.close();
         groundEffectTexture.close();
     }
-
     //start of game object
     private static void GameObject() throws IOException, SQLException {
         System.out.println("Starting Gameobjects...");
@@ -777,7 +776,6 @@ public class Runner {
         br.close();
         return hm;
     }
-
     //general map, used in multiple places
     private static HashMap<String, String> setupSoundKitEntryMap() throws IOException
     {
@@ -801,7 +799,6 @@ public class Runner {
         br.close();
         return hm;
     }
-
     //FDID map creation
     private static HashMap<String, String> setupFDIDMap() throws IOException
     {
@@ -816,7 +813,6 @@ public class Runner {
         br.close();
         return hm;
     }
-
     //itemModifiedAppearance map creation
     private static HashMap<String, String> setupItemModMap() throws IOException
     {
@@ -830,7 +826,6 @@ public class Runner {
         br.close();
         return hm;
     }
-
     //itemAppearance map creation
     private static HashMap<String, String> setupItemAppMap() throws IOException
     {
@@ -844,7 +839,6 @@ public class Runner {
         br.close();
         return hm;
     }
-
     //setup itemmodifiedappearance map but reversed
     private static HashMap<String, String> setupItemModReversedMap() throws IOException
     {
@@ -858,7 +852,6 @@ public class Runner {
         br.close();
         return hm;
     }
-
     //setup item appearance map but reversed
     private static HashMap<String, String> setupItemAppReversedMap() throws IOException
     {
@@ -872,7 +865,6 @@ public class Runner {
         br.close();
         return hm;
     }
-
     //setup item map
     private static HashMap<String, String> setupItemMap() throws IOException
     {
@@ -886,7 +878,6 @@ public class Runner {
         br.close();
         return hm;
     }
-
     //setup item appearance map for icons
     private static HashMap<String, String> setupItemAppIconMap() throws IOException
     {
@@ -900,7 +891,6 @@ public class Runner {
         br.close();
         return hm;
     }
-
     //setup tables npcmodelitemslotdisplayinfo and itemdisplayinfomaterialres and gameobjectdisplayinfoxsoundkit
     private static HashMap<String, String> setupMultiMap(String filename) throws IOException
     {
@@ -924,7 +914,6 @@ public class Runner {
         br.close();
         return hm;
     }
-
     //setup creaturemodelinfo map
     private static HashMap<String, String> setupModelMap() throws IOException
     {
@@ -938,7 +927,6 @@ public class Runner {
         br.close();
         return hm;
     }
-
     //setup textureID->FDID map
     private static HashMap<String, String> setupTextureMap() throws IOException
     {
@@ -952,7 +940,6 @@ public class Runner {
         br.close();
         return hm;
     }
-
     //reset CreatureDisplayInfoExtra variables
     private static void resetVarsCreature()
     {
@@ -968,8 +955,7 @@ public class Runner {
         shirt = surroundQuotes("0");
         tabard = surroundQuotes("0");
     }
-
-        //set CreatureDisplayInfoExtra variables
+    //set CreatureDisplayInfoExtra variables
     private static void setVarsCreature(String[] curr)
     {
         if(curr.length == 2) {
